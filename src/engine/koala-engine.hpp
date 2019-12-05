@@ -4,9 +4,9 @@
 
 using namespace Magnum;
 
-class Koala : public Platform::Application {
+class KoalaEngine : public Platform::Application {
 public:
-  explicit Koala(const Arguments &arguments);
+  explicit KoalaEngine(const Arguments &arguments);
 
 private:
   DebugLogger logger;

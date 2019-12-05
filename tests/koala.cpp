@@ -1,31 +1,12 @@
-#include "debuglogger.hpp"
-#include <Magnum/GL/DefaultFramebuffer.h>
-#include <Magnum/Platform/Sdl2Application.h>
+#include "koala-engine.hpp"
 
-using namespace Magnum;
-
-class Koala : public Platform::Application {
+class KoalaTest : public KoalaEngine {
 public:
-  explicit Koala(const Arguments &arguments);
-
-private:
-  DebugLogger logger;
-  void drawEvent() override;
+  KoalaTest(const Arguments &arguments);
+  virtual ~KoalaTest();
 };
 
-Koala::Koala(const Arguments &arguments)
-    : Platform::Application{arguments},
-      logger("Main", DebugLogger::DebugColor::COLOR_WHITE, false) {
-  logger.WriteLog(DebugLogger::DebugLevel::DEBUG_INFO, "I'm alive!");
-  /* TODO: Add your initialization code here */
-}
+KoalaTest::KoalaTest(const Arguments &arguments) : KoalaEngine(arguments) {}
+KoalaTest::~KoalaTest() {}
 
-void Koala::drawEvent() {
-  GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
-
-  /* TODO: Add your drawing code here */
-
-  swapBuffers();
-}
-
-MAGNUM_APPLICATION_MAIN(Koala)
+MAGNUM_APPLICATION_MAIN(KoalaTest)

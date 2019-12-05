@@ -5,7 +5,6 @@ find_package(Magnum REQUIRED GL Sdl2Application)
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 # Add Debuglogger to Koala
-include_directories("../src/debuglogger")
 include_directories("../src/engine")
 
 add_executable(Koala koala.cpp)
