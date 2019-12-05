@@ -1,5 +1,9 @@
 #!/bin/bash
 
+git submodule init
+git submodule update
+git submodule sync
+
 echo "=========> Build : Destroying build"
 rm -rf build
 mkdir build
