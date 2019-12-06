@@ -1,4 +1,5 @@
 #include "debuglogger.hpp"
+#include "rapidjson/document.h"
 #include <Magnum/GL/DefaultFramebuffer.h>
 #include <Magnum/Platform/Sdl2Application.h>
 
