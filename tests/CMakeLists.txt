@@ -1,11 +1,15 @@
 project(Koala)
 
+find_package(RapidJSON)
 find_package(Magnum REQUIRED GL Sdl2Application)
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 # Add Debuglogger to Koala
-include_directories("../src/engine")
+include_directories("../src/engine"
+                    "../src/debuglogger"
+                    ${RAPIDJSON_INCLUDE_DIRS}
+)
 
 add_executable(Koala koala.cpp)
 target_link_libraries(Koala PRIVATE

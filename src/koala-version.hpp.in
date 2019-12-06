@@ -1,0 +1,5 @@
+// Options to get from CMake
+
+#define KOALA_ENGINE_VERSION_MAJOR @KoalaEngine_VERSION_MAJOR@
+#define KOALA_ENGINE_VERSION_MINOR @KoalaEngine_VERSION_MINOR@
+#define KOALA_ENGINE_BUILD_SHA     "@KoalaEngine_BUILD_SHA@"
