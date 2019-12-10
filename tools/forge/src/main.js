@@ -29,6 +29,16 @@ const router = new VueRouter({
 });
 
 new Vue({
+    data() {
+        // eslint-disable-next-line no-console
+        console.log('Created Data State');
+
+        return {
+            project: {
+                name: 'Unnamed Project'
+            }
+        };
+    },
     router,
     render: h => h(App)
 }).$mount('#app');
