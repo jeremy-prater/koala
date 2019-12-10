@@ -15,6 +15,9 @@ export default {
     NavMenu
   }
 };
+
+// eslint-disable-next-line no-console
+console.log("Created App");
 </script>
 
 <style>

@@ -1,7 +1,19 @@
 <template>
   <div>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Project Name...</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">project</a>
+      <ul class="navbar-nav list-group-horizontal px-3">
+        <li class="nav-item text-nowrap">
+          <span class="nav-link">
+            <i class="fas fa-plus-square fa-2x navIcon" />
+          </span>
+        </li>
+        <li class="nav-item text-nowrap openbutton">
+          <b-button>
+            <i class="fas fa-folder-open fa-2x navIcon" />
+          </b-button>
+        </li>
+      </ul>
       <input
         class="form-control form-control-dark w-100"
         type="text"
@@ -10,17 +22,7 @@
       />
       <ul class="navbar-nav list-group-horizontal px-3">
         <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">
-            <i class="fas fa-folder-plus fa-2x navIcon" />
-          </a>
-        </li>
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">
-            <i class="fas fa-folder-open fa-2x navIcon" />
-          </a>
-        </li>
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">
+          <a class="nav-link-eject" href="#">
             <i class="fas fa-download fa-2x navIcon" />
           </a>
         </li>
@@ -108,12 +110,12 @@
 </template>
 
 
-<script scoped>
+<script>
 // eslint-disable-next-line no-console
 console.log("Creating NavMenu");
 </script>
 
-<style>
+<style scoped>
 body {
   font-size: 0.875rem;
 }
@@ -182,6 +184,16 @@ body {
   text-transform: uppercase;
 }
 
+.nav-link-eject {
+  color: #d33;
+}
+.nav-link-eject:hover {
+  color: #f55;
+}
+
+.openbutton {
+  border: 10px;
+}
 /*
  * Content
  */
