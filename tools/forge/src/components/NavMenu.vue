@@ -1,7 +1,18 @@
 <template>
   <div>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">project</a>
+      <a
+        v-if="!editingName"
+        class="navbar-brand col-sm-3 col-md-2 mr-0"
+        v-on:click="editName(true)"
+      >{{ project.name }}</a>
+      <input
+        v-if="editingName"
+        v-on:blur="editName(false)"
+        v-on:keyup.enter="editName(false)"
+        class="navbar-brand col-sm-3 col-md-2 mr-0"
+        v-model="project.name"
+      />
       <ul class="navbar-nav list-group-horizontal px-3">
         <li class="nav-item text-nowrap">
           <span class="nav-link">
@@ -9,9 +20,9 @@
           </span>
         </li>
         <li class="nav-item text-nowrap openbutton">
-          <b-button>
+          <a class="nav-link" v-on:click="openFolder">
             <i class="fas fa-folder-open fa-2x navIcon" />
-          </b-button>
+          </a>
         </li>
       </ul>
       <input
@@ -22,7 +33,7 @@
       />
       <ul class="navbar-nav list-group-horizontal px-3">
         <li class="nav-item text-nowrap">
-          <a class="nav-link-eject" href="#">
+          <a class="nav-link-eject" v-on:click="saveProject">
             <i class="fas fa-download fa-2x navIcon" />
           </a>
         </li>
@@ -109,10 +120,39 @@
   </div>
 </template>
 
-
 <script>
 // eslint-disable-next-line no-console
 console.log("Creating NavMenu");
+
+// in full builds helpers are exposed as Vuex.mapState
+import { mapState } from "vuex";
+
+export default {
+  data() {
+    return {
+      editingName: false
+    };
+  },
+  computed: mapState({
+    // arrow functions can make the code very succinct!
+    project: state => state.project
+  }),
+  methods: {
+    editName: function(editing) {
+      // eslint-disable-next-line no-console
+      console.log(`Edit project name [${editing}]`);
+      this.editingName = editing;
+    },
+    openFolder: function() {
+      // eslint-disable-next-line no-console
+      console.log(`Open new workspace`);
+    },
+    saveProject: function() {
+      // eslint-disable-next-line no-console
+      console.log(`Saving Project`);
+    }
+  }
+};
 </script>
 
 <style scoped>

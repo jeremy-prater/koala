@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Vuex from 'vuex';
 
 import App from './App.vue';
 
@@ -17,6 +18,7 @@ import Dashboard from './components/Dashboard.vue';
 
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
+Vue.use(Vuex);
 
 const router = new VueRouter({
     mode: 'history',
@@ -28,17 +30,22 @@ const router = new VueRouter({
     ]
 });
 
-new Vue({
-    data() {
-        // eslint-disable-next-line no-console
-        console.log('Created Data State');
+const store = new Vuex.Store({
+  state: {
+    count: 0,
+    project: {
+        name: "Unnamed project"
+    }
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
 
-        return {
-            project: {
-                name: 'Unnamed Project'
-            }
-        };
-    },
+new Vue({
     router,
+    store,
     render: h => h(App)
 }).$mount('#app');
