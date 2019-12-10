@@ -128,6 +128,7 @@ console.log("Creating NavMenu");
 import { mapState } from "vuex";
 
 export default {
+  name: "NavMenu",
   data() {
     return {
       editingName: false

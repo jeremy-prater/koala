@@ -1,9 +1,28 @@
 <template>
-  <div>It's the dashboard...</div>
+  <div>
+    It's the dashboard for [{{ project.name }}]
+    <br />
+    Current workspace : [{{ currentWorkspace }}]
+  </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
+// eslint-disable-next-line no-console
+console.log("Creating Dashboard");
+
 export default {
-  name: "Dashboard"
+  name: "Dashboard",
+  data() {
+    return {
+      editingName: false
+    };
+  },
+  computed: mapState({
+    // arrow functions can make the code very succinct!
+    project: state => state.project,
+    currentWorkspace: state => state.currentWorkspace
+  })
 };
 </script>

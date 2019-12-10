@@ -33,6 +33,7 @@ const router = new VueRouter({
 const store = new Vuex.Store({
   state: {
     count: 0,
+    currentWorkspace: __dirname,
     project: {
         name: "Unnamed project"
     }
