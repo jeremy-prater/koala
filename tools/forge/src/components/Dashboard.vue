@@ -9,7 +9,6 @@
 <script>
 import { mapState } from "vuex";
 
-// eslint-disable-next-line no-console
 console.log("Creating Dashboard");
 
 export default {

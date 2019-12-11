@@ -121,7 +121,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-console
 console.log("Creating NavMenu");
 
 // in full builds helpers are exposed as Vuex.mapState
@@ -140,16 +139,13 @@ export default {
   }),
   methods: {
     editName: function(editing) {
-      // eslint-disable-next-line no-console
       console.log(`Edit project name [${editing}]`);
       this.editingName = editing;
     },
     openFolder: function() {
-      // eslint-disable-next-line no-console
       console.log(`Open new workspace`);
     },
     saveProject: function() {
-      // eslint-disable-next-line no-console
       console.log(`Saving Project`);
     }
   }

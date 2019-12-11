@@ -16,9 +16,16 @@ import Home from './components/Home.vue';
 import HelloWorld from './components/HelloWorld.vue';
 import Dashboard from './components/Dashboard.vue';
 
+var remote = require('electron').remote;
+var electronFs = remote.require('fs');
+
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+
+if (!electronFs.existsSync('~/.forge')) {
+    console.warn('Configuration directory does not exists!');
+}
 
 const router = new VueRouter({
     mode: 'history',
@@ -31,19 +38,19 @@ const router = new VueRouter({
 });
 
 const store = new Vuex.Store({
-  state: {
-    count: 0,
-    currentWorkspace: __dirname,
-    project: {
-        name: "Unnamed project"
+    state: {
+        count: 0,
+        currentWorkspace: __dirname,
+        project: {
+            name: 'Unnamed project'
+        }
+    },
+    mutations: {
+        increment(state) {
+            state.count++;
+        }
     }
-  },
-  mutations: {
-    increment (state) {
-      state.count++
-    }
-  }
-})
+});
 
 new Vue({
     router,
