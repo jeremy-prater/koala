@@ -15,17 +15,11 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import Home from './components/Home.vue';
 import HelloWorld from './components/HelloWorld.vue';
 import Dashboard from './components/Dashboard.vue';
-
-var remote = require('electron').remote;
-var electronFs = remote.require('fs');
+import KoalaSettings from "./components/settings.js"
 
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(Vuex);
-
-if (!electronFs.existsSync('~/.forge')) {
-    console.warn('Configuration directory does not exists!');
-}
 
 const router = new VueRouter({
     mode: 'history',
@@ -40,7 +34,7 @@ const router = new VueRouter({
 const store = new Vuex.Store({
     state: {
         count: 0,
-        currentWorkspace: __dirname,
+        currentWorkspace: KoalaSettings.settings.workspace,
         project: {
             name: 'Unnamed project'
         }
