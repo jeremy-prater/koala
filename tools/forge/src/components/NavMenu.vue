@@ -17,6 +17,7 @@
         <li class="nav-item text-nowrap">
           <span
             class="nav-link"
+            v-bind:class="{ 'active': droppingEnabled }"
             @dragenter="onDragEvent"
             @dragover="onDragEvent"
             @dragend="onDragEvent"
@@ -141,7 +142,8 @@ export default {
   name: "NavMenu",
   data() {
     return {
-      editingName: false
+      editingName: false,
+      droppingEnabled: false
     };
   },
   computed: mapState({
@@ -169,6 +171,11 @@ export default {
     onDragEvent: function(e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = "copy";
+      if (e.type == "dragover") {
+        this.droppingEnabled = true;
+      } else {
+        this.droppingEnabled = false;
+      }
       if (e.type == "drop") {
         e.dataTransfer.files.forEach(file => {
           const sourceFile = path.join(file.path, file.name);
