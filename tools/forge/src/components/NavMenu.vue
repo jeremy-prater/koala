@@ -15,11 +15,16 @@
       />
       <ul class="navbar-nav list-group-horizontal px-3">
         <li class="nav-item text-nowrap">
-          <drop @drop="newDropListener">
-            <span class="nav-link">
-              <i class="fas fa-plus-square fa-2x navIcon" />
-            </span>
-          </drop>
+          <span
+            class="nav-link"
+            @dragenter="onDragEvent"
+            @dragover="onDragEvent"
+            @dragend="onDragEvent"
+            @dragleave="onDragEvent"
+            @drop="onDragEvent"
+          >
+            <i class="fas fa-plus-square fa-2x navIcon" />
+          </span>
         </li>
         <li class="nav-item text-nowrap openbutton">
           <a class="nav-link" v-on:click="openFolder">
@@ -127,7 +132,6 @@ console.log("Creating NavMenu");
 
 // in full builds helpers are exposed as Vuex.mapState
 import { mapState } from "vuex";
-import { Drop } from 'vue-drag-drop';
 
 const remote = require("electron").remote;
 const fs = remote.require("fs");
@@ -135,7 +139,6 @@ const path = require("path");
 
 export default {
   name: "NavMenu",
-  components: { Drop },
   data() {
     return {
       editingName: false
@@ -163,10 +166,16 @@ export default {
       console.log(`Saving Project [${outputFile}]`);
       fs.writeFileSync(outputFile, projectConfig);
     },
-    newDropListener: function(transferData, nativeEvent) {
-      nativeEvent.preventDefault();
-      console.log(transferData);
-      console.log(nativeEvent);
+    onDragEvent: function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
+      if (e.type == "drop") {
+        e.dataTransfer.files.forEach(file => {
+          const sourceFile = path.join(file.path, file.name);
+          console.log(`Dropped File ==> [${sourceFile}]`);
+        });
+      }
+      return false;
     }
   }
 };
