@@ -15,7 +15,11 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import Home from './components/Home.vue';
 import HelloWorld from './components/HelloWorld.vue';
 import Dashboard from './components/Dashboard.vue';
-import KoalaSettings from "./components/settings.js"
+import KoalaSettings from './components/settings.js';
+
+const remote = require('electron').remote;
+const fs = remote.require('fs');
+const path = require('path');
 
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
@@ -33,15 +37,28 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
     state: {
-        count: 0,
         currentWorkspace: KoalaSettings.settings.workspace,
         project: {
             name: 'Unnamed project'
         }
     },
     mutations: {
-        increment(state) {
-            state.count++;
+        setWorkspace(state, newWorkspace) {
+            state.currentWorkspace = newWorkspace;
+        },
+        loadProject(state) {
+            const inputSettings = path.join(
+                state.currentWorkspace,
+                'projectConfig.json'
+            );
+            if (fs.existsSync(inputSettings)) {
+                console.log(`Loading Project [${inputSettings}]`);
+                state.project = JSON.parse(fs.readFileSync(inputSettings));
+            } else {
+                console.warn(
+                    `Project configuration [${inputSettings}] does not exist!`
+                );
+            }
         }
     }
 });

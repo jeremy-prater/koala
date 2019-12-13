@@ -17,9 +17,21 @@ class KoalaSettings {
 
         if (!fs.existsSync(configFile)) {
             console.warn(`Configuration [${configFile}] does not exists!`);
+
+            const defaultWorkspace = path.join(configDir, 'default');
+            if (!fs.existsSync(defaultWorkspace)) {
+                console.info(
+                    `Generating default workspace [${defaultWorkspace}]`
+                );
+
+                fs.mkdirSync(defaultWorkspace);
+            }
+
             this.settings = {
-                workspace: '/'
+                workspace: defaultWorkspace
             };
+
+            this.saveSettings();
         } else {
             console.info(`Loaded Configuration file [${configFile}]`);
             this.settings = JSON.parse(fs.readFileSync(configFile));

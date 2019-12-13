@@ -13,10 +13,12 @@ export default {
   components: {
     //NavBar,
     NavMenu
+  },
+  mounted: function() {
+    console.log("Created App");
+    this.$store.commit("loadProject");
   }
 };
-
-console.log("Created App");
 </script>
 
 <style>

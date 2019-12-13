@@ -125,6 +125,9 @@ console.log("Creating NavMenu");
 
 // in full builds helpers are exposed as Vuex.mapState
 import { mapState } from "vuex";
+const remote = require("electron").remote;
+const fs = remote.require("fs");
+const path = require("path");
 
 export default {
   name: "NavMenu",
@@ -134,8 +137,8 @@ export default {
     };
   },
   computed: mapState({
-    // arrow functions can make the code very succinct!
-    project: state => state.project
+    project: state => state.project,
+    currentWorkspace: state => state.currentWorkspace
   }),
   methods: {
     editName: function(editing) {
@@ -144,9 +147,16 @@ export default {
     },
     openFolder: function() {
       console.log(`Open new workspace`);
+      this.$store.commit('loadProject');
+    },
+    loadProject: function() {
+      this.$store.commit("loadProject");
     },
     saveProject: function() {
-      console.log(`Saving Project`);
+      const projectConfig = JSON.stringify(this.project);
+      const outputFile = path.join(this.currentWorkspace, "projectConfig.json");
+      console.log(`Saving Project [${outputFile}]`);
+      fs.writeFileSync(outputFile, projectConfig);
     }
   }
 };
