@@ -15,9 +15,11 @@
       />
       <ul class="navbar-nav list-group-horizontal px-3">
         <li class="nav-item text-nowrap">
-          <span class="nav-link">
-            <i class="fas fa-plus-square fa-2x navIcon" />
-          </span>
+          <drop @drop="newDropListener">
+            <span class="nav-link">
+              <i class="fas fa-plus-square fa-2x navIcon" />
+            </span>
+          </drop>
         </li>
         <li class="nav-item text-nowrap openbutton">
           <a class="nav-link" v-on:click="openFolder">
@@ -125,12 +127,15 @@ console.log("Creating NavMenu");
 
 // in full builds helpers are exposed as Vuex.mapState
 import { mapState } from "vuex";
+import { Drop } from 'vue-drag-drop';
+
 const remote = require("electron").remote;
 const fs = remote.require("fs");
 const path = require("path");
 
 export default {
   name: "NavMenu",
+  components: { Drop },
   data() {
     return {
       editingName: false
@@ -147,7 +152,7 @@ export default {
     },
     openFolder: function() {
       console.log(`Open new workspace`);
-      this.$store.commit('loadProject');
+      this.$store.commit("loadProject");
     },
     loadProject: function() {
       this.$store.commit("loadProject");
@@ -157,6 +162,11 @@ export default {
       const outputFile = path.join(this.currentWorkspace, "projectConfig.json");
       console.log(`Saving Project [${outputFile}]`);
       fs.writeFileSync(outputFile, projectConfig);
+    },
+    newDropListener: function(transferData, nativeEvent) {
+      nativeEvent.preventDefault();
+      console.log(transferData);
+      console.log(nativeEvent);
     }
   }
 };

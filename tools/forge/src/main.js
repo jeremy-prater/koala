@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import '@fortawesome/fontawesome-free/css/all.css';
+import VueDragDrop from 'vue-drag-drop';
 
 import Home from './components/Home.vue';
 import HelloWorld from './components/HelloWorld.vue';
@@ -24,6 +25,7 @@ const path = require('path');
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(VueDragDrop);
 
 const router = new VueRouter({
     mode: 'history',
