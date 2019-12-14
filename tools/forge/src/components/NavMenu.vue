@@ -1,5 +1,19 @@
 <template>
   <div>
+    <modal v-show="isAddFileVisible" @close="skipToNextFile">
+      <template v-slot:title>Adding file {{ nextFile }}</template>
+      <template v-slot:body>
+        <p>{{ newObjectProperties.objectID }}</p>
+        <p>{{ newObjectProperties.tags }}</p>
+        <p>{{ newObjectProperties.objectName }}</p>
+        <p>{{ newObjectProperties.objectPath }}</p>
+      </template>
+      <template v-slot:footer>
+        <button type="button" class="btn btn-secondary" @click="skipToNextFile">Cancel</button>
+        <button type="button" class="btn btn-primary" @click="addObject">Add Object</button>
+      </template>
+    </modal>
+
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a
         v-if="!editingName"
@@ -133,19 +147,26 @@ console.log("Creating NavMenu");
 
 // in full builds helpers are exposed as Vuex.mapState
 import { mapState } from "vuex";
+import Modal from "./Modal";
 
 const remote = require("electron").remote;
 const fs = remote.require("fs");
 const path = require("path");
+const uuidv1 = require("uuid/v1");
 
 export default {
   name: "NavMenu",
   data() {
     return {
       editingName: false,
-      droppingEnabled: false
+      droppingEnabled: false,
+      isAddFileVisible: false,
+      nextFile: "",
+      newObjectProperties: {},
+      addFileLists: []
     };
   },
+  components: { Modal },
   computed: mapState({
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace
@@ -157,6 +178,7 @@ export default {
     },
     openFolder: function() {
       console.log(`Open new workspace`);
+      this.showModal();
     },
     saveProject: function() {
       const projectConfig = JSON.stringify(this.project);
@@ -173,12 +195,44 @@ export default {
         this.droppingEnabled = false;
       }
       if (e.type == "drop") {
+        this.addFileLists = [];
         e.dataTransfer.files.forEach(file => {
           const sourceFile = path.join(file.path, file.name);
-          console.log(`Dropped File ==> [${sourceFile}]`);
+          console.log(`Adding Dropped file ==> [${sourceFile}]`);
+          this.addFileLists.push(sourceFile);
         });
       }
+
+      if (this.addFileLists.length > 0) {
+        this.nextFile = this.addFileLists.pop();
+        this.showModal();
+      }
+
       return false;
+    },
+    showModal() {
+      console.log(`Showing add dialog for [${this.nextFile}]`);
+      this.newObjectProperties = {
+        objectID: uuidv1(),
+        tags: "default",
+        objectName: path.basename(this.nextFile),
+        objectPath: "/default"
+      };
+      this.isAddFileVisible = true;
+    },
+    closeModal() {
+      this.isAddFileVisible = false;
+    },
+    skipToNextFile() {
+      this.closeModal();
+      this.nextFile = this.addFileLists.pop();
+      if (this.nextFile != undefined) {
+        this.showModal();
+      }
+    },
+    addObject() {
+      console.log(`Adding Object [${this.nextFile}]`);
+      this.skipToNextFile();
     }
   }
 };
