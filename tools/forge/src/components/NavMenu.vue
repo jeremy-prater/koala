@@ -157,10 +157,6 @@ export default {
     },
     openFolder: function() {
       console.log(`Open new workspace`);
-      this.$store.commit("loadProject");
-    },
-    loadProject: function() {
-      this.$store.commit("loadProject");
     },
     saveProject: function() {
       const projectConfig = JSON.stringify(this.project);
