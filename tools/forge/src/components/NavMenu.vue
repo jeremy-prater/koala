@@ -3,10 +3,42 @@
     <modal v-show="isAddFileVisible" @close="skipToNextFile">
       <template v-slot:title>Adding file {{ nextFile }}</template>
       <template v-slot:body>
-        <p>{{ newObjectProperties.objectID }}</p>
-        <p>{{ newObjectProperties.tags }}</p>
-        <p>{{ newObjectProperties.objectName }}</p>
-        <p>{{ newObjectProperties.objectPath }}</p>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Object UUID</span>
+          </div>
+          <span type="text" class="form-control disabled">{{ newObjectProperties.objectID }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Object MD5</span>
+          </div>
+          <span type="text" class="form-control disabled">{{ newObjectProperties.objectHash }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Object Name</span>
+          </div>
+          <input type="text" class="form-control" v-model="newObjectProperties.objectName" />
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Object Path</span>
+          </div>
+          <input type="text" class="form-control" v-model="newObjectProperties.objectPath" />
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Object Tags</span>
+          </div>
+          <input type="text" class="form-control" v-model="newObjectProperties.tags" />
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Parser</span>
+          </div>
+          <input type="text" class="form-control" v-model="newObjectProperties.parser" />
+        </div>
       </template>
       <template v-slot:footer>
         <button type="button" class="btn btn-secondary" @click="skipToNextFile">Cancel</button>
@@ -153,6 +185,7 @@ const remote = require("electron").remote;
 const fs = remote.require("fs");
 const path = require("path");
 const uuidv1 = require("uuid/v1");
+const md5File = require("md5-file");
 
 export default {
   name: "NavMenu",
@@ -197,7 +230,7 @@ export default {
       if (e.type == "drop") {
         this.addFileLists = [];
         e.dataTransfer.files.forEach(file => {
-          const sourceFile = path.join(file.path, file.name);
+          const sourceFile = file.path; //= path.join(file.path, file.name);
           console.log(`Adding Dropped file ==> [${sourceFile}]`);
           this.addFileLists.push(sourceFile);
         });
@@ -212,11 +245,17 @@ export default {
     },
     showModal() {
       console.log(`Showing add dialog for [${this.nextFile}]`);
+      const filename = path.basename(this.nextFile);
+      const lastDot = filename.lastIndexOf(".");
+      const name = filename.substring(0, lastDot);
+      const parser = filename.substring(lastDot + 1);
       this.newObjectProperties = {
         objectID: uuidv1(),
         tags: "default",
-        objectName: path.basename(this.nextFile),
-        objectPath: "/default"
+        objectName: name,
+        objectPath: "/default",
+        parser: parser,
+        objectHash: md5File.sync(this.nextFile)
       };
       this.isAddFileVisible = true;
     },
@@ -243,6 +282,9 @@ body {
   font-size: 0.875rem;
 }
 
+.objectEdit {
+  width: 100%;
+}
 .feather {
   width: 16px;
   height: 16px;
