@@ -7,25 +7,37 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Object UUID</span>
           </div>
-          <span type="text" class="form-control disabled">{{ newObjectProperties.objectID }}</span>
+          <span type="text" class="form-control disabled">{{ newObjectProperties.uuid }}</span>
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Object MD5</span>
           </div>
-          <span type="text" class="form-control disabled">{{ newObjectProperties.objectHash }}</span>
+          <span type="text" class="form-control disabled">{{ newObjectProperties.hash }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Object Source</span>
+          </div>
+          <span type="text" class="form-control disabled">{{ newObjectProperties.source }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Object Size</span>
+          </div>
+          <span type="text" class="form-control disabled">{{ newObjectProperties.size }}</span>
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Object Name</span>
           </div>
-          <input type="text" class="form-control" v-model="newObjectProperties.objectName" />
+          <input type="text" class="form-control" v-model="newObjectProperties.name" />
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">Object Path</span>
           </div>
-          <input type="text" class="form-control" v-model="newObjectProperties.objectPath" />
+          <input type="text" class="form-control" v-model="newObjectProperties.path" />
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
@@ -202,7 +214,7 @@ export default {
   components: { Modal },
   computed: mapState({
     project: state => state.project,
-    currentWorkspace: state => state.currentWorkspace
+    currentWorkspace: state => state.currentWorkspace,
   }),
   methods: {
     editName: function(editing) {
@@ -211,7 +223,6 @@ export default {
     },
     openFolder: function() {
       console.log(`Open new workspace`);
-      this.showModal();
     },
     saveProject: function() {
       const projectConfig = JSON.stringify(this.project);
@@ -231,7 +242,7 @@ export default {
         this.addFileLists = [];
         e.dataTransfer.files.forEach(file => {
           const sourceFile = file.path; //= path.join(file.path, file.name);
-          console.log(`Adding Dropped file ==> [${sourceFile}]`);
+          // console.log(`Adding Dropped file ==> [${sourceFile}]`);
           this.addFileLists.push(sourceFile);
         });
       }
@@ -244,18 +255,20 @@ export default {
       return false;
     },
     showModal() {
-      console.log(`Showing add dialog for [${this.nextFile}]`);
+      // console.log(`Showing add dialog for [${this.nextFile}]`);
       const filename = path.basename(this.nextFile);
       const lastDot = filename.lastIndexOf(".");
       const name = filename.substring(0, lastDot);
       const parser = filename.substring(lastDot + 1);
       this.newObjectProperties = {
-        objectID: uuidv1(),
+        uuid: uuidv1(),
         tags: "default",
-        objectName: name,
-        objectPath: "/default",
+        name: name,
+        path: "/default",
         parser: parser,
-        objectHash: md5File.sync(this.nextFile)
+        hash: md5File.sync(this.nextFile),
+        source: this.nextFile,
+        size: fs.statSync(this.nextFile)['size']
       };
       this.isAddFileVisible = true;
     },
@@ -270,7 +283,8 @@ export default {
       }
     },
     addObject() {
-      console.log(`Adding Object [${this.nextFile}]`);
+      //console.log(`Adding Object [${this.nextFile}]`);
+      this.$store.commit("addObject", this.newObjectProperties);
       this.skipToNextFile();
     }
   }

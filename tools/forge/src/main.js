@@ -13,7 +13,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import Home from './components/Home.vue';
-import HelloWorld from './components/HelloWorld.vue';
+import Objects from './components/Objects.vue';
 import Dashboard from './components/Dashboard.vue';
 import KoalaSettings from './components/settings.js';
 
@@ -31,7 +31,7 @@ const router = new VueRouter({
     routes: [
         { path: '/', component: Home },
         { path: '/dashboard', component: Dashboard },
-        { path: '/objects', component: HelloWorld }
+        { path: '/objects', component: Objects }
     ]
 });
 
@@ -39,10 +39,15 @@ const store = new Vuex.Store({
     state: {
         currentWorkspace: KoalaSettings.settings.workspace,
         project: {
-            name: 'Unnamed project'
+            name: 'Unnamed project',
+            objects: []
         }
     },
     mutations: {
+        addObject(state, object) {
+            console.log(`Created Object [${object.name}]`);
+            state.project.objects.push(object);
+        },
         setWorkspace(state, newWorkspace) {
             state.currentWorkspace = newWorkspace;
         },
@@ -54,6 +59,9 @@ const store = new Vuex.Store({
             if (fs.existsSync(inputSettings)) {
                 console.log(`Loading Project [${inputSettings}]`);
                 state.project = JSON.parse(fs.readFileSync(inputSettings));
+                console.log(
+                    `Loaded [${state.project.objects.length}] objects!`
+                );
             } else {
                 console.warn(
                     `Project configuration [${inputSettings}] does not exist!`
