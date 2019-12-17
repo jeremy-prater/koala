@@ -72,7 +72,6 @@ export default {
         }
 
         if (add) {
-          console.log(object);
           objects.push(object);
         }
       });

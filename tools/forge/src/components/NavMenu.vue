@@ -1,5 +1,49 @@
 <template>
   <div>
+    <modal v-show="saveInProgress" @close="closeProjectSave" :key="saveProgress.width">
+      <template v-slot:title>Exporting workspace</template>
+      <template v-slot:body>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Source File</span>
+          </div>
+          <span type="text" class="form-control disabled">{{ currentObject.source }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Target Object</span>
+          </div>
+          <span type="text" class="form-control disabled">{{ currentObject.uuid }}</span>
+        </div>
+        <div class="progress">
+          <div
+            class="progress-bar progress-bar-striped progress-bar-animated"
+            role="progressbar"
+            v-bind:style="saveProgress"
+          ></div>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <button type="button" class="btn btn-danger" @click="cancelProjectSave">Abort</button>
+      </template>
+    </modal>
+
+    <modal v-show="editingWorkspace" @close="closeWorkspaceEditor">
+      <template v-slot:title>Open new workspace</template>
+      <template v-slot:body>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Workspace</span>
+          </div>
+          <input type="text" class="form-control" v-model="newWorkspace" />
+        </div>
+      </template>
+      <template v-slot:footer>
+        <button type="button" class="btn btn-secondary" @click="closeWorkspaceEditor">Cancel</button>
+        <button type="button" class="btn btn-primary" @click="openWorkspace">Open Workspace</button>
+      </template>
+    </modal>
+
     <modal v-show="isAddFileVisible" @close="skipToNextFile">
       <template v-slot:title>Adding file {{ nextFile }}</template>
       <template v-slot:body>
@@ -86,7 +130,7 @@
           </span>
         </li>
         <li class="nav-item text-nowrap openbutton">
-          <a class="nav-link" v-on:click="openFolder">
+          <a class="nav-link" v-on:click="showWorkspaceEditor">
             <i class="fas fa-folder-open fa-2x navIcon" />
           </a>
         </li>
@@ -204,31 +248,83 @@ export default {
   data() {
     return {
       editingName: false,
+      editingWorkspace: false,
       droppingEnabled: false,
       isAddFileVisible: false,
       nextFile: "",
+      newWorkspace: "",
       newObjectProperties: {},
-      addFileLists: []
+      addFileLists: [],
+      saveInProgress: false,
+      saveProgress: { width: "0%" },
+      cancelSave: false,
+      currentObject: {}
     };
   },
   components: { Modal },
   computed: mapState({
     project: state => state.project,
-    currentWorkspace: state => state.currentWorkspace,
+    currentWorkspace: state => state.currentWorkspace
   }),
   methods: {
     editName: function(editing) {
       console.log(`Edit project name [${editing}]`);
       this.editingName = editing;
     },
-    openFolder: function() {
-      console.log(`Open new workspace`);
+    updateSaveProgress: function(pos, max) {
+      let value = (pos / max) * 100;
+      console.log(`Save Progress [${value}]`);
+      this.saveProgress = {
+        width: `${value}%`
+      };
     },
     saveProject: function() {
-      const projectConfig = JSON.stringify(this.project);
-      const outputFile = path.join(this.currentWorkspace, "projectConfig.json");
-      console.log(`Saving Project [${outputFile}]`);
-      fs.writeFileSync(outputFile, projectConfig);
+      this.cancelSave = false;
+      const totalCount = this.project.objects.length + 1;
+      let currentCount = 0;
+
+      this.updateSaveProgress(++currentCount, totalCount);
+      let outputFile = path.join(this.currentWorkspace, "projectConfig.json");
+      this.currentObject = {
+        source: "Project Configuration",
+        uuid: outputFile
+      };
+
+      this.saveInProgress = true;
+
+      setTimeout(() => {
+        const projectConfig = JSON.stringify(this.project, null, 4);
+        console.log(`Saving Project [${outputFile}]`);
+        fs.writeFileSync(outputFile, projectConfig);
+
+        const saveObject = function() {
+          if (currentCount != totalCount) {
+            let object = this.project.objects[currentCount - 1];
+            this.updateSaveProgress(++currentCount, totalCount);
+            this.currentObject = object;
+            let outputFile = path.join(this.currentWorkspace, object.uuid);
+            console.log(`Copying [${object.source}] ==> [${outputFile}]`);
+            fs.copyFileSync(object.source, outputFile);
+
+            if (this.cancelSave) {
+              this.cancelSave = false;
+              this.currentObject = {
+                source: "Export Aborted",
+                uuid: "Export Aborted"
+              };
+            } else {
+              setTimeout(saveObject, 0);
+            }
+          } else {
+            this.currentObject = {
+              source: "Export Complete",
+              uuid: "Export Complete"
+            };
+          }
+        }.bind(this);
+
+        setTimeout(saveObject, 0);
+      }, 0);
     },
     onDragEvent: function(e) {
       e.preventDefault();
@@ -268,7 +364,7 @@ export default {
         parser: parser,
         hash: md5File.sync(this.nextFile),
         source: this.nextFile,
-        size: fs.statSync(this.nextFile)['size']
+        size: fs.statSync(this.nextFile)["size"]
       };
       this.isAddFileVisible = true;
     },
@@ -286,6 +382,26 @@ export default {
       //console.log(`Adding Object [${this.nextFile}]`);
       this.$store.commit("addObject", this.newObjectProperties);
       this.skipToNextFile();
+    },
+    showWorkspaceEditor: function() {
+      console.log("Open new workspace");
+      this.newWorkspace = this.currentWorkspace;
+      this.editingWorkspace = true;
+    },
+    closeWorkspaceEditor() {
+      this.editingWorkspace = false;
+    },
+    openWorkspace() {
+      this.$store.commit("setWorkspace", this.newWorkspace);
+      this.$store.commit("loadProject");
+      this.closeWorkspaceEditor();
+    },
+    cancelProjectSave() {
+      console.log("Aboring Project Save...");
+      this.cancelSave = true;
+    },
+    closeProjectSave() {
+      this.saveInProgress = false;
     }
   }
 };

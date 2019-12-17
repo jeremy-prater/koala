@@ -35,13 +35,17 @@ const router = new VueRouter({
     ]
 });
 
+const defaultState = function() {
+    return {
+        name: 'Unnamed project',
+        objects: []
+    };
+};
+
 const store = new Vuex.Store({
     state: {
         currentWorkspace: KoalaSettings.settings.workspace,
-        project: {
-            name: 'Unnamed project',
-            objects: []
-        }
+        project: defaultState()
     },
     mutations: {
         addObject(state, object) {
@@ -49,22 +53,28 @@ const store = new Vuex.Store({
             state.project.objects.push(object);
         },
         setWorkspace(state, newWorkspace) {
+            KoalaSettings.settings.workspace = newWorkspace;
             state.currentWorkspace = newWorkspace;
+            KoalaSettings.saveSettings();
         },
         loadProject(state) {
             const inputSettings = path.join(
-                state.currentWorkspace,
+                KoalaSettings.settings.workspace,
                 'projectConfig.json'
             );
+            state.project = defaultState();
             if (fs.existsSync(inputSettings)) {
                 console.log(`Loading Project [${inputSettings}]`);
-                state.project = JSON.parse(fs.readFileSync(inputSettings));
+                state.project = {
+                    ...state.project,
+                    ...JSON.parse(fs.readFileSync(inputSettings))
+                };
                 console.log(
                     `Loaded [${state.project.objects.length}] objects!`
                 );
             } else {
                 console.warn(
-                    `Project configuration [${inputSettings}] does not exist!`
+                    `Project configuration [${inputSettings}] does not exist! Using defaults!`
                 );
             }
         }

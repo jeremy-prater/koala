@@ -43,7 +43,6 @@
 
 <script>
 import { mapState } from "vuex";
-
 console.log("Creating Dashboard");
 
 export default {
