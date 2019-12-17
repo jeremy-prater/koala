@@ -26,17 +26,24 @@
       <div class="card-header">
         <div class="text-right" style="float:right;">
           <button type="button" class="btn btn-info" style="margin: 7px;">Edit</button>
-          <button type="button" class="btn btn-danger" style="margin: 7px;">Delete</button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteObject(object.uuid)"
+            style="margin: 7px;"
+          >Delete</button>
         </div>
         <div>
-          <h5>{{ object.name }}</h5>
+          <h5>{{ object.path }}/{{ object.name }}</h5>
           <h6>{{ object.uuid }}</h6>
         </div>
       </div>
       <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <h5 class="card-title">{{ object.source }}</h5>
+        <p class="card-text">Tags : {{ object.tags }}</p>
+        <p class="card-text">Parse : {{ object.parser }}</p>
+        <p class="card-text">Size : {{ object.size }}</p>
+        <p class="card-text">MD5 : {{ object.hash }}</p>
       </div>
     </div>
   </div>
@@ -85,6 +92,9 @@ export default {
     },
     closeEditor() {
       this.editorVisible = false;
+    },
+    deleteObject(uuid) {
+      this.$store.commit("deleteObject", uuid);
     }
   }
 };

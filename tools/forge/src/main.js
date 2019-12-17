@@ -52,6 +52,12 @@ const store = new Vuex.Store({
             console.log(`Created Object [${object.name}]`);
             state.project.objects.push(object);
         },
+        deleteObject(state, uuid) {
+            console.log(`Deleting Object [${uuid}]`);
+            state.project.objects = state.project.objects.filter(
+                object => object.uuid != uuid
+            );
+        },
         setWorkspace(state, newWorkspace) {
             KoalaSettings.settings.workspace = newWorkspace;
             state.currentWorkspace = newWorkspace;
