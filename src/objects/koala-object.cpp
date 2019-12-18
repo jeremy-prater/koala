@@ -10,15 +10,19 @@ std::shared_ptr<BaseObject> BaseObject::CreateObject(rapidjson::Pointer props) {
     return std::shared_ptr<BaseObject>();
   }
 
-  std::shared_ptr<BaseObject> newObject = std::make_shared<BaseObject>();
+  DebugLogger logger("BaseObject::CreateObject",
+                     DebugLogger::DebugColor::COLOR_RED, false);
 
   const size_t totalProps = props.GetTokenCount();
   const auto tokens = props.GetTokens();
 
   for (size_t currentProp = 0; currentProp < totalProps; currentProp++) {
     const auto token = tokens[currentProp];
-    newObject->logger.Info("Token : %s", token.name);
+    logger.Info("Token : %s", token.name);
   }
+
+  std::shared_ptr<BaseObject> newObject; // = std::make_shared<BaseObject>();
+  return newObject;
 }
 
 BaseObject::BaseObject(const std::string newUuid, const std::string newPath,
@@ -57,7 +61,9 @@ void BaseObject::AddTag(const std::string tag) noexcept {
   auto it = std::find(tags.begin(), tags.end(), tag);
   if (it != tags.end()) {
     tags.erase(it);
+    return true;
   }
+  return false;
 }
 
 [[nodiscard]] bool BaseObject::HasTag(const std::string tag) const noexcept {
@@ -84,6 +90,6 @@ void BaseObject::Unload() {
   return data != nullptr;
 }
 
-[[nodiscard]] const uint8_t const *BaseObject::GetData() const noexcept {
-  return static_cast<const uint8_t const *>(data);
+[[nodiscard]] const uint8_t *const BaseObject::GetData() const noexcept {
+  return static_cast<const uint8_t *const>(data);
 }

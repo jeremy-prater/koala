@@ -13,6 +13,8 @@ include_directories("../../../src/engine"
 )
 
 add_executable(${PROJ_NAME} koala.cpp)
+set(CXX_STANDARD_REQUIRED ON)
+set_property(TARGET ${PROJ_NAME} PROPERTY CXX_STANDARD 17)
 target_link_libraries(${PROJ_NAME} PRIVATE
     KoalaEngine
     Magnum::Application

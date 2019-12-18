@@ -2,8 +2,6 @@
 #include "koala-object.hpp"
 #include "rapidjson/document.h"
 
-using namespace Magnum;
-
 namespace Koala {
 
 class Project {

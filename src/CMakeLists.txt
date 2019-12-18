@@ -45,9 +45,12 @@ set(KOALAOBJECT_SRCS "objects/project-configuration.cpp"
 
 set(SOURCE_FILES ${DEBUGLOGGER_SRCS} ${KOALAENGINE_SRCS} ${KOALAOBJECT_SRCS})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
-add_library(KoalaEngine STATIC ${SOURCE_FILES})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+add_library(${PROJ_NAME} STATIC ${SOURCE_FILES})
+set(CXX_STANDARD_REQUIRED ON)
+set_property(TARGET ${PROJ_NAME} PROPERTY CXX_STANDARD 17)
 target_link_libraries(${PROJ_NAME} PRIVATE
     Magnum::Application
     Magnum::GL

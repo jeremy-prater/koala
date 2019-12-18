@@ -4,8 +4,6 @@
 #include <unordered_map>
 #include <vector>
 
-using namespace Magnum;
-
 namespace Koala {
 
 class BaseObject {
@@ -24,9 +22,8 @@ public:
   void Load();
   void Unload();
   [[nodiscard]] bool IsLoaded() const noexcept;
-  [[nodiscard]] const uint8_t const *GetData() const noexcept;
+  [[nodiscard]] const uint8_t *const GetData() const noexcept;
 
-private:
   BaseObject(const std::string newUuid, const std::string newPath,
              const std::string newName, const std::string newParser,
              const size_t newSize, const std::string newMD5);

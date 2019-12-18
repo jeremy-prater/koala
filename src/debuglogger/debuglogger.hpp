@@ -31,11 +31,11 @@ public:
 
   DebugLogger(std::string debugTag, DebugColor color, bool bold);
 
-  template <typename... Args> void Error(const char *format, Args... args);
-  template <typename... Args> void Warning(const char *format, Args... args);
-  template <typename... Args> void Status(const char *format, Args... args);
-  template <typename... Args> void Info(const char *format, Args... args);
-  template <typename... Args> void Verbose(const char *format, Args... args);
+  void Error(const char *format, ...) const noexcept;
+  void Warning(const char *format, ...) const noexcept;
+  void Status(const char *format, ...) const noexcept;
+  void Info(const char *format, ...) const noexcept;
+  void Verbose(const char *format, ...) const noexcept;
 
   void WriteLog(DebugLevel level, const char *format, ...) const noexcept;
   void SetDebugModuleName(std::string newName) noexcept;
@@ -46,6 +46,9 @@ private:
   static const char *debugLevels[DebugLevel::DEBUG_NUM_LEVELS];
   static const char *debugColors[DebugColor::DEBUG_NUM_COLORS];
   static std::mutex loggerLock;
+
+  void WriteLogInternal(DebugLogger::DebugLevel level, const char *format,
+                        va_list args) const noexcept;
 
   std::string debugTag;
   DebugColor debugColor;

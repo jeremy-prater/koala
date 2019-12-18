@@ -30,38 +30,57 @@ void DebugLogger::SetDebugColor(DebugColor newColor) noexcept {
 
 void DebugLogger::SetDebugBold(bool bold) noexcept { debugBold = bold; }
 
-template <typename... Args>
-void DebugLogger::Error(const char *format, Args... args) {
-  WriteLog(DebugLogger::DebugLevel::DEBUG_ERROR, format, args...);
+void DebugLogger::Error(const char *format, ...) const noexcept {
+  va_list args = {};
+  va_start(args, format);
+  WriteLogInternal(DebugLogger::DebugLevel::DEBUG_ERROR, format, args);
+  va_end(args);
 }
-template <typename... Args>
-void DebugLogger::Warning(const char *format, Args... args) {
-  WriteLog(DebugLogger::DebugLevel::DEBUG_WARNING, format, args...);
+
+void DebugLogger::Warning(const char *format, ...) const noexcept {
+  va_list args = {};
+  va_start(args, format);
+  WriteLog(DebugLogger::DebugLevel::DEBUG_WARNING, format, args);
+  va_end(args);
 }
-template <typename... Args>
-void DebugLogger::Status(const char *format, Args... args) {
-  WriteLog(DebugLogger::DebugLevel::DEBUG_STATUS, format, args...);
+
+void DebugLogger::Status(const char *format, ...) const noexcept {
+  va_list args = {};
+  va_start(args, format);
+  WriteLog(DebugLogger::DebugLevel::DEBUG_STATUS, format, args);
+  va_end(args);
 }
-template <typename... Args>
-void DebugLogger::Info(const char *format, Args... args) {
-  WriteLog(DebugLogger::DebugLevel::DEBUG_INFO, format, args...);
+
+void DebugLogger::Info(const char *format, ...) const noexcept {
+  va_list args = {};
+  va_start(args, format);
+  WriteLog(DebugLogger::DebugLevel::DEBUG_INFO, format, args);
+  va_end(args);
 }
-template <typename... Args>
-void DebugLogger::Verbose(const char *format, Args... args) {
-  WriteLog(DebugLogger::DebugLevel::DEBUG_VERBOSE, format, args...);
+
+void DebugLogger::Verbose(const char *format, ...) const noexcept {
+  va_list args = {};
+  va_start(args, format);
+  WriteLogInternal(DebugLogger::DebugLevel::DEBUG_VERBOSE, format, args);
+  va_end(args);
 }
 
 void DebugLogger::WriteLog(DebugLogger::DebugLevel level, const char *format,
                            ...) const noexcept {
+  va_list args = {};
+  va_start(args, format);
+  WriteLogInternal(level, format, args);
+  va_end(args);
+}
 
+void DebugLogger::WriteLogInternal(DebugLogger::DebugLevel level,
+                                   const char *format, va_list args) const
+    noexcept {
   static char buffer[DEBUG_LINE_LENGTH];
   static char levelColor[8];
   static char tagColor[8];
 
-  va_list args = {};
-  va_start(args, format);
   vsnprintf(buffer, DEBUG_LINE_LENGTH, format, args);
-  va_end(args);
 
   int levelColorIndex;
   bool levelBold = false;
