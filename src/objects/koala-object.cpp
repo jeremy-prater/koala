@@ -1,4 +1,5 @@
 #include "koala-object.hpp"
+#include <algorithm>
 
 using namespace Koala;
 

@@ -1,4 +1,5 @@
 #include "debuglogger.hpp"
+#include <memory>
 #include <mutex>
 #include <rapidjson/pointer.h>
 #include <unordered_map>

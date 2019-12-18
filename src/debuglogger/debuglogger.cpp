@@ -40,21 +40,21 @@ void DebugLogger::Error(const char *format, ...) const noexcept {
 void DebugLogger::Warning(const char *format, ...) const noexcept {
   va_list args = {};
   va_start(args, format);
-  WriteLog(DebugLogger::DebugLevel::DEBUG_WARNING, format, args);
+  WriteLogInternal(DebugLogger::DebugLevel::DEBUG_WARNING, format, args);
   va_end(args);
 }
 
 void DebugLogger::Status(const char *format, ...) const noexcept {
   va_list args = {};
   va_start(args, format);
-  WriteLog(DebugLogger::DebugLevel::DEBUG_STATUS, format, args);
+  WriteLogInternal(DebugLogger::DebugLevel::DEBUG_STATUS, format, args);
   va_end(args);
 }
 
 void DebugLogger::Info(const char *format, ...) const noexcept {
   va_list args = {};
   va_start(args, format);
-  WriteLog(DebugLogger::DebugLevel::DEBUG_INFO, format, args);
+  WriteLogInternal(DebugLogger::DebugLevel::DEBUG_INFO, format, args);
   va_end(args);
 }
 
