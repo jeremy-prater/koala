@@ -1,7 +1,6 @@
 #include "debuglogger.hpp"
 #include "rapidjson/document.h"
-#include <Magnum/GL/DefaultFramebuffer.h>
-#include <Magnum/Platform/Sdl2Application.h>
+#include "koala-object.hpp"
 
 using namespace Magnum;
 
@@ -9,10 +8,10 @@ namespace Koala {
 
 class Project {
 public:
-  explicit KoalaEngine(const Arguments &arguments);
+  Project(const std::string rootDir);
 
 private:
   DebugLogger logger;
-  void drawEvent() override;
+  
 };
 } // namespace Koala

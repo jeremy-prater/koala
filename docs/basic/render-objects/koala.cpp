@@ -1,4 +1,5 @@
 #include "koala-engine.hpp"
+#include "koala-project-configuration.hpp"
 
 using namespace Koala;
 
