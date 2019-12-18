@@ -5,6 +5,7 @@
 
 #define DEBUG_LINE_LENGTH 1024
 
+namespace Koala {
 class DebugLogger {
 public:
   typedef enum {
@@ -44,3 +45,4 @@ private:
   DebugColor debugColor;
   bool debugBold;
 };
+} // namespace Koala

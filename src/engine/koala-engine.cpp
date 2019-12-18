@@ -1,7 +1,9 @@
 #include "koala-engine.hpp"
 #include "koala-version.hpp"
 
-KoalaEngine::KoalaEngine(const Arguments &arguments)
+using namespace Koala;
+
+Engine::Engine(const Arguments &arguments)
     : Platform::Application{arguments},
       logger("Main", DebugLogger::DebugColor::COLOR_WHITE, false) {
   logger.WriteLog(DebugLogger::DebugLevel::DEBUG_INFO,
@@ -11,7 +13,7 @@ KoalaEngine::KoalaEngine(const Arguments &arguments)
   /* TODO: Add your initialization code here */
 }
 
-void KoalaEngine::drawEvent() {
+void Engine::drawEvent() {
   GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
 
   /* TODO: Add your drawing code here */

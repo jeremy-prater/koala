@@ -7,13 +7,12 @@ using namespace Magnum;
 
 namespace Koala {
 
-class Engine : public Platform::Application {
+class Project {
 public:
-  explicit Engine(const Arguments &arguments);
+  explicit KoalaEngine(const Arguments &arguments);
 
 private:
   DebugLogger logger;
   void drawEvent() override;
 };
-
 } // namespace Koala

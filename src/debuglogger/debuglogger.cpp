@@ -3,6 +3,8 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+using namespace Koala;
+
 const char
     *DebugLogger::debugLevels[DebugLogger::DebugLevel::DEBUG_NUM_LEVELS] = {
         "     ERROR", "   WARNING", "  STATUS  ", "  INFO    ", "VERBOSE   ",
@@ -28,8 +30,8 @@ void DebugLogger::SetDebugColor(DebugColor newColor) noexcept {
 
 void DebugLogger::SetDebugBold(bool bold) noexcept { debugBold = bold; }
 
-void DebugLogger::WriteLog(DebugLogger::DebugLevel level, const char *format, ...) const
-    noexcept {
+void DebugLogger::WriteLog(DebugLogger::DebugLevel level, const char *format,
+                           ...) const noexcept {
 
   static char buffer[DEBUG_LINE_LENGTH];
   static char levelColor[8];
