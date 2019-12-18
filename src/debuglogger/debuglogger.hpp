@@ -31,6 +31,12 @@ public:
 
   DebugLogger(std::string debugTag, DebugColor color, bool bold);
 
+  template <typename... Args> void Error(const char *format, Args... args);
+  template <typename... Args> void Warning(const char *format, Args... args);
+  template <typename... Args> void Status(const char *format, Args... args);
+  template <typename... Args> void Info(const char *format, Args... args);
+  template <typename... Args> void Verbose(const char *format, Args... args);
+
   void WriteLog(DebugLevel level, const char *format, ...) const noexcept;
   void SetDebugModuleName(std::string newName) noexcept;
   void SetDebugColor(DebugColor newColor) noexcept;

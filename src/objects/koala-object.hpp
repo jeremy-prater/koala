@@ -12,6 +12,9 @@ class BaseObject {
 public:
   static std::shared_ptr<BaseObject> CreateObject(rapidjson::Pointer props);
 
+  [[nodiscard]] const std::string GetUUID() const noexcept;
+  [[nodiscard]] const std::string GetPath() const noexcept;
+  [[nodiscard]] const std::string GetName() const noexcept;
   [[nodiscard]] const std::string GetParser() const noexcept;
 
   void AddTag(const std::string tag) noexcept;
@@ -24,7 +27,9 @@ public:
   [[nodiscard]] const uint8_t const *GetData() const noexcept;
 
 private:
-  BaseObject();
+  BaseObject(const std::string newUuid, const std::string newPath,
+             const std::string newName, const std::string newParser,
+             const size_t newSize, const std::string newMD5);
   ~BaseObject();
 
 private:
@@ -34,17 +39,18 @@ private:
   const std::string path;
   const std::string name;
   const std::string parser;
-  const int32_t size;
+  const size_t size;
   const std::string md5;
 
-  std::mutex loadLock;
-  bool loaded;
+  mutable std::mutex loadLock;
   uint8_t *data;
 
-  std::mutex tagsLock;
+  mutable std::mutex tagsLock;
   std::vector<std::string> tags;
 
-  std::mutex metaObjectLock;
+  mutable std::mutex metaObjectLock;
   std::unordered_map<std::string, std::string> metaObjects;
+
+  DebugLogger logger;
 };
 } // namespace Koala

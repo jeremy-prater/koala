@@ -9,6 +9,7 @@ set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 # Add Debuglogger to Koala
 include_directories("../../../src/engine"
                     "../../../src/debuglogger"
+                    "../../../src/objects"
                     ${RAPIDJSON_INCLUDE_DIRS}
 )
 

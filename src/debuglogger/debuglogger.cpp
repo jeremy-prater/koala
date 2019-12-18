@@ -30,6 +30,27 @@ void DebugLogger::SetDebugColor(DebugColor newColor) noexcept {
 
 void DebugLogger::SetDebugBold(bool bold) noexcept { debugBold = bold; }
 
+template <typename... Args>
+void DebugLogger::Error(const char *format, Args... args) {
+  WriteLog(DebugLogger::DebugLevel::DEBUG_ERROR, format, args...);
+}
+template <typename... Args>
+void DebugLogger::Warning(const char *format, Args... args) {
+  WriteLog(DebugLogger::DebugLevel::DEBUG_WARNING, format, args...);
+}
+template <typename... Args>
+void DebugLogger::Status(const char *format, Args... args) {
+  WriteLog(DebugLogger::DebugLevel::DEBUG_STATUS, format, args...);
+}
+template <typename... Args>
+void DebugLogger::Info(const char *format, Args... args) {
+  WriteLog(DebugLogger::DebugLevel::DEBUG_INFO, format, args...);
+}
+template <typename... Args>
+void DebugLogger::Verbose(const char *format, Args... args) {
+  WriteLog(DebugLogger::DebugLevel::DEBUG_VERBOSE, format, args...);
+}
+
 void DebugLogger::WriteLog(DebugLogger::DebugLevel level, const char *format,
                            ...) const noexcept {
 
