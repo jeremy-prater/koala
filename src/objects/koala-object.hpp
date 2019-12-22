@@ -2,6 +2,7 @@
 #include <memory>
 #include <mutex>
 #include <rapidjson/pointer.h>
+#include <rapidjson/rapidjson.h>
 #include <unordered_map>
 #include <vector>
 
@@ -9,7 +10,8 @@ namespace Koala {
 
 class BaseObject {
 public:
-  static std::shared_ptr<BaseObject> CreateObject(rapidjson::Pointer props);
+  static std::shared_ptr<BaseObject>
+  CreateObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
   [[nodiscard]] const std::string GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;

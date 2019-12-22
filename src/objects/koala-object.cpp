@@ -1,28 +1,35 @@
 #include "koala-object.hpp"
 #include <algorithm>
+#include <boost/algorithm/string.hpp>
 
 using namespace Koala;
 
 const std::string BaseObject::metaIgnore[] = {
     "uuid", "path", "name", "source", "tags", "parser", "size", "md5sum"};
 
-std::shared_ptr<BaseObject> BaseObject::CreateObject(rapidjson::Pointer props) {
-  if (!props.IsValid()) {
-    return std::shared_ptr<BaseObject>();
-  }
+std::shared_ptr<BaseObject> BaseObject::CreateObject(
+    rapidjson::GenericObject<false, rapidjson::Value::ValueType> props) {
 
   DebugLogger logger("BaseObject::CreateObject",
                      DebugLogger::DebugColor::COLOR_RED, false);
 
-  const size_t totalProps = props.GetTokenCount();
-  const auto tokens = props.GetTokens();
+  const std::string uuid = props["uuid"].GetString();
+  const std::string path = props["path"].GetString();
+  const std::string name = props["name"].GetString();
+  const std::string parser = props["parser"].GetString();
+  const size_t size = props["size"].GetUint();
+  const std::string md5Sum = props["hash"].GetString();
 
-  for (size_t currentProp = 0; currentProp < totalProps; currentProp++) {
-    const auto token = tokens[currentProp];
-    logger.Info("Token : %s", token.name);
+  std::shared_ptr<BaseObject> newObject =
+      std::make_shared<BaseObject>(uuid, path, name, parser, size, md5Sum);
+
+  {
+    std::scoped_lock<std::mutex> lock(newObject->tagsLock);
+    const std::string tagStringRaw = props["tags"].GetString();
+    boost::split(newObject->tags, tagStringRaw,
+                 [](char c) { return c == ' '; });
   }
 
-  std::shared_ptr<BaseObject> newObject; // = std::make_shared<BaseObject>();
   return newObject;
 }
 

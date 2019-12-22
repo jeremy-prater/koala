@@ -21,6 +21,7 @@ configure_file (
 
 
 find_package(RapidJSON)
+find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(Magnum REQUIRED GL Sdl2Application)
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
@@ -30,6 +31,7 @@ include_directories("debuglogger"
                     "engine"
                     "objects"
                     ${RAPIDJSON_INCLUDE_DIRS}
+                    ${Boost_INCLUDE_DIRS}
                     ${PROJECT_BINARY_DIR}
                     )
 
@@ -49,8 +51,6 @@ set(SOURCE_FILES ${DEBUGLOGGER_SRCS} ${KOALAENGINE_SRCS} ${KOALAOBJECT_SRCS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 add_library(${PROJ_NAME} STATIC ${SOURCE_FILES})
-set(CXX_STANDARD_REQUIRED ON)
-set_property(TARGET ${PROJ_NAME} PROPERTY CXX_STANDARD 17)
 target_link_libraries(${PROJ_NAME} PRIVATE
     Magnum::Application
     Magnum::GL
