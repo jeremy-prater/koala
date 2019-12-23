@@ -41,6 +41,13 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   logger.Info("Opening %s", projectRoot.c_str());
 
   Koala::Project project(projectRoot);
+
+  auto uuids = project.GetObjectUUIDs();
+  for (auto uuid : uuids)
+  {
+    auto object = project.GetObject(uuid);
+    object->Load();
+  }
 }
 KoalaTest::~KoalaTest() {}
 

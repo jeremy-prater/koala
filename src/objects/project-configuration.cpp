@@ -36,7 +36,28 @@ Project::Project(const std::string path, const std::string defaultConfigFile)
       "Loaded Project Config [%s] ==> [%d bytes]... Creating [%d] objects",
       configFile.c_str(), configStats.st_size, objects.Size());
 
-  for (auto &object : objects) {
-    BaseObject::CreateObject(object.GetObject());
+  {
+    std::scoped_lock<std::mutex> lock(objectsMutex);
+    for (auto &object : objects) {
+
+      auto newObject = BaseObject::CreateObject(path, object.GetObject());
+      this->objects[newObject->GetUUID()] = newObject;
+    }
   }
+}
+
+[[nodiscard]] std::vector<std::string> Project::GetObjectUUIDs() const
+    noexcept {
+  std::scoped_lock<std::mutex> lock(objectsMutex);
+  std::vector<std::string> keys;
+  for (const auto &[key, value] : objects) {
+    keys.push_back(key);
+  }
+  return keys;
+}
+
+[[nodiscard]] std::shared_ptr<BaseObject>
+Project::GetObject(std::string uuid) const noexcept {
+  std::scoped_lock<std::mutex> lock(objectsMutex);
+  return objects.at(uuid);
 }

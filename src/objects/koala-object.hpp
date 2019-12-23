@@ -1,4 +1,5 @@
 #include "debuglogger.hpp"
+#include <boost/signals2.hpp>
 #include <memory>
 #include <mutex>
 #include <rapidjson/pointer.h>
@@ -10,8 +11,9 @@ namespace Koala {
 
 class BaseObject {
 public:
-  static std::shared_ptr<BaseObject>
-  CreateObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
+  static std::shared_ptr<BaseObject> CreateObject(
+      const std::string rootDir,
+      rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
   [[nodiscard]] const std::string GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
@@ -29,8 +31,26 @@ public:
 
   BaseObject(const std::string newUuid, const std::string newPath,
              const std::string newName, const std::string newParser,
-             const size_t newSize, const std::string newMD5);
+             const size_t newSize, const std::string newMD5,
+             const std::string newRootDir);
   ~BaseObject();
+
+  // Life cycle events
+  boost::signals2::signal<void()> onLoadComplete();
+
+  boost::signals2::signal<void()> onStartup();
+
+  boost::signals2::signal<void()> onRunning();
+
+  // Object is alive and steady state
+
+  // User implementation here
+
+  // Object shutdown
+
+  boost::signals2::signal<void()> onShutdown();
+
+  boost::signals2::signal<void()> onReleased();
 
 private:
   static const std::string metaIgnore[];
@@ -41,6 +61,7 @@ private:
   const std::string parser;
   const size_t size;
   const std::string md5;
+  const std::string rootDir;
 
   mutable std::mutex loadLock;
   uint8_t *data;
