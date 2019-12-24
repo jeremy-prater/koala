@@ -43,7 +43,7 @@ BaseObject::BaseObject(const std::string newUuid, const std::string newPath,
                        const size_t newSize, const std::string newMD5,
                        const std::string newRootDir)
     : uuid(newUuid), path(newPath), name(newName), parser(newParser),
-      size(newSize), md5(newMD5), rootDir(newRootDir),
+      size(newSize), md5(newMD5), rootDir(newRootDir), data(nullptr),
       logger("Object" + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
              false) {
   logger.Info("Created Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
@@ -90,6 +90,9 @@ void BaseObject::Load() {
   std::scoped_lock<std::mutex> lock(loadLock);
   if (data == nullptr) {
     data = static_cast<uint8_t *>(malloc(size));
+  } else {
+    logger.Warning("Object is already loaded");
+    return;
   }
 
   if (data == nullptr) {
@@ -101,8 +104,6 @@ void BaseObject::Load() {
   const std::string fullPath = rootDir + "/" + uuid;
 
   auto fd = open(fullPath.c_str(), O_RDONLY);
-
-  logger.Info("[%s] opened ==> %d", fullPath.c_str(), fd);
 
   if (fd == -1) {
     logger.Error("Unable to open [%s] ==> [%s]", uuid.c_str(), strerror(errno));
@@ -121,6 +122,8 @@ void BaseObject::Load() {
   }
 
   close(fd);
+
+  logger.Info("Loaded!");
 }
 
 void BaseObject::Unload() {
@@ -129,6 +132,7 @@ void BaseObject::Unload() {
     free(data);
     data = nullptr;
   }
+  logger.Info("Unloaded!");
 }
 
 [[nodiscard]] bool BaseObject::IsLoaded() const noexcept {
