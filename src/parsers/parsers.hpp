@@ -1,24 +1,27 @@
+#pragma once
+
 #include "koala-object.hpp"
+#include <functional>
 #include <memory>
+#include <unordered_map>
 
 namespace Koala {
 
-template <typename Output> class Parser {
-public:
-  Parser();
-  virtual ~Parser();
-  virtual Output Generate(std::shared_ptr<BaseObject> input) = 0;
-
-private:
+struct ParserResult {
+  uint8_t *output;
+  size_t size;
 };
 
 class Parsers {
 public:
-  static void RegisterParser(std::string parserName, Parser *parserObject);
-  static 
+  static std::function<ParserResult(BaseObject *)>
+  GetParser(std::string parserName);
 
 private:
-  static std::mutex parserLock;
-  static std::unordered_map<std::string, Parser *> parsers;
+  static std::unordered_map<std::string,
+                            std::function<ParserResult(BaseObject *)>>
+      parsers;
+
+  [[nodiscard]] static ParserResult ObjParser(BaseObject *object) noexcept;
 };
 } // namespace  Koala

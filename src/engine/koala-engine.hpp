@@ -1,3 +1,5 @@
+#pragma once
+
 #include "debuglogger.hpp"
 #include "rapidjson/document.h"
 #include <Magnum/GL/DefaultFramebuffer.h>

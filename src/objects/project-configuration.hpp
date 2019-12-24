@@ -1,3 +1,5 @@
+#pragma once
+
 #include "debuglogger.hpp"
 #include "koala-object.hpp"
 #include "rapidjson/document.h"

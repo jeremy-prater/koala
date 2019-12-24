@@ -43,11 +43,16 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   Koala::Project project(projectRoot);
 
   auto uuids = project.GetObjectUUIDs();
-  for (auto uuid : uuids)
-  {
+  for (auto uuid : uuids) {
     auto object = project.GetObject(uuid);
     object->Load();
   }
+
+  for (auto uuid : uuids) {
+    auto object = project.GetObject(uuid);
+    object->Parse();
+  }
+
 }
 KoalaTest::~KoalaTest() {}
 

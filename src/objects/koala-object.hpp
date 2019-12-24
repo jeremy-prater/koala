@@ -1,3 +1,5 @@
+#pragma once
+
 #include "debuglogger.hpp"
 #include <boost/signals2.hpp>
 #include <memory>
@@ -25,8 +27,11 @@ public:
   [[nodiscard]] bool HasTag(const std::string tag) const noexcept;
 
   void Load();
-  void Unload();
   [[nodiscard]] bool IsLoaded() const noexcept;
+
+  [[nodiscard]] bool Parse() noexcept;
+
+  void Unload();
   [[nodiscard]] const uint8_t *const GetData() const noexcept;
 
   BaseObject(const std::string newUuid, const std::string newPath,
