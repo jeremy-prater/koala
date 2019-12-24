@@ -88,7 +88,10 @@ void BaseObject::AddTag(const std::string tag) noexcept {
 }
 
 void BaseObject::Load() {
+  auto start = std::chrono::system_clock::now();
+
   std::scoped_lock<std::mutex> lock(loadLock);
+
   if (data == nullptr) {
     data = static_cast<uint8_t *>(malloc(size));
   } else {
@@ -126,7 +129,10 @@ void BaseObject::Load() {
 
   close(fd);
 
-  logger.Info("Loaded!");
+  logger.Info("Loaded! [%d] us",
+              std::chrono::duration_cast<std::chrono::microseconds>(
+                  std::chrono::system_clock::now() - start)
+                  .count());
 }
 
 void BaseObject::Unload() {
@@ -141,14 +147,19 @@ void BaseObject::Unload() {
 }
 
 [[nodiscard]] bool BaseObject::Parse() noexcept {
+  auto start = std::chrono::system_clock::now();
+
   auto parserFunc = Parsers::GetParser(parser);
   if (!parserFunc.operator bool()) {
     logger.Warning("Unknown parser [%s]", parser.c_str());
     return false;
   }
 
-  logger.Info("Parsing");
   auto result = parserFunc(this);
+  logger.Info("Parsing complete [%d] us",
+              std::chrono::duration_cast<std::chrono::microseconds>(
+                  std::chrono::system_clock::now() - start)
+                  .count());
   return true;
 }
 
