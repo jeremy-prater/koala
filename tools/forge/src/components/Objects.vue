@@ -39,11 +39,24 @@
         </div>
       </div>
       <div class="card-body">
-        <h5 class="card-title">{{ object.source }}</h5>
-        <p class="card-text">Tags : {{ object.tags }}</p>
-        <p class="card-text">Parse : {{ object.parser }}</p>
-        <p class="card-text">Size : {{ object.size }}</p>
-        <p class="card-text">MD5 : {{ object.hash }}</p>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h5 class="card-title">{{ object.source }}</h5>
+              <p class="card-text">Tags : {{ object.tags }}</p>
+              <p class="card-text">Parse : {{ object.parser }}</p>
+              <p class="card-text">Size : {{ object.size }}</p>
+              <p class="card-text">MD5 : {{ object.hash }}</p>
+            </div>
+            <div class="col-3">
+              <ViewerglTF
+                v-if="object.parser == 'gltf'"
+                style="width: 100%; height:100%; background-color:#333"
+                v-bind:object="object"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -55,6 +68,7 @@ console.log("Creating Object Viewer");
 // in full builds helpers are exposed as Vuex.mapState
 import { mapState } from "vuex";
 import Modal from "./Modal";
+import ViewerglTF from "./viewer-gltf";
 
 export default {
   name: "Objects",
@@ -65,7 +79,7 @@ export default {
       objectsInFilter: []
     };
   },
-  components: { Modal },
+  components: { Modal, ViewerglTF },
   computed: mapState({
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace,
