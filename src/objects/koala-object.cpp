@@ -1,5 +1,4 @@
 #include "koala-object.hpp"
-#include "parsers.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <fcntl.h>
@@ -149,13 +148,6 @@ void BaseObject::Unload() {
 [[nodiscard]] bool BaseObject::Parse() noexcept {
   auto start = std::chrono::system_clock::now();
 
-  auto parserFunc = Parsers::GetParser(parser);
-  if (!parserFunc.operator bool()) {
-    logger.Warning("Unknown parser [%s]", parser.c_str());
-    return false;
-  }
-
-  auto result = parserFunc(this);
   logger.Info("Parsing complete [%d] us",
               std::chrono::duration_cast<std::chrono::microseconds>(
                   std::chrono::system_clock::now() - start)

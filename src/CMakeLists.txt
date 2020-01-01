@@ -30,7 +30,6 @@ set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 include_directories("debuglogger"
                     "engine"
                     "objects"
-                    "parsers"
                     ${RAPIDJSON_INCLUDE_DIRS}
                     ${Boost_INCLUDE_DIRS}
                     ${PROJECT_BINARY_DIR}
@@ -47,8 +46,7 @@ set(KOALAOBJECT_SRCS "objects/project-configuration.cpp"
                      "objects/koala-object.cpp") 
 
 # Add Parsers
-set(KOALAPARSERS_SRCS "parsers/parsers.cpp"
-                      "parsers/obj.cpp") 
+set(KOALAPARSERS_SRCS "") 
 
 set(SOURCE_FILES ${DEBUGLOGGER_SRCS} ${KOALAENGINE_SRCS} ${KOALAOBJECT_SRCS} ${KOALAPARSERS_SRCS})
 
