@@ -34,11 +34,9 @@ public:
   void Unload();
   [[nodiscard]] const uint8_t *const GetData() const noexcept;
 
-  BaseObject(const std::string newUuid, const std::string newPath,
-             const std::string newName, const std::string newParser,
-             const size_t newSize, const std::string newMD5,
-             const std::string newRootDir);
-  ~BaseObject();
+  BaseObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+             const std::string rootDir);
+  virtual ~BaseObject();
 
   // Life cycle events
   boost::signals2::signal<void()> onLoadComplete();
@@ -57,17 +55,17 @@ public:
 
   boost::signals2::signal<void()> onReleased();
 
-private:
-  static const std::string metaIgnore[];
-
+protected:
   const std::string uuid;
   const std::string path;
   const std::string name;
   const std::string parser;
   const size_t size;
-  const std::string md5;
+  const std::string md5Sum;
   const std::string rootDir;
 
+private:
+  static const std::string metaIgnore[];
   mutable std::mutex loadLock;
   uint8_t *data;
 

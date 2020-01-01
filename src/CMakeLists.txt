@@ -43,7 +43,8 @@ set(KOALAENGINE_SRCS "engine/koala-engine.cpp")
 
 # Add Koala objects
 set(KOALAOBJECT_SRCS "objects/project-configuration.cpp"
-                     "objects/koala-object.cpp") 
+                     "objects/koala-object.cpp"
+                     "objects/gltf-object.cpp") 
 
 # Add Parsers
 set(KOALAPARSERS_SRCS "") 

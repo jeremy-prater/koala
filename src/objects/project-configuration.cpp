@@ -9,7 +9,7 @@ using namespace Koala;
 
 Project::Project(const std::string path, const std::string defaultConfigFile)
     : rootDir(path), configFile(defaultConfigFile),
-      logger("Project-" + path, DebugLogger::DebugColor::COLOR_MAGENTA, false) {
+      logger("Project-" + path, DebugLogger::DebugColor::COLOR_GREEN, false) {
   const std::string configFilePath = rootDir + "/" + configFile;
 
   struct stat configStats = {};

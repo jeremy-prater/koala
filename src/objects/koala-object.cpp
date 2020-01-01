@@ -1,4 +1,5 @@
 #include "koala-object.hpp"
+#include "gltf-object.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <fcntl.h>
@@ -14,21 +15,17 @@ const std::string BaseObject::metaIgnore[] = {
 std::shared_ptr<BaseObject> BaseObject::CreateObject(
     const std::string rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props) {
+  std::shared_ptr<BaseObject> newObject;
+  bool validParser = false;
 
-  DebugLogger logger("BaseObject::CreateObject",
-                     DebugLogger::DebugColor::COLOR_RED, false);
-
-  const std::string uuid = props["uuid"].GetString();
-  const std::string path = props["path"].GetString();
-  const std::string name = props["name"].GetString();
   const std::string parser = props["parser"].GetString();
-  const size_t size = props["size"].GetUint();
-  const std::string md5Sum = props["hash"].GetString();
 
-  std::shared_ptr<BaseObject> newObject = std::make_shared<BaseObject>(
-      uuid, path, name, parser, size, md5Sum, rootDir);
+  if (parser == "gltf") {
+    newObject = std::dynamic_pointer_cast<BaseObject>(
+        std::make_shared<GLTFObject>(props, rootDir));
+  }
 
-  {
+  if (validParser) {
     std::scoped_lock<std::mutex> lock(newObject->tagsLock);
     const std::string tagStringRaw = props["tags"].GetString();
     boost::split(newObject->tags, tagStringRaw,
@@ -38,18 +35,21 @@ std::shared_ptr<BaseObject> BaseObject::CreateObject(
   return newObject;
 }
 
-BaseObject::BaseObject(const std::string newUuid, const std::string newPath,
-                       const std::string newName, const std::string newParser,
-                       const size_t newSize, const std::string newMD5,
-                       const std::string newRootDir)
-    : uuid(newUuid), path(newPath), name(newName), parser(newParser),
-      size(newSize), md5(newMD5), rootDir(newRootDir), data(nullptr),
+BaseObject::BaseObject(
+    rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+    const std::string root)
+    : uuid(props["uuid"].GetString()), path(props["path"].GetString()),
+      name(props["name"].GetString()), parser(props["parser"].GetString()),
+      size(props["size"].GetUint()), md5Sum(props["hash"].GetString()),
+      rootDir(root), data(nullptr),
       logger("Object" + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
              false) {
   logger.Info("Created Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
 }
 
-BaseObject::~BaseObject() {}
+BaseObject::~BaseObject() {
+  logger.Info("Destoryed Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
+}
 
 [[nodiscard]] const std::string BaseObject::GetUUID() const noexcept {
   return uuid;
