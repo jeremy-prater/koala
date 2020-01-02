@@ -1,10 +1,27 @@
 cmake_minimum_required(VERSION 3.4)
+project("Koala")
 
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/modules/" ${CMAKE_MODULE_PATH})
+#Wonky work around for boost until it's fixed
+set(Boost_NO_BOOST_CMAKE ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+#Magnum config
+set(WITH_SDL2APPLICATION ON CACHE BOOL "" FORCE)
+
+# Magnum Plug-ins config
+set(WITH_ANYIMAGEIMPORTER ON CACHE BOOL "" FORCE)
+set(WITH_ANYSCENEIMPORTER ON CACHE BOOL "" FORCE)
+set(WITH_ASSIMPIMPORTER ON CACHE BOOL "" FORCE)
+set(WITH_TINYGLTFIMPORTER ON CACHE BOOL "" FORCE)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} 
+        "${CMAKE_SOURCE_DIR}/corrade/modules"
+        "${CMAKE_SOURCE_DIR}/magnum/modules"
+        "${CMAKE_SOURCE_DIR}/magnum-plugins/modules"
+        "${PROJECT_SOURCE_DIR}/modules/")
 
 # Add SDL2 library
 message("Finding SDL2")
@@ -13,13 +30,21 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 # Add Corrade as a subproject
 message("Finding Corrade")
-add_subdirectory(corrade EXCLUDE_FROM_ALL)
+add_subdirectory(corrade)
 
 # Add Magnum as a subproject, enable Sdl2Application
 message("Finding Magnum")
-set(WITH_SDL2APPLICATION ON CACHE BOOL "" FORCE)
-add_subdirectory(magnum EXCLUDE_FROM_ALL)
+add_subdirectory(magnum)
 
+# Add Magnum plugins as a subproject
+message("Finding Magnum Plugins")
+add_subdirectory(magnum-plugins)
+
+message("Adding Koala Source")
 add_subdirectory(src)
+
+message("Adding Koala Docs")
 add_subdirectory(docs)
+
+message("Adding Koala Tests")
 add_subdirectory(tests)

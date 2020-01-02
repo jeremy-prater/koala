@@ -23,6 +23,7 @@ configure_file (
 find_package(RapidJSON)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(Magnum REQUIRED GL Sdl2Application)
+find_package(MagnumPlugins REQUIRED TinyGltfImporter)
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
@@ -30,9 +31,11 @@ set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 include_directories("debuglogger"
                     "engine"
                     "objects"
+                    "${PROJECT_BINARY_DIR}/../magnum-plugins/src"
                     ${RAPIDJSON_INCLUDE_DIRS}
                     ${Boost_INCLUDE_DIRS}
                     ${PROJECT_BINARY_DIR}
+                    ${MAGNUMPLUGINS_INCLUDE_DIR}
                     )
 
 # Add Debug logger

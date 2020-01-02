@@ -7,3 +7,6 @@
 [submodule "magnum-bootstrap"]
 	path = magnum-bootstrap
 	url = https://github.com/mosra/magnum-bootstrap.git
+[submodule "magnum-plugins"]
+	path = magnum-plugins
+	url = git@github.com:mosra/magnum-plugins.git
