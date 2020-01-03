@@ -1,4 +1,5 @@
 #include "koala-object.hpp"
+#include "glsl-frag-object.hpp"
 #include "gltf-object.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
@@ -16,7 +17,6 @@ std::shared_ptr<BaseObject> BaseObject::CreateObject(
     const std::string rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props) {
   std::shared_ptr<BaseObject> newObject;
-  bool validParser = false;
 
   const std::string parser = props["parser"].GetString();
 
@@ -24,8 +24,12 @@ std::shared_ptr<BaseObject> BaseObject::CreateObject(
     newObject = std::dynamic_pointer_cast<BaseObject>(
         std::make_shared<GLTFObject>(props, rootDir));
   }
+  if (parser == "glsl-frag") {
+    newObject = std::dynamic_pointer_cast<BaseObject>(
+        std::make_shared<GLSLFragObject>(props, rootDir));
+  }
 
-  if (validParser) {
+  if (newObject.operator bool()) {
     std::scoped_lock<std::mutex> lock(newObject->tagsLock);
     const std::string tagStringRaw = props["tags"].GetString();
     boost::split(newObject->tags, tagStringRaw,
