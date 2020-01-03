@@ -60,5 +60,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 add_library(${PROJ_NAME} STATIC ${SOURCE_FILES})
 target_link_libraries(${PROJ_NAME} PRIVATE
     Magnum::Application
+    MagnumPlugins::TinyGltfImporter
     Magnum::GL
     Magnum::Magnum)

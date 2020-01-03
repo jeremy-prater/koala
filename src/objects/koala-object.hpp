@@ -29,7 +29,7 @@ public:
   void Load();
   [[nodiscard]] bool IsLoaded() const noexcept;
 
-  [[nodiscard]] bool Parse() noexcept;
+  [[nodiscard]] virtual bool Parse() noexcept = 0;
 
   void Unload();
   [[nodiscard]] const uint8_t *const GetData() const noexcept;
@@ -60,7 +60,7 @@ protected:
   const std::string path;
   const std::string name;
   const std::string parser;
-  const size_t size;
+  const ssize_t size;
   const std::string md5Sum;
   const std::string rootDir;
 

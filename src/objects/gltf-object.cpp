@@ -16,3 +16,8 @@ GLTFObject::~GLTFObject() {
   logger.Info("Destoryed GLTF Object [%s] ==> [%s]", uuid.c_str(),
               parser.c_str());
 }
+
+[[nodiscard]] bool GLTFObject::Parse() noexcept {
+  logger.Info("Parsing GLTF");
+  return true;
+}
