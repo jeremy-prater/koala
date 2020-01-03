@@ -27,12 +27,13 @@ public:
   [[nodiscard]] bool HasTag(const std::string tag) const noexcept;
 
   void Load();
+  void Unload();
   [[nodiscard]] bool IsLoaded() const noexcept;
 
   [[nodiscard]] virtual bool Parse() noexcept = 0;
+  [[nodiscard]] bool IsParsed() const noexcept;
 
-  void Unload();
-  [[nodiscard]] const uint8_t *const GetData() const noexcept;
+  [[nodiscard]] const uint8_t *GetData() const noexcept;
 
   BaseObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
              const std::string rootDir);
@@ -41,7 +42,7 @@ public:
   // Life cycle events
   boost::signals2::signal<void()> onLoadComplete();
 
-  boost::signals2::signal<void()> onStartup();
+  boost::signals2::signal<void()> onParsed();
 
   boost::signals2::signal<void()> onRunning();
 
@@ -63,6 +64,7 @@ protected:
   const ssize_t size;
   const std::string md5Sum;
   const std::string rootDir;
+  bool parsed;
 
 private:
   static const std::string metaIgnore[];

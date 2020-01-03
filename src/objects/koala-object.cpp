@@ -41,7 +41,7 @@ BaseObject::BaseObject(
     : uuid(props["uuid"].GetString()), path(props["path"].GetString()),
       name(props["name"].GetString()), parser(props["parser"].GetString()),
       size(props["size"].GetUint()), md5Sum(props["hash"].GetString()),
-      rootDir(root), data(nullptr),
+      rootDir(root), parsed(false), data(nullptr),
       logger("Object" + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
              false) {
   logger.Info("Created Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
@@ -134,6 +134,8 @@ void BaseObject::Load() {
                   .count());
 }
 
+[[nodiscard]] bool BaseObject::IsParsed() const noexcept { return parsed; }
+
 void BaseObject::Unload() {
   std::scoped_lock<std::mutex> lock(loadLock);
   if (data != nullptr) {
@@ -160,6 +162,6 @@ void BaseObject::Unload() {
   return data != nullptr;
 }
 
-[[nodiscard]] const uint8_t *const BaseObject::GetData() const noexcept {
-  return static_cast<const uint8_t *const>(data);
+[[nodiscard]] const uint8_t *BaseObject::GetData() const noexcept {
+  return static_cast<const uint8_t *>(data);
 }

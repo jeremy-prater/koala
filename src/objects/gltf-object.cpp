@@ -1,4 +1,6 @@
 #include "gltf-object.hpp"
+#include <Corrade/Containers/ArrayView.h>
+#include <chrono>
 
 using namespace Koala;
 
@@ -18,6 +20,17 @@ GLTFObject::~GLTFObject() {
 }
 
 [[nodiscard]] bool GLTFObject::Parse() noexcept {
-  logger.Info("Parsing GLTF");
-  return true;
+  auto start = std::chrono::system_clock::now();
+
+  parsed = gltfImporter.openData(Corrade::Containers::ArrayView<const char>{
+      reinterpret_cast<const char *>(GetData()), static_cast<size_t>(size)});
+
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                      std::chrono::system_clock::now() - start)
+                      .count();
+  logger.Info("GLTF parsed [%d] meshes [%d] objects in [%d] us",
+              gltfImporter.mesh3DCount(), gltfImporter.object3DCount(),
+              duration);
+
+  return parsed;
 }

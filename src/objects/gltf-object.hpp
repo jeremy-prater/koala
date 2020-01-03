@@ -13,7 +13,9 @@ public:
   [[nodiscard]] virtual bool Parse() noexcept override;
 
 private:
+  bool parsed;
   Magnum::Trade::TinyGltfImporter gltfImporter;
+
   DebugLogger logger;
 };
 } // namespace Koala
