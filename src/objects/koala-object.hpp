@@ -35,6 +35,9 @@ public:
 
   [[nodiscard]] const uint8_t *GetData() const noexcept;
 
+  [[nodiscard]] const std::string GetMetaObject(const std::string key) const noexcept;
+  void SetMetaObject(const std::string key, const std::string value) noexcept;
+
   BaseObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
              const std::string rootDir);
   virtual ~BaseObject();
@@ -67,7 +70,7 @@ protected:
   bool parsed;
 
 private:
-  static const std::string metaIgnore[];
+  static const std::vector<std::string> metaIgnore;
   mutable std::mutex loadLock;
   uint8_t *data;
 

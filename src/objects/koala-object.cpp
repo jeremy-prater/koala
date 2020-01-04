@@ -1,5 +1,5 @@
 #include "koala-object.hpp"
-#include "glsl-frag-object.hpp"
+#include "glsl-object.hpp"
 #include "gltf-object.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
@@ -10,7 +10,7 @@
 
 using namespace Koala;
 
-const std::string BaseObject::metaIgnore[] = {
+const std::vector<std::string> BaseObject::metaIgnore{
     "uuid", "path", "name", "source", "tags", "parser", "size", "md5sum"};
 
 std::shared_ptr<BaseObject> BaseObject::CreateObject(
@@ -20,20 +20,21 @@ std::shared_ptr<BaseObject> BaseObject::CreateObject(
 
   const std::string parser = props["parser"].GetString();
 
-  if (parser == "gltf") {
-    newObject = std::dynamic_pointer_cast<BaseObject>(
-        std::make_shared<GLTFObject>(props, rootDir));
-  }
-  if (parser == "glsl-frag") {
-    newObject = std::dynamic_pointer_cast<BaseObject>(
-        std::make_shared<GLSLFragObject>(props, rootDir));
-  }
-
   if (newObject.operator bool()) {
     std::scoped_lock<std::mutex> lock(newObject->tagsLock);
     const std::string tagStringRaw = props["tags"].GetString();
     boost::split(newObject->tags, tagStringRaw,
                  [](char c) { return c == ' '; });
+  }
+
+  if (parser == "gltf") {
+    newObject = std::dynamic_pointer_cast<BaseObject>(
+        std::make_shared<GLTFObject>(props, rootDir));
+  }
+
+  if (parser == "glsl") {
+    newObject = std::dynamic_pointer_cast<BaseObject>(
+        std::make_shared<GLSLObject>(props, rootDir));
   }
 
   return newObject;
@@ -49,10 +50,20 @@ BaseObject::BaseObject(
       logger("Object" + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
              false) {
   logger.Info("Created Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
+  for (auto &value : props) {
+    std::string metaName = value.name.GetString();
+    if (std::find(metaIgnore.begin(), metaIgnore.end(), metaName) ==
+        metaIgnore.end()) {
+      std::string metaValue = value.value.GetString();
+      metaObjects[metaName] = metaValue;
+      logger.Info("Setting object meta [%s] ==> [%s]", metaName.c_str(),
+                  metaValue.c_str());
+    }
+  }
 }
 
 BaseObject::~BaseObject() {
-  logger.Info("Destoryed Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
+  logger.Info("Destroyed Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
 }
 
 [[nodiscard]] const std::string BaseObject::GetUUID() const noexcept {
@@ -168,4 +179,20 @@ void BaseObject::Unload() {
 
 [[nodiscard]] const uint8_t *BaseObject::GetData() const noexcept {
   return static_cast<const uint8_t *>(data);
+}
+
+[[nodiscard]] const std::string
+BaseObject::GetMetaObject(const std::string key) const noexcept {
+  std::scoped_lock<std::mutex> lock(metaObjectLock);
+  auto it = metaObjects.find(key);
+  if (it == metaObjects.end()) {
+    logger.Warning("No Metaobject key! [%s]", key.c_str());
+    return std::string();
+  }
+  return it->second;
+}
+void BaseObject::SetMetaObject(const std::string key,
+                               const std::string value) noexcept {
+  std::scoped_lock<std::mutex> lock(metaObjectLock);
+  metaObjects[key] = value;
 }
