@@ -1,5 +1,6 @@
 #include "koala-engine.hpp"
 #include "project-configuration.hpp"
+#include <chrono>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -12,6 +13,7 @@ public:
   virtual ~KoalaTest();
 
 private:
+  std::shared_ptr<Koala::Project> project;
   DebugLogger logger;
 };
 
@@ -39,20 +41,21 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   }
 
   logger.Info("Opening %s", projectRoot.c_str());
+  auto start = std::chrono::system_clock::now();
 
-  Koala::Project project(projectRoot);
+  project = std::make_shared<Koala::Project>(projectRoot);
 
-  auto uuids = project.GetObjectUUIDs();
+  auto uuids = project->GetObjectUUIDs();
   for (auto uuid : uuids) {
-    auto object = project.GetObject(uuid);
+    auto object = project->GetObject(uuid);
     object->Load();
-  }
-
-  for (auto uuid : uuids) {
-    auto object = project.GetObject(uuid);
     object->Parse();
   }
 
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                      std::chrono::system_clock::now() - start)
+                      .count();
+  logger.Info("Asset loading complete in [%d] ms", duration);
 }
 KoalaTest::~KoalaTest() {}
 
