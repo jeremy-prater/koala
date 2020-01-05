@@ -70,7 +70,6 @@ protected:
   bool parsed;
 
 private:
-  static const std::vector<std::string> metaIgnore;
   mutable std::mutex loadLock;
   uint8_t *data;
 

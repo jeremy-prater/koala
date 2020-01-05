@@ -10,9 +10,6 @@
 
 using namespace Koala;
 
-const std::vector<std::string> BaseObject::metaIgnore{
-    "uuid", "path", "name", "source", "tags", "parser", "size", "md5sum"};
-
 std::shared_ptr<BaseObject> BaseObject::CreateObject(
     const std::string rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props) {
@@ -50,15 +47,12 @@ BaseObject::BaseObject(
       logger("Object" + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
              false) {
   logger.Info("Created Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
-  for (auto &value : props) {
+  for (auto &value : props["metadata"].GetObject()) {
     std::string metaName = value.name.GetString();
-    if (std::find(metaIgnore.begin(), metaIgnore.end(), metaName) ==
-        metaIgnore.end()) {
-      std::string metaValue = value.value.GetString();
-      metaObjects[metaName] = metaValue;
-      logger.Info("Setting object meta [%s] ==> [%s]", metaName.c_str(),
-                  metaValue.c_str());
-    }
+    std::string metaValue = value.value.GetString();
+    metaObjects[metaName] = metaValue;
+    logger.Info("Setting object meta [%s] ==> [%s]", metaName.c_str(),
+                metaValue.c_str());
   }
 }
 

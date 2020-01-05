@@ -58,6 +58,29 @@ const store = new Vuex.Store({
                 object => object.uuid != uuid
             );
         },
+        addMetadata(state, metadata) {
+            state.project.objects.forEach(object => {
+                if (object.uuid == metadata.uuid) {
+                    console.log(
+                        `Adding metadata ${metadata.uuid} [${metadata.key}] ==> [${metadata.value}]`
+                    );
+                    object.metadata[metadata.key] = metadata.value;
+                }
+            });
+        },
+        deleteMetadata(state, metadata) {
+            state.project.objects.forEach(object => {
+                if (
+                    object.uuid == metadata.uuid &&
+                    object.metadata.hasOwnProperty(metadata.key)
+                ) {
+                    console.log(
+                        `Deleting metadata ${metadata.uuid} [${metadata.key}]`
+                    );
+                    delete object.metadata[metadata.key];
+                }
+            });
+        },
         setWorkspace(state, newWorkspace) {
             KoalaSettings.settings.workspace = newWorkspace;
             state.currentWorkspace = newWorkspace;

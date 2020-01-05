@@ -22,6 +22,24 @@
       </template>
     </modal>
 
+    <modal v-show="addingMetadata" @close="cancelAddMetadata">
+      <template
+        v-slot:title
+      >Add metadata to {{ currentObjectMetadata.path }}/{{ currentObjectMetadata.name }}</template>
+      <template v-slot:body>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <input type="text" class="form-control input-group-text" v-model="newMetadata.key" />
+          </div>
+          <input type="text" class="form-control" v-model="newMetadata.value" />
+        </div>
+      </template>
+      <template v-slot:footer>
+        <button type="button" class="btn btn-secondary" @click="cancelAddMetadata">Cancel</button>
+        <button type="button" class="btn btn-primary" @click="completeAddMetadata">Add Metadata</button>
+      </template>
+    </modal>
+
     <div class="card text-left" v-for="object in getObjectsInView" v-bind:key="object.uuid">
       <div class="card-header">
         <div class="text-right" style="float:right;">
@@ -56,6 +74,34 @@
               />
             </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <h5 class="card-title">
+                Metadata
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="startAddMetadata(object)"
+                >Add Metadata</button>
+              </h5>
+
+              <div
+                v-for="key in getObjectMetadataKeys(object)"
+                v-bind:key="`${object.uuid}.${key}`"
+                class="input-group mb-3"
+              >
+                <div class="input-group-prepend">
+                  <span class="form-control input-group-text">{{ key }}</span>
+                </div>
+                <input type="text" class="form-control" v-model="object.metadata[key]" />
+                <button
+                  class="btn btn-outline-danger"
+                  type="button"
+                  @click="deleteMetadata(object, key)"
+                >Delete</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -76,7 +122,14 @@ export default {
     return {
       editorVisible: false,
       filter: "",
-      objectsInFilter: []
+      objectsInFilter: [],
+
+      addingMetadata: false,
+      currentObjectMetadata: {},
+      newMetadata: {
+        key: "New Key",
+        value: "New Value"
+      }
     };
   },
   components: { Modal, ViewerglTF },
@@ -109,6 +162,34 @@ export default {
     },
     deleteObject(uuid) {
       this.$store.commit("deleteObject", uuid);
+    },
+    getObjectMetadataKeys(object) {
+      return Object.keys(object.metadata).sort();
+    },
+    startAddMetadata(object) {
+      this.newMetadata = {
+        key: "New Key",
+        value: "New Value"
+      };
+      this.currentObjectMetadata = object;
+      this.addingMetadata = true;
+    },
+    cancelAddMetadata() {
+      this.addingMetadata = false;
+    },
+    completeAddMetadata() {
+      this.$store.commit("addMetadata", {
+        uuid: this.currentObjectMetadata.uuid,
+        key: this.newMetadata.key,
+        value: this.newMetadata.value
+      });
+      this.addingMetadata = false;
+    },
+    deleteMetadata(object, key) {
+      this.$store.commit("deleteMetadata", { uuid: object.uuid, key: key });
+      // Do this to kick the vue-renderer update
+      this.addingMetadata = true;
+      this.addingMetadata = false;
     }
   }
 };

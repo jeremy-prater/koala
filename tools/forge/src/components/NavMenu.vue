@@ -364,7 +364,8 @@ export default {
         parser: parser,
         hash: md5File.sync(this.nextFile),
         source: this.nextFile,
-        size: fs.statSync(this.nextFile)["size"]
+        size: fs.statSync(this.nextFile)["size"],
+        metadata: {}
       };
       this.isAddFileVisible = true;
     },

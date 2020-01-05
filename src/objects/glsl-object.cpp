@@ -55,13 +55,13 @@ GLSLObject::GLSLObject(
              GetShaderTypeFromString(GetMetaObject("Type"))),
       logger("GLSL-Object-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {
-  logger.Info("Created GLSL Fragment Shader [%s] ==> [%s]", uuid.c_str(),
-              parser.c_str());
+  logger.Info("Created GLSL Shader [%s] ==> [%s][%s]", uuid.c_str(),
+              GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 
 GLSLObject::~GLSLObject() {
-  logger.Info("Destroyed GLSL Fragment Shader [%s] ==> [%s]", uuid.c_str(),
-              parser.c_str());
+  logger.Info("Destroyed GLSL Shader [%s] ==> [%s][%s]", uuid.c_str(),
+              GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 
 [[nodiscard]] bool GLSLObject::Parse() noexcept {
