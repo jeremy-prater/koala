@@ -282,29 +282,22 @@ export default {
       this.cancelSave = false;
       const totalCount = this.project.objects.length + 1;
       let currentCount = 0;
-
-      this.updateSaveProgress(++currentCount, totalCount);
       let outputFile = path.join(this.currentWorkspace, "projectConfig.json");
-      this.currentObject = {
-        source: "Project Configuration",
-        uuid: outputFile
-      };
 
       this.saveInProgress = true;
 
       setTimeout(() => {
-        const projectConfig = JSON.stringify(this.project, null, 4);
         console.log(`Saving Project [${outputFile}]`);
-        fs.writeFileSync(outputFile, projectConfig);
 
         const saveObject = function() {
-          if (currentCount != totalCount) {
-            let object = this.project.objects[currentCount - 1];
+          if (currentCount != totalCount - 1) {
+            let object = this.project.objects[currentCount];
             this.updateSaveProgress(++currentCount, totalCount);
-            this.currentObject = object;
             let outputFile = path.join(this.currentWorkspace, object.uuid);
             console.log(`Copying [${object.source}] ==> [${outputFile}]`);
             fs.copyFileSync(object.source, outputFile);
+            object.hash = md5File.sync(object.source);
+            object.size = fs.statSync(object.source)["size"];
 
             if (this.cancelSave) {
               this.cancelSave = false;
@@ -316,6 +309,11 @@ export default {
               setTimeout(saveObject, 0);
             }
           } else {
+            const projectConfig = JSON.stringify(this.project, null, 4);
+            fs.writeFileSync(outputFile, projectConfig);
+
+            this.updateSaveProgress(++currentCount, totalCount);
+
             this.currentObject = {
               source: "Export Complete",
               uuid: "Export Complete"

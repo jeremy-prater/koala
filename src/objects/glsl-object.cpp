@@ -67,8 +67,12 @@ GLSLObject::~GLSLObject() {
 [[nodiscard]] bool GLSLObject::Parse() noexcept {
   auto start = std::chrono::system_clock::now();
 
-  parsed = true;
-  // shader
+  const std::string shaderString(reinterpret_cast<const char *>(GetData()));
+  shader.addSource(shaderString);
+  parsed = shader.compile();
+  if (!parsed) {
+    logger.Error("Failed to comple shader!");
+  }
 
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
                       std::chrono::system_clock::now() - start)
