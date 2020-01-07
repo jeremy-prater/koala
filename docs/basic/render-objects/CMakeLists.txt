@@ -15,7 +15,7 @@ include_directories("../../../src/engine"
                     ${RAPIDJSON_INCLUDE_DIRS}
 )
 
-add_executable(${PROJ_NAME} koala.cpp)
+add_executable(${PROJ_NAME} render-objects.cpp)
 set(CXX_STANDARD_REQUIRED ON)
 set_property(TARGET ${PROJ_NAME} PROPERTY CXX_STANDARD 17)
 target_link_libraries(${PROJ_NAME} PRIVATE

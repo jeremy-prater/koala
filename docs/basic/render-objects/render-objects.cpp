@@ -1,21 +1,6 @@
-#include "koala-engine.hpp"
-#include "project-configuration.hpp"
-#include <chrono>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include "render-objects.hpp"
 
 using namespace Koala;
-
-class KoalaTest : public Engine {
-public:
-  KoalaTest(const Arguments &arguments);
-  virtual ~KoalaTest();
-
-private:
-  std::shared_ptr<Koala::Project> project;
-  DebugLogger logger;
-};
 
 KoalaTest::KoalaTest(const Arguments &arguments)
     : Engine(arguments),
@@ -57,6 +42,15 @@ KoalaTest::KoalaTest(const Arguments &arguments)
                       .count();
   logger.Info("Asset loading complete in [%d] ms", duration);
 }
+
+void KoalaTest::drawEvent() {
+  GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
+
+  /* TODO: Add your drawing code here */
+
+  swapBuffers();
+}
+
 KoalaTest::~KoalaTest() {}
 
 MAGNUM_APPLICATION_MAIN(KoalaTest)

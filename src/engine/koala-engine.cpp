@@ -10,11 +10,3 @@ Engine::Engine(const Arguments &arguments)
               KOALA_ENGINE_VERSION_MINOR, KOALA_ENGINE_BUILD_SHA);
   /* TODO: Add your initialization code here */
 }
-
-void Engine::drawEvent() {
-  GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
-
-  /* TODO: Add your drawing code here */
-
-  swapBuffers();
-}

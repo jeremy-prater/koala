@@ -71,7 +71,9 @@ GLSLObject::~GLSLObject() {
   shader.addSource(shaderString);
   parsed = shader.compile();
   if (!parsed) {
-    logger.Error("Failed to comple shader!");
+    logger.Error("Failed to comple shader!\n\n--- Begin Shader---\n%s\n--- End "
+                 "Shader ---",
+                 shaderString.c_str());
   }
 
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
