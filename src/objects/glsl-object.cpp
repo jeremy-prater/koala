@@ -67,7 +67,7 @@ GLSLObject::~GLSLObject() {
 [[nodiscard]] bool GLSLObject::Parse() noexcept {
   auto start = std::chrono::system_clock::now();
 
-  const std::string shaderString(reinterpret_cast<const char *>(GetData()));
+  const std::string shaderString(reinterpret_cast<const char *>(GetData()), size);
   shader.addSource(shaderString);
   parsed = shader.compile();
   if (!parsed) {
