@@ -1,6 +1,6 @@
 #pragma once
 
-#include "koala-object.hpp"
+#include "base-object.hpp"
 #include <Magnum/GL/Shader.h>
 #include <Magnum/GL/Version.h>
 

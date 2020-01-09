@@ -1,6 +1,6 @@
 #pragma once
 
-#include "koala-object.hpp"
+#include "base-object.hpp"
 #include <MagnumPlugins/TinyGltfImporter/TinyGltfImporter.h>
 
 namespace Koala {

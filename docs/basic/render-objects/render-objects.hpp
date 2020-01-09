@@ -1,6 +1,7 @@
 #pragma once
 
-#include "koala-engine.hpp"
+#include "camera.hpp"
+#include "engine.hpp"
 #include "project-configuration.hpp"
 #include <chrono>
 #include <sys/stat.h>
@@ -14,9 +15,12 @@ public:
   KoalaTest(const Arguments &arguments);
   virtual ~KoalaTest();
 
+protected:
+  std::unique_ptr<Koala::Camera> camera;
+  std::shared_ptr<Koala::Project> project;
+
 private:
   void drawEvent() override;
 
-  std::shared_ptr<Koala::Project> project;
   DebugLogger logger;
 };

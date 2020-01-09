@@ -1,7 +1,7 @@
 #pragma once
 
 #include "debuglogger.hpp"
-#include "koala-object.hpp"
+#include "base-object.hpp"
 #include "rapidjson/document.h"
 #include <mutex>
 #include <unordered_map>

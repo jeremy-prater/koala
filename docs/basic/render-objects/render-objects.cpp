@@ -1,6 +1,7 @@
 #include "render-objects.hpp"
 
 using namespace Koala;
+using namespace Magnum;
 
 KoalaTest::KoalaTest(const Arguments &arguments)
     : Engine(arguments),
@@ -41,6 +42,8 @@ KoalaTest::KoalaTest(const Arguments &arguments)
                       std::chrono::system_clock::now() - start)
                       .count();
   logger.Info("Asset loading complete in [%d] ms", duration);
+
+  camera = std::make_unique<Koala::Camera>("default", &scene);
 }
 
 void KoalaTest::drawEvent() {

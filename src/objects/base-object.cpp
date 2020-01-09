@@ -1,4 +1,4 @@
-#include "koala-object.hpp"
+#include "base-object.hpp"
 #include "glsl-object.hpp"
 #include "gltf-object.hpp"
 #include <algorithm>

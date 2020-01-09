@@ -22,7 +22,8 @@ configure_file (
 
 find_package(RapidJSON)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
-find_package(Magnum REQUIRED GL Sdl2Application)
+find_package(Corrade REQUIRED Main)
+find_package(Magnum REQUIRED Sdl2Application GL SceneGraph MeshTools Shaders Trade)
 find_package(MagnumPlugins REQUIRED TinyGltfImporter)
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
@@ -42,11 +43,12 @@ include_directories("debuglogger"
 set(DEBUGLOGGER_SRCS "debuglogger/debuglogger.cpp")
 
 # Add Koala engine
-set(KOALAENGINE_SRCS "engine/koala-engine.cpp") 
+set(KOALAENGINE_SRCS "engine/engine.cpp"
+                     "engine/camera.cpp") 
 
 # Add Koala objects
 set(KOALAOBJECT_SRCS "objects/project-configuration.cpp"
-                     "objects/koala-object.cpp"
+                     "objects/base-object.cpp"
                      "objects/gltf-object.cpp"
                      "objects/glsl-object.cpp")
 
@@ -60,7 +62,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 add_library(${PROJ_NAME} STATIC ${SOURCE_FILES})
 target_link_libraries(${PROJ_NAME} PRIVATE
+    Corrade::Main
+    Magnum::Magnum
     Magnum::Application
-    MagnumPlugins::TinyGltfImporter
     Magnum::GL
-    Magnum::Magnum)
+    Magnum::SceneGraph
+    Magnum::MeshTools
+    Magnum::Shaders
+    Magnum::Trade
+    MagnumPlugins::TinyGltfImporter)
