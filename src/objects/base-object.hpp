@@ -4,7 +4,6 @@
 #include <boost/signals2.hpp>
 #include <memory>
 #include <mutex>
-#include <rapidjson/pointer.h>
 #include <rapidjson/rapidjson.h>
 #include <unordered_map>
 #include <vector>

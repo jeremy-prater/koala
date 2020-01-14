@@ -44,7 +44,9 @@ set(DEBUGLOGGER_SRCS "debuglogger/debuglogger.cpp")
 
 # Add Koala engine
 set(KOALAENGINE_SRCS "engine/engine.cpp"
-                     "engine/camera.cpp") 
+                     "engine/camera.cpp"
+                     "engine/renderable.cpp"
+                     )
 
 # Add Koala objects
 set(KOALAOBJECT_SRCS "objects/project-configuration.cpp"
