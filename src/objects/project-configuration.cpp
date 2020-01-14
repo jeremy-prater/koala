@@ -42,6 +42,8 @@ Project::Project(const std::string path, const std::string defaultConfigFile)
 
       auto newObject = BaseObject::CreateObject(path, object.GetObject());
       this->objects[newObject->GetUUID()] = newObject;
+      this->objectsByPath[newObject->GetPath() + "/" + newObject->GetName()] =
+          newObject;
     }
   }
 }
@@ -57,7 +59,13 @@ Project::Project(const std::string path, const std::string defaultConfigFile)
 }
 
 [[nodiscard]] std::shared_ptr<BaseObject>
-Project::GetObject(std::string uuid) const noexcept {
+Project::GetObject(const std::string uuid) const noexcept {
   std::scoped_lock<std::mutex> lock(objectsMutex);
   return objects.at(uuid);
+}
+
+[[nodiscard]] std::shared_ptr<BaseObject>
+Project::GetObjectByPath(const std::string path) const noexcept {
+  std::scoped_lock<std::mutex> lock(objectsMutex);
+  return objectsByPath.at(path);
 }

@@ -12,9 +12,10 @@ public:
   virtual ~GLTFObject();
   [[nodiscard]] virtual bool Parse() noexcept override;
 
+  Magnum::Trade::TinyGltfImporter gltfImporter;
+
 private:
   bool parsed;
-  Magnum::Trade::TinyGltfImporter gltfImporter;
 
   DebugLogger logger;
 };

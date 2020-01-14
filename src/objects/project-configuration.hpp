@@ -1,11 +1,11 @@
 #pragma once
 
-#include "debuglogger.hpp"
 #include "base-object.hpp"
+#include "debuglogger.hpp"
 #include "rapidjson/document.h"
+#include <memory>
 #include <mutex>
 #include <unordered_map>
-#include <memory>
 
 namespace Koala {
 
@@ -16,8 +16,10 @@ public:
 
   [[nodiscard]] std::vector<std::string> GetObjectUUIDs() const noexcept;
 
-  [[nodiscard]] std::shared_ptr<BaseObject> GetObject(std::string uuid) const
-      noexcept;
+  [[nodiscard]] std::shared_ptr<BaseObject>
+  GetObject(const std::string uuid) const noexcept;
+  [[nodiscard]] std::shared_ptr<BaseObject>
+  GetObjectByPath(const std::string path) const noexcept;
 
 private:
   const std::string rootDir;
@@ -27,6 +29,7 @@ private:
 
   mutable std::mutex objectsMutex;
   std::unordered_map<std::string, std::shared_ptr<BaseObject>> objects;
+  std::unordered_map<std::string, std::shared_ptr<BaseObject>> objectsByPath;
 
   DebugLogger logger;
 };

@@ -28,9 +28,9 @@ GLTFObject::~GLTFObject() {
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
                       std::chrono::system_clock::now() - start)
                       .count();
-  logger.Info("GLTF parsed [%d] meshes [%d] objects in [%d] us",
-              gltfImporter.mesh3DCount(), gltfImporter.object3DCount(),
-              duration);
+
+  logger.Info("GLTF parsed [%d] objects in [%d] us",
+              gltfImporter.object3DCount(), duration);
 
   return parsed;
 }

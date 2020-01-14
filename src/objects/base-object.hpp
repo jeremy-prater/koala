@@ -4,6 +4,7 @@
 #include <boost/signals2.hpp>
 #include <memory>
 #include <mutex>
+#include <rapidjson/pointer.h>
 #include <rapidjson/rapidjson.h>
 #include <unordered_map>
 #include <vector>
@@ -34,7 +35,8 @@ public:
 
   [[nodiscard]] const uint8_t *GetData() const noexcept;
 
-  [[nodiscard]] const std::string GetMetaObject(const std::string key) const noexcept;
+  [[nodiscard]] const std::string GetMetaObject(const std::string key) const
+      noexcept;
   void SetMetaObject(const std::string key, const std::string value) noexcept;
 
   BaseObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,

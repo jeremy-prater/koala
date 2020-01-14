@@ -18,8 +18,12 @@ namespace Koala {
 class Engine : public Magnum::Platform::Application {
 public:
   explicit Engine(const Arguments &arguments);
+  virtual ~Engine();
 
   Scene3D scene;
+
+protected:
+  void DumpScene(Object3D &parent, const int depth) const noexcept;
 
 private:
   DebugLogger logger;
