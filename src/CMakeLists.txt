@@ -32,6 +32,7 @@ set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 include_directories("debuglogger"
                     "engine"
                     "assets"
+                    "objects"
                     "${PROJECT_BINARY_DIR}/../magnum-plugins/src"
                     ${RAPIDJSON_INCLUDE_DIRS}
                     ${Boost_INCLUDE_DIRS}
@@ -43,11 +44,14 @@ include_directories("debuglogger"
 set(DEBUGLOGGER_SRCS "debuglogger/debuglogger.cpp")
 
 # Add Koala engine
-set(KOALAENGINE_SRCS "engine/engine.cpp"
-                     "engine/camera.cpp"
-                     "engine/renderable.cpp"
-                     "engine/scene.cpp"
-                     )
+set(KOALA_ENGINE_SRCS "engine/engine.cpp"
+)
+
+# Add Koala objects
+set(KOALA_OBJECT_SRCS "objects/camera.cpp"
+                      "objects/renderable.cpp"
+                      "objects/scene.cpp"
+                      )
 
 # Add Koala assets
 set(KOALA_ASSET_SRCS "assets/project-configuration.cpp"
@@ -58,7 +62,11 @@ set(KOALA_ASSET_SRCS "assets/project-configuration.cpp"
 # Add Parsers
 set(KOALAPARSERS_SRCS "") 
 
-set(SOURCE_FILES ${DEBUGLOGGER_SRCS} ${KOALAENGINE_SRCS} ${KOALA_ASSET_SRCS} ${KOALAPARSERS_SRCS})
+set(SOURCE_FILES ${DEBUGLOGGER_SRCS}
+                 ${KOALA_ENGINE_SRCS}
+                 ${KOALA_OBJECT_SRCS}
+                 ${KOALA_ASSET_SRCS}
+                 ${KOALAPARSERS_SRCS})
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")

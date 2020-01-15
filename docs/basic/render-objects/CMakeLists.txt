@@ -13,6 +13,7 @@ set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 include_directories("../../../src/engine"
                     "../../../src/debuglogger"
                     "../../../src/assets"
+                    "../../../src/objects"
                     ${Boost_INCLUDE_DIRS}
                     ${RAPIDJSON_INCLUDE_DIRS}
 )

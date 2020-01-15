@@ -11,9 +11,8 @@ namespace Koala {
 
 class Renderable : public Object3D, public Magnum::SceneGraph::Drawable3D {
 public:
-  explicit Renderable(
-      rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-      Object3D *parent, Magnum::SceneGraph::DrawableGroup3D *group);
+  explicit Renderable(Object3D *parent,
+                      Magnum::SceneGraph::DrawableGroup3D *group);
   ~Renderable();
 
 private:
