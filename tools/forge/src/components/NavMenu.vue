@@ -302,10 +302,11 @@ export default {
             let object = this.project.objects[currentCount];
             this.updateSaveProgress(++currentCount, totalCount);
             let outputFile = path.join(this.currentWorkspace, object.uuid);
-            console.log(`Copying [${object.source}] ==> [${outputFile}]`);
-            fs.copyFileSync(object.source, outputFile);
-            object.hash = md5File.sync(object.source);
-            object.size = fs.statSync(object.source)["size"];
+            const sourceFile = this.currentWorkspace + "/" + object.source;
+            console.log(`Copying [${sourceFile}] ==> [${outputFile}]`);
+            fs.copyFileSync(sourceFile, outputFile);
+            object.hash = md5File.sync(sourceFile);
+            object.size = fs.statSync(sourceFile)["size"];
 
             if (this.cancelSave) {
               this.cancelSave = false;
@@ -358,13 +359,10 @@ export default {
     },
     getRelativePath: function(parentPath) {
       console.log("getRelativePath");
+      let newPath = path.relative(this.currentWorkspace, parentPath);
+      console.log(newPath);
 
-      // Split by / and remove sequence...
-      // relative path!
-      console.log(this.currentWorkspace);
-      console.log(parentPath);
-
-      return parentPath;
+      return newPath;
     },
     showAddFileModal() {
       // console.log(`Showing add dialog for [${this.nextFile}]`);
@@ -372,15 +370,18 @@ export default {
       const lastDot = filename.lastIndexOf(".");
       const name = filename.substring(0, lastDot);
       const parser = filename.substring(lastDot + 1);
+      const relativeFile = this.getRelativePath(this.nextFile);
+      const fullPath = this.currentWorkspace + "/" + relativeFile;
+      console.log(fullPath);
       this.newObjectProperties = {
         uuid: uuidv1(),
         tags: "default",
         name: name,
         path: "/default",
         parser: parser,
-        hash: md5File.sync(this.nextFile),
-        source: this.getRelativePath(this.nextFile),
-        size: fs.statSync(this.nextFile)["size"],
+        hash: md5File.sync(fullPath),
+        source: relativeFile,
+        size: fs.statSync(fullPath)["size"],
         metadata: {}
       };
       this.isAddFileVisible = true;

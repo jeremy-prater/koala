@@ -7,6 +7,7 @@ console.log("Creating Viewer glTF");
 
 import * as THREE from "three";
 // ES modules
+import { mapState } from "vuex";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const remote = require("electron").remote;
@@ -22,7 +23,9 @@ export default {
   },
   props: ["object"],
   components: {},
-  computed: {},
+  computed: mapState({
+    currentWorkspace: state => state.currentWorkspace
+  }),
   methods: {
     remapMaterials: function(parent) {
       if (parent.hasOwnProperty("material")) {
@@ -74,7 +77,7 @@ export default {
     let loader = new GLTFLoader();
     let data = undefined;
     try {
-      data = fs.readFileSync(this.object.source);
+      data = fs.readFileSync(this.currentWorkspace + "/" + this.object.source);
     } catch (error) {
       console.error(
         `Error loading [${this.object.path}/${this.object.name}] at physical location [${this.object.source}] [${error}]`
