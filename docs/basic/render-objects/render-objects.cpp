@@ -1,5 +1,5 @@
 #include "render-objects.hpp"
-#include "gltf-object.hpp"
+#include "gltf-asset.hpp"
 
 using namespace Koala;
 using namespace Magnum;
@@ -46,10 +46,10 @@ KoalaTest::KoalaTest(const Arguments &arguments)
 
   camera = std::make_unique<Koala::Camera>("default", &scene);
 
-  auto o_object = std::dynamic_pointer_cast<GLTFObject>(
+  auto o_object = std::dynamic_pointer_cast<GLTFAsset>(
       project->GetObjectByPath("/default/o"));
 
-  DumpScene(scene, 0);
+  scene.DumpScene();
 }
 
 void KoalaTest::drawEvent() {

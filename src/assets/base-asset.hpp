@@ -11,9 +11,9 @@
 
 namespace Koala {
 
-class BaseObject {
+class BaseAsset {
 public:
-  static std::shared_ptr<BaseObject> CreateObject(
+  static std::shared_ptr<BaseAsset> CreateObject(
       const std::string rootDir,
       rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
@@ -39,9 +39,9 @@ public:
       noexcept;
   void SetMetaObject(const std::string key, const std::string value) noexcept;
 
-  BaseObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+  BaseAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
              const std::string rootDir);
-  virtual ~BaseObject();
+  virtual ~BaseAsset();
 
   // Life cycle events
   boost::signals2::signal<void()> onLoadComplete();

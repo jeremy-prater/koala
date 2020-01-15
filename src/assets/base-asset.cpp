@@ -1,6 +1,6 @@
-#include "base-object.hpp"
-#include "glsl-object.hpp"
-#include "gltf-object.hpp"
+#include "base-asset.hpp"
+#include "glsl-asset.hpp"
+#include "gltf-asset.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <fcntl.h>
@@ -10,10 +10,10 @@
 
 using namespace Koala;
 
-std::shared_ptr<BaseObject> BaseObject::CreateObject(
+std::shared_ptr<BaseAsset> BaseAsset::CreateObject(
     const std::string rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props) {
-  std::shared_ptr<BaseObject> newObject;
+  std::shared_ptr<BaseAsset> newObject;
 
   const std::string parser = props["parser"].GetString();
 
@@ -25,19 +25,19 @@ std::shared_ptr<BaseObject> BaseObject::CreateObject(
   }
 
   if (parser == "gltf") {
-    newObject = std::dynamic_pointer_cast<BaseObject>(
-        std::make_shared<GLTFObject>(props, rootDir));
+    newObject = std::dynamic_pointer_cast<BaseAsset>(
+        std::make_shared<GLTFAsset>(props, rootDir));
   }
 
   if (parser == "glsl") {
-    newObject = std::dynamic_pointer_cast<BaseObject>(
-        std::make_shared<GLSLObject>(props, rootDir));
+    newObject = std::dynamic_pointer_cast<BaseAsset>(
+        std::make_shared<GLSLAsset>(props, rootDir));
   }
 
   return newObject;
 }
 
-BaseObject::BaseObject(
+BaseAsset::BaseAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
     const std::string root)
     : uuid(props["uuid"].GetString()), path(props["path"].GetString()),
@@ -56,31 +56,31 @@ BaseObject::BaseObject(
   }
 }
 
-BaseObject::~BaseObject() {
+BaseAsset::~BaseAsset() {
   logger.Info("Destroyed Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
 }
 
-[[nodiscard]] const std::string BaseObject::GetUUID() const noexcept {
+[[nodiscard]] const std::string BaseAsset::GetUUID() const noexcept {
   return uuid;
 }
-[[nodiscard]] const std::string BaseObject::GetPath() const noexcept {
+[[nodiscard]] const std::string BaseAsset::GetPath() const noexcept {
   return path;
 }
-[[nodiscard]] const std::string BaseObject::GetName() const noexcept {
+[[nodiscard]] const std::string BaseAsset::GetName() const noexcept {
   return name;
 }
-[[nodiscard]] const std::string BaseObject::GetParser() const noexcept {
+[[nodiscard]] const std::string BaseAsset::GetParser() const noexcept {
   return parser;
 }
 
-void BaseObject::AddTag(const std::string tag) noexcept {
+void BaseAsset::AddTag(const std::string tag) noexcept {
   std::scoped_lock<std::mutex> lock(tagsLock);
   if (std::find(tags.begin(), tags.end(), tag) == tags.end()) {
     tags.push_back(tag);
   }
 }
 
-[[nodiscard]] bool BaseObject::DeleteTag(const std::string tag) noexcept {
+[[nodiscard]] bool BaseAsset::DeleteTag(const std::string tag) noexcept {
   std::scoped_lock<std::mutex> lock(tagsLock);
   auto it = std::find(tags.begin(), tags.end(), tag);
   if (it != tags.end()) {
@@ -90,12 +90,12 @@ void BaseObject::AddTag(const std::string tag) noexcept {
   return false;
 }
 
-[[nodiscard]] bool BaseObject::HasTag(const std::string tag) const noexcept {
+[[nodiscard]] bool BaseAsset::HasTag(const std::string tag) const noexcept {
   std::scoped_lock<std::mutex> lock(tagsLock);
   return std::find(tags.begin(), tags.end(), tag) != tags.end();
 }
 
-void BaseObject::Load() {
+void BaseAsset::Load() {
   auto start = std::chrono::system_clock::now();
 
   std::scoped_lock<std::mutex> lock(loadLock);
@@ -143,9 +143,9 @@ void BaseObject::Load() {
                   .count());
 }
 
-[[nodiscard]] bool BaseObject::IsParsed() const noexcept { return parsed; }
+[[nodiscard]] bool BaseAsset::IsParsed() const noexcept { return parsed; }
 
-void BaseObject::Unload() {
+void BaseAsset::Unload() {
   std::scoped_lock<std::mutex> lock(loadLock);
   if (data != nullptr) {
     free(data);
@@ -156,7 +156,7 @@ void BaseObject::Unload() {
   }
 }
 
-[[nodiscard]] bool BaseObject::Parse() noexcept {
+[[nodiscard]] bool BaseAsset::Parse() noexcept {
   auto start = std::chrono::system_clock::now();
 
   logger.Info("Parsing complete [%d] us",
@@ -166,17 +166,17 @@ void BaseObject::Unload() {
   return true;
 }
 
-[[nodiscard]] bool BaseObject::IsLoaded() const noexcept {
+[[nodiscard]] bool BaseAsset::IsLoaded() const noexcept {
   std::scoped_lock<std::mutex> lock(loadLock);
   return data != nullptr;
 }
 
-[[nodiscard]] const uint8_t *BaseObject::GetData() const noexcept {
+[[nodiscard]] const uint8_t *BaseAsset::GetData() const noexcept {
   return static_cast<const uint8_t *>(data);
 }
 
 [[nodiscard]] const std::string
-BaseObject::GetMetaObject(const std::string key) const noexcept {
+BaseAsset::GetMetaObject(const std::string key) const noexcept {
   std::scoped_lock<std::mutex> lock(metaObjectLock);
   auto it = metaObjects.find(key);
   if (it == metaObjects.end()) {
@@ -185,7 +185,7 @@ BaseObject::GetMetaObject(const std::string key) const noexcept {
   }
   return it->second;
 }
-void BaseObject::SetMetaObject(const std::string key,
+void BaseAsset::SetMetaObject(const std::string key,
                                const std::string value) noexcept {
   std::scoped_lock<std::mutex> lock(metaObjectLock);
   metaObjects[key] = value;

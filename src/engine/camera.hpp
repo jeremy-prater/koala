@@ -25,7 +25,7 @@ public:
 private:
   const std::string cameraName;
 
-  Magnum::SceneGraph::Object<Magnum::SceneGraph::MatrixTransformation3D> camera;
+  Object3D camera;
   Magnum::SceneGraph::Camera3D cameraLens;
 
   DebugLogger logger;

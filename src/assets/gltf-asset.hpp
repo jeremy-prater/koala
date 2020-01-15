@@ -1,15 +1,15 @@
 #pragma once
 
-#include "base-object.hpp"
+#include "base-asset.hpp"
 #include <MagnumPlugins/TinyGltfImporter/TinyGltfImporter.h>
 
 namespace Koala {
 
-class GLTFObject : public BaseObject {
+class GLTFAsset : public BaseAsset {
 public:
-  GLTFObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+  GLTFAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
              const std::string rootDir);
-  virtual ~GLTFObject();
+  virtual ~GLTFAsset();
   [[nodiscard]] virtual bool Parse() noexcept override;
 
   Magnum::Trade::TinyGltfImporter gltfImporter;

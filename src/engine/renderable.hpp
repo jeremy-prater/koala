@@ -5,6 +5,7 @@
 #include <Magnum/SceneGraph/Drawable.h>
 #include <memory>
 #include <rapidjson/pointer.h>
+#include <unordered_map>
 
 namespace Koala {
 
@@ -16,6 +17,7 @@ public:
   ~Renderable();
 
 private:
+  std::unordered_map<std::string, std::string> properties;
   DebugLogger logger;
 };
 

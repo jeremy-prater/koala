@@ -40,7 +40,7 @@ Project::Project(const std::string path, const std::string defaultConfigFile)
     std::scoped_lock<std::mutex> lock(objectsMutex);
     for (auto &object : objects) {
 
-      auto newObject = BaseObject::CreateObject(path, object.GetObject());
+      auto newObject = BaseAsset::CreateObject(path, object.GetObject());
       this->objects[newObject->GetUUID()] = newObject;
       this->objectsByPath[newObject->GetPath() + "/" + newObject->GetName()] =
           newObject;
@@ -58,13 +58,13 @@ Project::Project(const std::string path, const std::string defaultConfigFile)
   return keys;
 }
 
-[[nodiscard]] std::shared_ptr<BaseObject>
+[[nodiscard]] std::shared_ptr<BaseAsset>
 Project::GetObject(const std::string uuid) const noexcept {
   std::scoped_lock<std::mutex> lock(objectsMutex);
   return objects.at(uuid);
 }
 
-[[nodiscard]] std::shared_ptr<BaseObject>
+[[nodiscard]] std::shared_ptr<BaseAsset>
 Project::GetObjectByPath(const std::string path) const noexcept {
   std::scoped_lock<std::mutex> lock(objectsMutex);
   return objectsByPath.at(path);

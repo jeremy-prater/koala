@@ -1,16 +1,16 @@
 #pragma once
 
-#include "base-object.hpp"
+#include "base-asset.hpp"
 #include <Magnum/GL/Shader.h>
 #include <Magnum/GL/Version.h>
 
 namespace Koala {
 
-class GLSLObject : public BaseObject {
+class GLSLAsset : public BaseAsset {
 public:
-  GLSLObject(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+  GLSLAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
              const std::string rootDir);
-  virtual ~GLSLObject();
+  virtual ~GLSLAsset();
   [[nodiscard]] virtual bool Parse() noexcept override;
 
 private:

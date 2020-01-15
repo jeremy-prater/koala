@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base-object.hpp"
+#include "base-asset.hpp"
 #include "debuglogger.hpp"
 #include "rapidjson/document.h"
 #include <memory>
@@ -16,9 +16,9 @@ public:
 
   [[nodiscard]] std::vector<std::string> GetObjectUUIDs() const noexcept;
 
-  [[nodiscard]] std::shared_ptr<BaseObject>
+  [[nodiscard]] std::shared_ptr<BaseAsset>
   GetObject(const std::string uuid) const noexcept;
-  [[nodiscard]] std::shared_ptr<BaseObject>
+  [[nodiscard]] std::shared_ptr<BaseAsset>
   GetObjectByPath(const std::string path) const noexcept;
 
 private:
@@ -28,8 +28,8 @@ private:
   rapidjson::Document configDocument;
 
   mutable std::mutex objectsMutex;
-  std::unordered_map<std::string, std::shared_ptr<BaseObject>> objects;
-  std::unordered_map<std::string, std::shared_ptr<BaseObject>> objectsByPath;
+  std::unordered_map<std::string, std::shared_ptr<BaseAsset>> objects;
+  std::unordered_map<std::string, std::shared_ptr<BaseAsset>> objectsByPath;
 
   DebugLogger logger;
 };

@@ -1,25 +1,25 @@
-#include "gltf-object.hpp"
+#include "gltf-asset.hpp"
 #include <Corrade/Containers/ArrayView.h>
 #include <chrono>
 
 using namespace Koala;
 
-GLTFObject::GLTFObject(
+GLTFAsset::GLTFAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
     const std::string rootDir)
-    : BaseObject(props, rootDir),
+    : BaseAsset(props, rootDir),
       logger("GLTF-Object-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {
   logger.Info("Created GLTF Object [%s] ==> [%s]", uuid.c_str(),
               parser.c_str());
 }
 
-GLTFObject::~GLTFObject() {
+GLTFAsset::~GLTFAsset() {
   logger.Info("Destroyed GLTF Object [%s] ==> [%s]", uuid.c_str(),
               parser.c_str());
 }
 
-[[nodiscard]] bool GLTFObject::Parse() noexcept {
+[[nodiscard]] bool GLTFAsset::Parse() noexcept {
   auto start = std::chrono::system_clock::now();
 
   parsed = gltfImporter.openData(Corrade::Containers::ArrayView<const char>{

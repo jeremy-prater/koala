@@ -1,10 +1,10 @@
-#include "glsl-object.hpp"
+#include "glsl-asset.hpp"
 #include <chrono>
 
 using namespace Koala;
 
 const std::unordered_map<std::string, const Magnum::GL::Version>
-    GLSLObject::shaderVersions{{"GL460", Magnum::GL::Version::GL460},
+    GLSLAsset::shaderVersions{{"GL460", Magnum::GL::Version::GL460},
                                {"GL450", Magnum::GL::Version::GL450},
                                {"GL440", Magnum::GL::Version::GL440},
                                {"GL430", Magnum::GL::Version::GL430},
@@ -17,7 +17,7 @@ const std::unordered_map<std::string, const Magnum::GL::Version>
                                {"GL300", Magnum::GL::Version::GL300}};
 
 const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
-    GLSLObject::shaderTypes{
+    GLSLAsset::shaderTypes{
         {"Vertex", Magnum::GL::Shader::Type::Vertex},
         {"Fragment", Magnum::GL::Shader::Type::Fragment},
         {"Geometry", Magnum::GL::Shader::Type::Geometry},
@@ -27,7 +27,7 @@ const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
         {"Compute", Magnum::GL::Shader::Type::Compute}};
 
 const Magnum::GL::Version
-GLSLObject::GetShaderVersionFromString(const std::string version) {
+GLSLAsset::GetShaderVersionFromString(const std::string version) {
   auto it = shaderVersions.find(version);
   if (it == shaderVersions.end()) {
     logger.Warning("Unable to get Shader version [%s] Defaulting to GL330!",
@@ -38,7 +38,7 @@ GLSLObject::GetShaderVersionFromString(const std::string version) {
 }
 
 const Magnum::GL::Shader::Type
-GLSLObject::GetShaderTypeFromString(const std::string type) {
+GLSLAsset::GetShaderTypeFromString(const std::string type) {
   auto it = shaderTypes.find(type);
   if (it == shaderTypes.end()) {
     logger.Warning("Unable to get Shader type [%s] Defaulting to Vertex");
@@ -47,10 +47,10 @@ GLSLObject::GetShaderTypeFromString(const std::string type) {
   return it->second;
 }
 
-GLSLObject::GLSLObject(
+GLSLAsset::GLSLAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
     const std::string rootDir)
-    : BaseObject(props, rootDir),
+    : BaseAsset(props, rootDir),
       shader(GetShaderVersionFromString(GetMetaObject("Version")),
              GetShaderTypeFromString(GetMetaObject("Type"))),
       logger("GLSL-Object-" + path + "/" + name,
@@ -59,12 +59,12 @@ GLSLObject::GLSLObject(
               GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 
-GLSLObject::~GLSLObject() {
+GLSLAsset::~GLSLAsset() {
   logger.Info("Destroyed GLSL Shader [%s] ==> [%s][%s]", uuid.c_str(),
               GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 
-[[nodiscard]] bool GLSLObject::Parse() noexcept {
+[[nodiscard]] bool GLSLAsset::Parse() noexcept {
   auto start = std::chrono::system_clock::now();
 
   const std::string shaderString(reinterpret_cast<const char *>(GetData()), size);

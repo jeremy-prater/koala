@@ -2,6 +2,7 @@
 
 #include "debuglogger.hpp"
 #include "rapidjson/document.h"
+#include "scene.hpp"
 #include "typedefs.hpp"
 #include <Magnum/GL/DefaultFramebuffer.h>
 #include <Magnum/Platform/Sdl2Application.h>
@@ -20,10 +21,7 @@ public:
   explicit Engine(const Arguments &arguments);
   virtual ~Engine();
 
-  Scene3D scene;
-
-protected:
-  void DumpScene(Object3D &parent, const int depth) const noexcept;
+  Scene scene;
 
 private:
   DebugLogger logger;
