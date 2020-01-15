@@ -8,14 +8,13 @@ GLTFAsset::GLTFAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
     const std::string rootDir)
     : BaseAsset(props, rootDir),
-      logger("GLTF-Object-" + path + "/" + name,
+      logger("GLTF-Asset-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {
-  logger.Info("Created GLTF Object [%s] ==> [%s]", uuid.c_str(),
-              parser.c_str());
+  logger.Info("Created GLTF Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
 }
 
 GLTFAsset::~GLTFAsset() {
-  logger.Info("Destroyed GLTF Object [%s] ==> [%s]", uuid.c_str(),
+  logger.Info("Destroyed GLTF Asset [%s] ==> [%s]", uuid.c_str(),
               parser.c_str());
 }
 

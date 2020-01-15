@@ -46,18 +46,18 @@ BaseAsset::BaseAsset(
       rootDir(root), parsed(false), data(nullptr),
       logger("Object" + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
              false) {
-  logger.Info("Created Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
+  logger.Info("Created Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
   for (auto &value : props["metadata"].GetObject()) {
     std::string metaName = value.name.GetString();
     std::string metaValue = value.value.GetString();
     metaObjects[metaName] = metaValue;
-    logger.Info("Setting object meta [%s] ==> [%s]", metaName.c_str(),
+    logger.Info("Setting asset metadata [%s] ==> [%s]", metaName.c_str(),
                 metaValue.c_str());
   }
 }
 
 BaseAsset::~BaseAsset() {
-  logger.Info("Destroyed Object [%s] ==> [%s]", uuid.c_str(), parser.c_str());
+  logger.Info("Destroyed Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
 }
 
 [[nodiscard]] const std::string BaseAsset::GetUUID() const noexcept {
@@ -180,7 +180,7 @@ BaseAsset::GetMetaObject(const std::string key) const noexcept {
   std::scoped_lock<std::mutex> lock(metaObjectLock);
   auto it = metaObjects.find(key);
   if (it == metaObjects.end()) {
-    logger.Warning("No Metaobject key! [%s]", key.c_str());
+    logger.Warning("No asset metadata key! [%s]", key.c_str());
     return std::string();
   }
   return it->second;
