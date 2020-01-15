@@ -54,8 +54,8 @@ export default {
     this.render.width = domObject.clientWidth;
     this.render.height = domObject.clientHeight;
 
-    console.log(
-      `Creating Viewer-glTF for [${this.object.uuid}] @ [${this.render.width}x${this.render.height}] from source [${this.object.source}]`
+    console.debug(
+      `Creating Viewer-glTF for [${this.object.uuid}]` //  @ [${this.render.width}x${this.render.height}] from source [${this.object.source}]
     );
 
     this.render.scene = new THREE.Scene();

@@ -351,12 +351,22 @@ export default {
 
       if (this.addFileLists.length > 0) {
         this.nextFile = this.addFileLists.pop();
-        this.showModal();
+        this.showAddFileModal();
       }
 
       return false;
     },
-    showModal() {
+    getRelativePath: function(parentPath) {
+      console.log("getRelativePath");
+
+      // Split by / and remove sequence...
+      // relative path!
+      console.log(this.currentWorkspace);
+      console.log(parentPath);
+
+      return parentPath;
+    },
+    showAddFileModal() {
       // console.log(`Showing add dialog for [${this.nextFile}]`);
       const filename = path.basename(this.nextFile);
       const lastDot = filename.lastIndexOf(".");
@@ -369,7 +379,7 @@ export default {
         path: "/default",
         parser: parser,
         hash: md5File.sync(this.nextFile),
-        source: this.nextFile,
+        source: this.getRelativePath(this.nextFile),
         size: fs.statSync(this.nextFile)["size"],
         metadata: {}
       };
@@ -382,7 +392,7 @@ export default {
       this.closeModal();
       this.nextFile = this.addFileLists.pop();
       if (this.nextFile != undefined) {
-        this.showModal();
+        this.showAddFileModal();
       }
     },
     addObject() {
