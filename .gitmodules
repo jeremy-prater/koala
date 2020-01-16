@@ -10,3 +10,6 @@
 [submodule "magnum-plugins"]
 	path = magnum-plugins
 	url = git@github.com:mosra/magnum-plugins.git
+[submodule "projects"]
+	path = projects
+	url = git@github.com:jeremy-prater/koala-projects.git
