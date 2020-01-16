@@ -1,6 +1,6 @@
-#include "scene.hpp"
+#include "objects/scene.hpp"
 
-using namespace Koala;
+using namespace Koala::Objects;
 
 Scene::Scene() : logger("Scene", DebugLogger::DebugColor::COLOR_YELLOW, false) {
   logger.Info("Created Scene");

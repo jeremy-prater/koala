@@ -1,6 +1,6 @@
-#include "engine.hpp"
+#include "engine/engine.hpp"
 
-using namespace Koala;
+using namespace Koala::Engine;
 using namespace Magnum;
 
 class KoalaTest : public Engine {

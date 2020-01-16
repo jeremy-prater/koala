@@ -5,11 +5,12 @@
 #include <Magnum/GL/Version.h>
 
 namespace Koala {
+namespace Assets {
 
 class GLSLAsset : public BaseAsset {
 public:
   GLSLAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-             const std::string rootDir);
+            const std::string rootDir);
   virtual ~GLSLAsset();
   [[nodiscard]] virtual bool Parse() noexcept override;
 
@@ -27,4 +28,6 @@ private:
 
   DebugLogger logger;
 };
+
+} // namespace Assets
 } // namespace Koala

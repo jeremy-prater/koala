@@ -1,13 +1,14 @@
 #pragma once
 
 #include "base-asset.hpp"
-#include "debuglogger.hpp"
+#include "debuglogger/debuglogger.hpp"
 #include "rapidjson/document.h"
 #include <memory>
 #include <mutex>
 #include <unordered_map>
 
 namespace Koala {
+namespace Assets {
 
 class Project {
 public:
@@ -33,4 +34,6 @@ private:
 
   DebugLogger logger;
 };
+
+} // namespace Assets
 } // namespace Koala

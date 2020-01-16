@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-using namespace Koala;
+using namespace Koala::Assets;
 
 Project::Project(const std::string path, const std::string defaultConfigFile)
     : rootDir(path), configFile(defaultConfigFile),

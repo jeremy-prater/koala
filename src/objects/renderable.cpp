@@ -1,6 +1,6 @@
-#include "renderable.hpp"
+#include "objects/renderable.hpp"
 
-using namespace Koala;
+using namespace Koala::Objects;
 using namespace Magnum;
 
 Renderable::Renderable(Object3D *parent, SceneGraph::DrawableGroup3D *group)

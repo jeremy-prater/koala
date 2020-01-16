@@ -13,3 +13,9 @@
 [submodule "projects"]
 	path = projects
 	url = git@github.com:jeremy-prater/koala-projects.git
+[submodule "external/cppzmq"]
+	path = external/cppzmq
+	url = git@github.com:zeromq/cppzmq.git
+[submodule "external/libzmq"]
+	path = external/libzmq
+	url = git@github.com:zeromq/libzmq.git

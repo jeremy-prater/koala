@@ -1,7 +1,7 @@
 #pragma once
 
-#include "debuglogger.hpp"
-#include "typedefs.hpp"
+#include "debuglogger/debuglogger.hpp"
+#include "engine/typedefs.hpp"
 #include <Magnum/SceneGraph/Camera.h>
 #include <Magnum/SceneGraph/DualQuaternionTransformation.h>
 #include <Magnum/SceneGraph/MatrixTransformation3D.h>
@@ -16,6 +16,7 @@
 // #include <Magnum/SceneGraph/SceneGraph.h>
 
 namespace Koala {
+namespace Objects {
 
 class Camera {
 public:
@@ -31,4 +32,5 @@ private:
   DebugLogger logger;
 };
 
+} // namespace Objects
 } // namespace Koala

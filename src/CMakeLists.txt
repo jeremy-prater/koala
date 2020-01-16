@@ -21,6 +21,8 @@ configure_file (
 
 
 find_package(RapidJSON)
+find_package(cppzmq)
+find_package(ZeroMQ)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(Corrade REQUIRED Main)
 find_package(Magnum REQUIRED Sdl2Application GL SceneGraph MeshTools Shaders Trade)
@@ -29,13 +31,12 @@ find_package(MagnumPlugins REQUIRED TinyGltfImporter)
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 # Setup include directories
-include_directories("debuglogger"
-                    "engine"
-                    "assets"
-                    "objects"
+include_directories("${PROJECT_SOURCE_DIR}"
                     "${PROJECT_BINARY_DIR}/../magnum-plugins/src"
-                    ${RAPIDJSON_INCLUDE_DIRS}
+                    "${PROJECT_SOURCE_DIR}/../external/libzmq/include"
+                    "${PROJECT_SOURCE_DIR}/../external/cppzmq"
                     ${Boost_INCLUDE_DIRS}
+                    ${RAPIDJSON_INCLUDE_DIRS}
                     ${PROJECT_BINARY_DIR}
                     ${MAGNUMPLUGINS_INCLUDE_DIR}
                     )
@@ -44,14 +45,12 @@ include_directories("debuglogger"
 set(DEBUGLOGGER_SRCS "debuglogger/debuglogger.cpp")
 
 # Add Koala engine
-set(KOALA_ENGINE_SRCS "engine/engine.cpp"
-)
+set(KOALA_ENGINE_SRCS "engine/engine.cpp")
 
 # Add Koala objects
 set(KOALA_OBJECT_SRCS "objects/camera.cpp"
                       "objects/renderable.cpp"
-                      "objects/scene.cpp"
-                      )
+                      "objects/scene.cpp")
 
 # Add Koala assets
 set(KOALA_ASSET_SRCS "assets/project-configuration.cpp"
@@ -59,20 +58,21 @@ set(KOALA_ASSET_SRCS "assets/project-configuration.cpp"
                      "assets/gltf-asset.cpp"
                      "assets/glsl-asset.cpp")
 
-# Add Parsers
-set(KOALAPARSERS_SRCS "") 
+# Add Koala Cloud
+set(KOALA_CLOUD_SRCS "cloud/primary-endpoint.cpp"
+                     "cloud/debugger.cpp")
 
 set(SOURCE_FILES ${DEBUGLOGGER_SRCS}
                  ${KOALA_ENGINE_SRCS}
                  ${KOALA_OBJECT_SRCS}
                  ${KOALA_ASSET_SRCS}
-                 ${KOALAPARSERS_SRCS})
-
+                 ${KOALA_CLOUD_SRCS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 add_library(${PROJ_NAME} STATIC ${SOURCE_FILES})
 target_link_libraries(${PROJ_NAME} PRIVATE
+    libzmq
     Corrade::Main
     Magnum::Magnum
     Magnum::Application

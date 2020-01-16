@@ -2,7 +2,7 @@
 #include <Corrade/Containers/ArrayView.h>
 #include <chrono>
 
-using namespace Koala;
+using namespace Koala::Assets;
 
 GLTFAsset::GLTFAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,

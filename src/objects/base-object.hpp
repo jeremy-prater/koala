@@ -1,10 +1,11 @@
 #pragma once
 
-#include "debuglogger.hpp"
-#include "typedefs.hpp"
+#include "debuglogger/debuglogger.hpp"
+#include "engine/typedefs.hpp"
 #include <rapidjson/pointer.h>
 
 namespace Koala {
+namespace Objects {
 
 class BaseObject : Object3D {
 public:
@@ -16,4 +17,5 @@ private:
   DebugLogger logger;
 };
 
+} // namespace Objects
 } // namespace Koala

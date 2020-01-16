@@ -1,6 +1,6 @@
 #pragma once
 
-#include "debuglogger.hpp"
+#include "debuglogger/debuglogger.hpp"
 #include <boost/signals2.hpp>
 #include <memory>
 #include <mutex>
@@ -10,6 +10,7 @@
 #include <vector>
 
 namespace Koala {
+namespace Assets {
 
 class BaseAsset {
 public:
@@ -40,7 +41,7 @@ public:
   void SetMetaObject(const std::string key, const std::string value) noexcept;
 
   BaseAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-             const std::string rootDir);
+            const std::string rootDir);
   virtual ~BaseAsset();
 
   // Life cycle events
@@ -82,4 +83,6 @@ private:
 
   DebugLogger logger;
 };
+
+} // namespace Assets
 } // namespace Koala

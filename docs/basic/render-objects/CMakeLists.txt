@@ -10,10 +10,7 @@ find_package(MagnumPlugins REQUIRED TinyGltfImporter)
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 # Add Debuglogger to Koala
-include_directories("../../../src/engine"
-                    "../../../src/debuglogger"
-                    "../../../src/assets"
-                    "../../../src/objects"
+include_directories("../../../src/"
                     ${Boost_INCLUDE_DIRS}
                     ${RAPIDJSON_INCLUDE_DIRS}
 )

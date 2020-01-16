@@ -29,6 +29,15 @@ message("Finding SDL2")
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
+# Add external deps
+message("Adding externals")
+SET(BUILD_STATIC ON CACHE BOOL "" FORCE)
+SET(WITH_PERF_TOOL OFF CACHE BOOL "" FORCE)
+SET(ZMQ_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+SET(ZeroMQ_DIR "${CMAKE_CURRENT_BINARY_DIR}/external/libzmq" CACHE STRING "" FORCE)
+SET(cppzmq_DIR "${CMAKE_CURRENT_BINARY_DIR}/external/cppzmq" CACHE STRING "" FORCE)
+add_subdirectory(external)
+
 # Add Corrade as a subproject
 message("Finding Corrade")
 add_subdirectory(corrade)

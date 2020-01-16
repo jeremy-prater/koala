@@ -1,13 +1,14 @@
 #pragma once
 
-#include "debuglogger.hpp"
+#include "debuglogger/debuglogger.hpp"
+#include "engine/typedefs.hpp"
 #include "rapidjson/document.h"
 #include "scene.hpp"
-#include "typedefs.hpp"
 #include <Magnum/SceneGraph/Scene.h>
 #include <Magnum/SceneGraph/SceneGraph.h>
 
 namespace Koala {
+namespace Objects {
 
 class Scene : public Scene3D {
 public:
@@ -21,4 +22,5 @@ private:
   DebugLogger logger;
 };
 
+} // namespace Objects
 } // namespace Koala

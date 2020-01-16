@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-using namespace Koala;
+using namespace Koala::Assets;
 
 std::shared_ptr<BaseAsset> BaseAsset::CreateObject(
     const std::string rootDir,

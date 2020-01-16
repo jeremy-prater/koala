@@ -1,7 +1,7 @@
-#include "engine.hpp"
+#include "engine/engine.hpp"
 #include "koala-version.hpp"
 
-using namespace Koala;
+using namespace Koala::Engine;
 using namespace Magnum;
 
 Engine::Engine(const Arguments &arguments)

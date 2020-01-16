@@ -1,13 +1,14 @@
 #pragma once
 
-#include "debuglogger.hpp"
-#include "typedefs.hpp"
+#include "debuglogger/debuglogger.hpp"
+#include "engine/typedefs.hpp"
 #include <Magnum/SceneGraph/Drawable.h>
 #include <memory>
 #include <rapidjson/pointer.h>
 #include <unordered_map>
 
 namespace Koala {
+namespace Objects {
 
 class Renderable : public Object3D, public Magnum::SceneGraph::Drawable3D {
 public:
@@ -20,4 +21,5 @@ private:
   DebugLogger logger;
 };
 
+} // namespace Objects
 } // namespace Koala

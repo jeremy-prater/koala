@@ -1,7 +1,7 @@
 #include "glsl-asset.hpp"
 #include <chrono>
 
-using namespace Koala;
+using namespace Koala::Assets;
 
 const std::unordered_map<std::string, const Magnum::GL::Version>
     GLSLAsset::shaderVersions{{"GL460", Magnum::GL::Version::GL460},

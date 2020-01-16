@@ -1,11 +1,11 @@
 #include "render-objects.hpp"
-#include "gltf-asset.hpp"
+#include "assets/gltf-asset.hpp"
 
 using namespace Koala;
 using namespace Magnum;
 
 KoalaTest::KoalaTest(const Arguments &arguments)
-    : Engine(arguments),
+    : Engine::Engine(arguments),
       logger("render-objects", DebugLogger::DebugColor::COLOR_BLUE, false) {
   if (arguments.argc != 2) {
     logger.Error("No path given! Usage : %s <path to project>",
@@ -30,7 +30,7 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   logger.Info("Opening %s", projectRoot.c_str());
   auto start = std::chrono::system_clock::now();
 
-  project = std::make_shared<Koala::Project>(projectRoot);
+  project = std::make_shared<Assets::Project>(projectRoot);
 
   auto uuids = project->GetObjectUUIDs();
   for (auto uuid : uuids) {
@@ -44,12 +44,12 @@ KoalaTest::KoalaTest(const Arguments &arguments)
                       .count();
   logger.Info("Asset loading complete in [%d] ms", duration);
 
-  camera = std::make_unique<Koala::Camera>("default", &scene);
+  camera = std::make_unique<Objects::Camera>("default", &scene);
 
-  auto o_object = std::dynamic_pointer_cast<GLTFAsset>(
+  auto o_object = std::dynamic_pointer_cast<Assets::GLTFAsset>(
       project->GetObjectByPath("/default/o"));
 
-  scene.DumpScene();
+  cloudEndpoints = std::make_unique<Cloud::PrimaryEndpoint>();
 }
 
 void KoalaTest::drawEvent() {

@@ -1,8 +1,8 @@
 
-#include "camera.hpp"
+#include "objects/camera.hpp"
 #include "koala-version.hpp"
 
-using namespace Koala;
+using namespace Koala::Objects;
 using namespace Magnum;
 using namespace Math::Literals;
 
