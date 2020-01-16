@@ -2,6 +2,7 @@
 
 #include "debuglogger/debuglogger.hpp"
 #include <unordered_map>
+#include <vector>
 
 namespace Koala {
 
