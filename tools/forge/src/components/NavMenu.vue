@@ -358,11 +358,7 @@ export default {
       return false;
     },
     getRelativePath: function(parentPath) {
-      console.log("getRelativePath");
-      let newPath = path.relative(this.currentWorkspace, parentPath);
-      console.log(newPath);
-
-      return newPath;
+      return path.relative(this.currentWorkspace, parentPath);
     },
     showAddFileModal() {
       // console.log(`Showing add dialog for [${this.nextFile}]`);
@@ -372,7 +368,6 @@ export default {
       const parser = filename.substring(lastDot + 1);
       const relativeFile = this.getRelativePath(this.nextFile);
       const fullPath = this.currentWorkspace + "/" + relativeFile;
-      console.log(fullPath);
       this.newObjectProperties = {
         uuid: uuidv1(),
         tags: "default",
