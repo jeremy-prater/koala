@@ -9,24 +9,31 @@ class ServiceRequestResponse {
         this.url = `tcp://127.0.0.1:${this.port}`;
         this.socket = new zmq.Reply();
         this.socket.events.on('accept', event => {
-            this.logger.info(`New Connection from [${event.address}]`);
+            this.logger.info(`[${this.name}] --> Accept [${event.address}]`);
         });
         this.logger.info(
-            `Created RequestResponse Service [${this.name}] on port [${this.url}]`
+            `[${this.name}] --> Created [${this.name}] on port [${this.url}]`
         );
     }
 
     handler(msg) {
-        this.logger.warn(`[${this.name}] Response not implemented... [${msg}]`);
+        this.logger.warn(
+            `[${this.name}] --> Response not implemented... [${msg}]`
+        );
     }
 
     async start() {
+        this.logger.info(`[${this.name}] --> Bind`);
         await this.socket.bind(this.url);
 
         while (this.running) {
+            this.logger.info(`[${this.name}] --> Wait for data...`);
             const [msg] = await this.socket.receive();
+            this.logger.info(`[${this.name}] --> Data in!`);
             this.handler(msg);
         }
+
+        this.logger.info(`[${this.name}] --> Exit worker loop`);
     }
 }
 
