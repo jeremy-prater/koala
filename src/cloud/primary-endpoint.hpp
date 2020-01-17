@@ -1,8 +1,10 @@
 #pragma once
 
+#include "cloud/cloud.hpp"
 #include "debuglogger/debuglogger.hpp"
 #include <unordered_map>
 #include <vector>
+#include <zmq.hpp>
 
 namespace Koala {
 
@@ -21,6 +23,7 @@ public:
 private:
   std::unordered_map<std::string, unsigned short> serviceEndpoints;
 
+  zmq::socket_t socket;
   DebugLogger logger;
 };
 

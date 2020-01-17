@@ -1,4 +1,5 @@
 const zmq = require('zeromq');
+const ServiceRecordsDB = require('./service-records-db');
 
 class ServiceRequestResponse {
     constructor(name, port) {
@@ -14,6 +15,8 @@ class ServiceRequestResponse {
         this.logger.info(
             `[${this.name}] --> Created [${this.name}] on port [${this.url}]`
         );
+        const recordDB = new ServiceRecordsDB();
+        recordDB.AddServiceRecord(name, port);
     }
 
     handler(msg) {
@@ -23,13 +26,15 @@ class ServiceRequestResponse {
     }
 
     async start() {
-        this.logger.info(`[${this.name}] --> Bind`);
+        this.logger.info(
+            `[${this.name}] --> Worker ready to accept connections...`
+        );
         await this.socket.bind(this.url);
 
         while (this.running) {
-            this.logger.info(`[${this.name}] --> Wait for data...`);
+            // this.logger.info(`[${this.name}] --> Wait for data...`);
             const [msg] = await this.socket.receive();
-            this.logger.info(`[${this.name}] --> Data in!`);
+            // this.logger.info(`[${this.name}] --> Data in!`);
             this.handler(msg);
         }
 

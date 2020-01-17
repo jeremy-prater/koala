@@ -59,7 +59,8 @@ set(KOALA_ASSET_SRCS "assets/project-configuration.cpp"
                      "assets/glsl-asset.cpp")
 
 # Add Koala Cloud
-set(KOALA_CLOUD_SRCS "cloud/primary-endpoint.cpp"
+set(KOALA_CLOUD_SRCS "cloud/cloud.cpp"
+                     "cloud/primary-endpoint.cpp"
                      "cloud/debugger.cpp")
 
 set(SOURCE_FILES ${DEBUGLOGGER_SRCS}

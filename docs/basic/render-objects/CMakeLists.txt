@@ -10,7 +10,11 @@ find_package(MagnumPlugins REQUIRED TinyGltfImporter)
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 # Add Debuglogger to Koala
-include_directories("../../../src/"
+include_directories("${PROJECT_SOURCE_DIR}/../../../src/"
+                    "${PROJECT_SOURCE_DIR}"
+                    "${PROJECT_BINARY_DIR}/../../../magnum-plugins/src"
+                    "${PROJECT_SOURCE_DIR}/../../../external/libzmq/include"
+                    "${PROJECT_SOURCE_DIR}/../../../external/cppzmq"
                     ${Boost_INCLUDE_DIRS}
                     ${RAPIDJSON_INCLUDE_DIRS}
 )

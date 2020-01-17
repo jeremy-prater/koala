@@ -1,19 +1,49 @@
 #include "primary-endpoint.hpp"
-#include <zmq.hpp>
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
 using namespace Koala::Cloud;
 
 PrimaryEndpoint::PrimaryEndpoint(const std::string host)
-    : logger("Cloud-PrimaryEndpoint", DebugLogger::DebugColor::COLOR_MAGENTA,
+    : socket(Cloud::GetContext(), zmq::socket_type::req),
+      logger("Cloud-PrimaryEndpoint", DebugLogger::DebugColor::COLOR_MAGENTA,
              false) {
-  zmq::context_t context;
-  zmq::socket_t socket(context, zmq::socket_type::req);
   std::string url = "tcp://" + host + ":20100";
   logger.Info("Created Cloud Primary Endpoint [%s]", url.c_str());
   socket.connect(url);
-  const std::string_view message = "{command: \"GetServices\"}";
-  auto result = socket.send(zmq::buffer(message), zmq::send_flags::dontwait);
+
+  rapidjson::Document outgoingRequest;
+  outgoingRequest.SetObject();
+  outgoingRequest.AddMember("command", "GetServices",
+                            outgoingRequest.GetAllocator());
+  rapidjson::StringBuffer message;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(message);
+  outgoingRequest.Accept(writer);
+
+  socket.send(zmq::buffer(std::string(message.GetString())));
+  zmq::message_t incomingMessage;
+  auto result = socket.recv(incomingMessage);
+  if (result > 0) {
+
+    rapidjson::Document response;
+    response.Parse(incomingMessage.to_string().c_str());
+
+    for (auto &service : response.GetArray()) {
+      auto serviceRecord = service.GetObject();
+      serviceEndpoints[serviceRecord["name"].GetString()] =
+          serviceRecord["port"].GetUint();
+    }
+
+    for (auto &service : serviceEndpoints) {
+      logger.Info("Cloud Service [%s] --> [%d]", service.first.c_str(),
+                  service.second);
+    }
+  } else {
+    logger.Warning("Failed to receive GetServices!");
+  }
 }
+
 PrimaryEndpoint::~PrimaryEndpoint() {
   logger.Info("Destroyed Cloud Primary Endpoint");
 }
