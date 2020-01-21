@@ -1,8 +1,8 @@
 class ServiceRecordDB {
     constructor() {
         this.logger = require('./logger');
-        this.logger.info('Created Service Record DB');
         if (ServiceRecordDB.records == undefined) {
+            this.logger.info('Created Service Record DB');
             ServiceRecordDB.records = [];
         }
     }
@@ -20,4 +20,4 @@ class ServiceRecordDB {
     }
 }
 
-module.exports = ServiceRecordDB;
+module.exports = new ServiceRecordDB();

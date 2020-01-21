@@ -49,7 +49,7 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   auto o_object = std::dynamic_pointer_cast<Assets::GLTFAsset>(
       project->GetObjectByPath("/default/o"));
 
-  cloudEndpoints = std::make_unique<Cloud::PrimaryEndpoint>();
+  cloud = std::make_unique<Cloud::Cloud>();
 }
 
 void KoalaTest::drawEvent() {

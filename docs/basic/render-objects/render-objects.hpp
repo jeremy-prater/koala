@@ -1,7 +1,7 @@
 #pragma once
 
 #include "assets/project-configuration.hpp"
-#include "cloud/primary-endpoint.hpp"
+#include "cloud/cloud.hpp"
 #include "engine/engine.hpp"
 #include "objects/camera.hpp"
 #include <chrono>
@@ -15,7 +15,7 @@ public:
   virtual ~KoalaTest();
 
 protected:
-  std::unique_ptr<Koala::Cloud::PrimaryEndpoint> cloudEndpoints;
+  std::unique_ptr<Koala::Cloud::Cloud> cloud;
   std::unique_ptr<Koala::Objects::Camera> camera;
   std::shared_ptr<Koala::Assets::Project> project;
 

@@ -1,4 +1,5 @@
 #include "primary-endpoint.hpp"
+#include "cloud/cloud.hpp"
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
@@ -6,7 +7,7 @@
 using namespace Koala::Cloud;
 
 PrimaryEndpoint::PrimaryEndpoint(const std::string host)
-    : socket(Cloud::GetContext(), zmq::socket_type::req),
+    : socket(Cloud::getInstance()->GetContext(), zmq::socket_type::req),
       logger("Cloud-PrimaryEndpoint", DebugLogger::DebugColor::COLOR_MAGENTA,
              false) {
   std::string url = "tcp://" + host + ":20100";

@@ -8,7 +8,7 @@ class ServiceRequestResponse {
         this.name = name;
         this.running = true;
         this.url = `tcp://127.0.0.1:${this.port}`;
-        this.socket = new zmq.Reply();
+        this.socket = new zmq.Push();
         this.socket.events.on('accept', event => {
             this.logger.info(`[${this.name}] --> Accept [${event.address}]`);
         });

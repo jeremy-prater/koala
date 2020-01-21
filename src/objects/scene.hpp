@@ -14,11 +14,8 @@ class Scene : public Scene3D {
 public:
   Scene();
   virtual ~Scene();
-  void DumpScene() const noexcept;
 
 private:
-  void DumpScene(const Object3D &parent, const int depth) const noexcept;
-
   DebugLogger logger;
 };
 
