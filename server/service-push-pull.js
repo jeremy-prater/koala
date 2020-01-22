@@ -1,14 +1,14 @@
 const zmq = require('zeromq');
 const ServiceRecordsDB = require('./service-records-db');
 
-class ServiceRequestResponse {
+class ServicePushPull {
     constructor(name, port) {
         this.logger = require('./logger');
         this.port = port;
         this.name = name;
         this.running = true;
         this.url = `tcp://127.0.0.1:${this.port}`;
-        this.socket = new zmq.Push();
+        this.socket = new zmq.Pull();
         this.socket.events.on('accept', event => {
             this.logger.info(`[${this.name}] --> Accept [${event.address}]`);
         });
@@ -44,4 +44,4 @@ class ServiceRequestResponse {
     }
 }
 
-module.exports = ServiceRequestResponse;
+module.exports = ServicePushPull;

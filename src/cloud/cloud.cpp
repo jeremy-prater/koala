@@ -12,11 +12,14 @@ Cloud::Cloud()
       cloudSessionUUIDString(boost::uuids::to_string(cloudSessionUUID)),
       logger("Cloud", DebugLogger::DebugColor::COLOR_MAGENTA, false) {
   instance = this;
-  logger.Info("Created Cloud Infrastructure [%s]",
-              cloudSessionUUIDString.c_str());
 
   primaryEndpoint = std::make_unique<PrimaryEndpoint>();
+  debugger = std::make_unique<Debugger>();
+
+  logger.Info("Created Cloud Infrastructure [%s]",
+              cloudSessionUUIDString.c_str());
 }
+
 Cloud::~Cloud() {
   primaryEndpoint.reset();
   logger.Info("Destroyed Cloud Infrastructure");

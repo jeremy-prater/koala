@@ -49,7 +49,7 @@ PrimaryEndpoint::~PrimaryEndpoint() {
   logger.Info("Destroyed Cloud Primary Endpoint");
 }
 
-[[nodiscard]] std::vector<std::string>
+[[nodiscard]] const std::vector<std::string>
 PrimaryEndpoint::GetServiceEndpointNames() const noexcept {
   std::vector<std::string> endpoints;
   for (auto &endpoint : serviceEndpoints) {

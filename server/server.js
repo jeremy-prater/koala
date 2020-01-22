@@ -1,8 +1,11 @@
-const logger = require("./logger");
+const logger = require('./logger');
 const ServiceRecordService = require('./service-records');
+const DebuggerService = require('./service-debugger');
 
-let service = new ServiceRecordService();
+let recordService = new ServiceRecordService();
+let debugService = new DebuggerService();
 
-service.start();
+recordService.start();
+debugService.start();
 
-logger.info("All services running...");
+logger.info('All services running...');

@@ -1,10 +1,11 @@
 #pragma once
 
-#include "debuglogger/debuglogger.hpp"
+#include "cloud/debugger.hpp"
 #include "cloud/primary-endpoint.hpp"
+#include "debuglogger/debuglogger.hpp"
 #include <boost/uuid/random_generator.hpp>
-#include <zmq.hpp>
 #include <memory>
+#include <zmq.hpp>
 
 namespace Koala {
 namespace Cloud {
@@ -20,7 +21,8 @@ public:
   const boost::uuids::uuid cloudSessionUUID;
   const std::string cloudSessionUUIDString;
   std::unique_ptr<PrimaryEndpoint> primaryEndpoint;
-  
+  std::unique_ptr<Debugger> debugger;
+
 private:
   static Cloud *instance;
   zmq::context_t zmqContext;
