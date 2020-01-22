@@ -48,7 +48,8 @@ set(DEBUGLOGGER_SRCS "debuglogger/debuglogger.cpp")
 set(KOALA_ENGINE_SRCS "engine/engine.cpp")
 
 # Add Koala objects
-set(KOALA_OBJECT_SRCS "objects/camera.cpp"
+set(KOALA_OBJECT_SRCS "objects/base-object.cpp"
+                      "objects/camera.cpp"
                       "objects/renderable.cpp"
                       "objects/scene.cpp")
 

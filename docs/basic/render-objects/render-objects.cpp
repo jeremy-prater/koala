@@ -44,12 +44,14 @@ KoalaTest::KoalaTest(const Arguments &arguments)
                       .count();
   logger.Info("Asset loading complete in [%d] ms", duration);
 
-  camera = std::make_unique<Objects::Camera>("default", &scene);
-
-  auto o_object = std::dynamic_pointer_cast<Assets::GLTFAsset>(
-      project->GetObjectByPath("/default/o"));
+  camera = std::make_unique<Objects::Camera>("default", scene);
 
   cloud = std::make_unique<Cloud::Cloud>();
+
+  auto o_asset = std::dynamic_pointer_cast<Assets::GLTFAsset>(
+      project->GetObjectByPath("/default/o"));
+
+
 }
 
 void KoalaTest::drawEvent() {

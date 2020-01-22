@@ -13,6 +13,7 @@
 #include <Magnum/SceneGraph/Object.h>
 #include <Magnum/SceneGraph/Scene.h>
 #include <Magnum/SceneGraph/SceneGraph.h>
+#include <memory>
 
 namespace Koala {
 namespace Engine {
@@ -22,7 +23,7 @@ public:
   explicit Engine(const Arguments &arguments);
   virtual ~Engine();
 
-  Objects::Scene scene;
+  std::unique_ptr<Objects::Scene> scene;
 
 private:
   DebugLogger logger;

@@ -6,12 +6,11 @@ using namespace Koala::Objects;
 using namespace Magnum;
 using namespace Math::Literals;
 
-Camera::Camera(const std::string name, Scene3D *scene)
-    : cameraName(name), cameraLens{camera},
-      logger("Camera-" + cameraName, DebugLogger::DebugColor::COLOR_YELLOW,
-             false) {
+Camera::Camera(const std::string name, std::unique_ptr<Scene> &scene)
+    : cameraName(name), cameraLens{camera} {
+  logger.SetDebugModuleName("Camera-" + cameraName);
   logger.Info("Camera Created");
-  camera.setParent(scene).translate(Vector3::zAxis(5.0f));
+  camera.setParent(scene.get()).translate(Vector3::zAxis(5.0f));
   cameraLens
       .setProjectionMatrix(
           Matrix4::perspectiveProjection(70.0_degf, 1.0f, 0.001f, 100.0f))

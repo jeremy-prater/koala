@@ -21,6 +21,7 @@ Cloud::Cloud()
 }
 
 Cloud::~Cloud() {
+  debugger.reset();
   primaryEndpoint.reset();
   logger.Info("Destroyed Cloud Infrastructure");
 }
