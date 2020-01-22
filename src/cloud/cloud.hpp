@@ -20,8 +20,8 @@ public:
 
   const boost::uuids::uuid cloudSessionUUID;
   const std::string cloudSessionUUIDString;
-  std::unique_ptr<PrimaryEndpoint> primaryEndpoint;
-  std::unique_ptr<Debugger> debugger;
+  std::shared_ptr<PrimaryEndpoint> primaryEndpoint;
+  std::shared_ptr<Debugger> debugger;
 
 private:
   static Cloud *instance;

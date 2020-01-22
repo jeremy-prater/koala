@@ -23,7 +23,7 @@ public:
   explicit Engine(const Arguments &arguments);
   virtual ~Engine();
 
-  std::unique_ptr<Objects::Scene> scene;
+  std::shared_ptr<Objects::Scene> scene;
 
 private:
   DebugLogger logger;

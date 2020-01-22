@@ -2,6 +2,8 @@
 
 #include "debuglogger/debuglogger.hpp"
 #include "engine/typedefs.hpp"
+#include "objects/scene.hpp"
+#include "objects/base-object.hpp"
 #include <Magnum/SceneGraph/Drawable.h>
 #include <memory>
 #include <rapidjson/pointer.h>
@@ -10,10 +12,10 @@
 namespace Koala {
 namespace Objects {
 
-class Renderable : public Object3D, public Magnum::SceneGraph::Drawable3D {
+class Renderable : public BaseObject, public Magnum::SceneGraph::Drawable3D {
 public:
-  explicit Renderable(Object3D *parent,
-                      Magnum::SceneGraph::DrawableGroup3D *group);
+  explicit Renderable(const std::string name, const uint32_t groupId,
+                       std::shared_ptr<Scene> scene);
   ~Renderable();
 
 private:

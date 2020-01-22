@@ -23,7 +23,7 @@ namespace Objects {
 
 class Camera : BaseObject {
 public:
-  Camera(const std::string name, std::unique_ptr<Scene> &scene);
+  Camera(const std::string name, std::shared_ptr<Scene> scene);
   ~Camera();
 
 private:
@@ -31,6 +31,9 @@ private:
 
   Object3D camera;
   Magnum::SceneGraph::Camera3D cameraLens;
+
+private:
+  DebugLogger logger;
 };
 
 } // namespace Objects

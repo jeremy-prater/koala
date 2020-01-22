@@ -2,6 +2,7 @@
 
 #include "debuglogger/debuglogger.hpp"
 #include "engine/typedefs.hpp"
+#include "objects/scene-renderable-groups.hpp"
 #include "rapidjson/document.h"
 #include "scene.hpp"
 #include <Magnum/SceneGraph/Scene.h>
@@ -10,7 +11,7 @@
 namespace Koala {
 namespace Objects {
 
-class Scene : public Scene3D {
+class Scene : public Scene3D, SceneRenderableGrouping {
 public:
   Scene();
   virtual ~Scene();

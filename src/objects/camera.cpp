@@ -6,7 +6,7 @@ using namespace Koala::Objects;
 using namespace Magnum;
 using namespace Math::Literals;
 
-Camera::Camera(const std::string name, std::unique_ptr<Scene> &scene)
+Camera::Camera(const std::string name, std::shared_ptr<Scene> scene)
     : cameraName(name), cameraLens{camera} {
   logger.SetDebugModuleName("Camera-" + cameraName);
   logger.Info("Camera Created");
