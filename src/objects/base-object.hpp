@@ -6,7 +6,12 @@
 namespace Koala {
 namespace Objects {
 
-class BaseObject : Object3D {
+class BaseObject : public Object3D {
+public:
+  BaseObject(const std::string name);
+
+protected:
+  DebugLogger logger;
 };
 
 } // namespace Objects

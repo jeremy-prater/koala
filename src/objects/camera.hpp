@@ -31,9 +31,6 @@ private:
 
   Object3D camera;
   Magnum::SceneGraph::Camera3D cameraLens;
-
-private:
-  DebugLogger logger;
 };
 
 } // namespace Objects

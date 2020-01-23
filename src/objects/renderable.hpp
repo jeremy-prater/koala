@@ -2,8 +2,8 @@
 
 #include "debuglogger/debuglogger.hpp"
 #include "engine/typedefs.hpp"
-#include "objects/scene.hpp"
 #include "objects/base-object.hpp"
+#include "objects/scene.hpp"
 #include <Magnum/SceneGraph/Drawable.h>
 #include <memory>
 #include <rapidjson/pointer.h>
@@ -15,12 +15,11 @@ namespace Objects {
 class Renderable : public BaseObject, public Magnum::SceneGraph::Drawable3D {
 public:
   explicit Renderable(const std::string name, const uint32_t groupId,
-                       std::shared_ptr<Scene> scene);
+                      std::shared_ptr<Scene> scene);
   ~Renderable();
 
 private:
   std::unordered_map<std::string, std::string> properties;
-  DebugLogger logger;
 };
 
 } // namespace Objects

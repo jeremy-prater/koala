@@ -11,7 +11,7 @@
 namespace Koala {
 namespace Objects {
 
-class Scene : public Scene3D, SceneRenderableGrouping {
+class Scene : public Scene3D, public SceneRenderableGrouping {
 public:
   Scene();
   virtual ~Scene();
