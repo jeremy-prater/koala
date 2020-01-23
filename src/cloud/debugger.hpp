@@ -9,10 +9,10 @@ namespace Cloud {
 
 class Debugger {
 public:
-  Debugger(const std::string host = "127.0.0.1");
+  Debugger(const std::string &host = "127.0.0.1");
   ~Debugger();
 
-  void AddLog(const std::string logMessage);
+  void AddLog(const std::string &logMessage);
 
 private:
   zmq::socket_t socket;

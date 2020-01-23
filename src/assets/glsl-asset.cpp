@@ -26,8 +26,9 @@ const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
          Magnum::GL::Shader::Type::TessellationEvaluation},
         {"Compute", Magnum::GL::Shader::Type::Compute}};
 
-const Magnum::GL::Version
-GLSLAsset::GetShaderVersionFromString(const std::string &version) const noexcept {
+Magnum::GL::Version
+GLSLAsset::GetShaderVersionFromString(const std::string &version) const
+    noexcept {
   auto it = shaderVersions.find(version);
   if (it == shaderVersions.end()) {
     logger.Warning("Unable to get Shader version [%s] Defaulting to GL330!",
@@ -37,7 +38,7 @@ GLSLAsset::GetShaderVersionFromString(const std::string &version) const noexcept
   return it->second;
 }
 
-const Magnum::GL::Shader::Type
+Magnum::GL::Shader::Type
 GLSLAsset::GetShaderTypeFromString(const std::string &type) const noexcept {
   auto it = shaderTypes.find(type);
   if (it == shaderTypes.end()) {

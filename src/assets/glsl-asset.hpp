@@ -19,12 +19,10 @@ private:
       shaderVersions;
   static const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
       shaderTypes;
-  const Magnum::GL::Version
+  Magnum::GL::Version
   GetShaderVersionFromString(const std::string &version) const noexcept;
-  const Magnum::GL::Shader::Type
+  Magnum::GL::Shader::Type
   GetShaderTypeFromString(const std::string &type) const noexcept;
-
-  bool parsed;
 
   Magnum::GL::Shader shader;
 

@@ -23,9 +23,9 @@ public:
   [[nodiscard]] const std::string GetName() const noexcept;
   [[nodiscard]] const std::string GetParser() const noexcept;
 
-  void AddTag(const std::string tag) noexcept;
-  [[nodiscard]] bool DeleteTag(const std::string tag) noexcept;
-  [[nodiscard]] bool HasTag(const std::string tag) const noexcept;
+  void AddTag(const std::string &tag) noexcept;
+  [[nodiscard]] bool DeleteTag(const std::string &tag) noexcept;
+  [[nodiscard]] bool HasTag(const std::string &tag) const noexcept;
 
   void Load();
   void Unload();
@@ -36,12 +36,12 @@ public:
 
   [[nodiscard]] const uint8_t *GetData() const noexcept;
 
-  [[nodiscard]] const std::string GetMetaObject(const std::string key) const
+  [[nodiscard]] const std::string &GetMetaObject(const std::string &key) const
       noexcept;
-  void SetMetaObject(const std::string key, const std::string value) noexcept;
+  void SetMetaObject(const std::string &key, const std::string &value) noexcept;
 
   BaseAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-            const std::string rootDir);
+            const std::string &rootDir);
   virtual ~BaseAsset();
 
   // Life cycle events

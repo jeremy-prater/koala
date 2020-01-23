@@ -6,7 +6,7 @@
 
 using namespace Koala::Cloud;
 
-PrimaryEndpoint::PrimaryEndpoint(const std::string host)
+PrimaryEndpoint::PrimaryEndpoint(const std::string &host)
     : socket(Cloud::getInstance()->GetContext(), zmq::socket_type::req),
       logger("Cloud-PrimaryEndpoint", DebugLogger::DebugColor::COLOR_MAGENTA,
              false) {
@@ -59,7 +59,7 @@ PrimaryEndpoint::GetServiceEndpointNames() const noexcept {
 }
 
 [[nodiscard]] unsigned short
-PrimaryEndpoint::GetServicePort(const std::string name) const noexcept {
+PrimaryEndpoint::GetServicePort(const std::string &name) const noexcept {
   auto it = serviceEndpoints.find(name);
   if (it != serviceEndpoints.end()) {
     return it->second;

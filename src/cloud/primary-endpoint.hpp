@@ -11,12 +11,12 @@ namespace Cloud {
 
 class PrimaryEndpoint {
 public:
-  PrimaryEndpoint(const std::string host = "127.0.0.1");
+  PrimaryEndpoint(const std::string &host = "127.0.0.1");
   ~PrimaryEndpoint();
 
   [[nodiscard]] const std::vector<std::string> GetServiceEndpointNames() const
       noexcept;
-  [[nodiscard]] unsigned short GetServicePort(const std::string name) const
+  [[nodiscard]] unsigned short GetServicePort(const std::string &name) const
       noexcept;
 
 private:

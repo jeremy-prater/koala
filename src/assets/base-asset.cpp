@@ -39,7 +39,7 @@ std::shared_ptr<BaseAsset> BaseAsset::CreateObject(
 
 BaseAsset::BaseAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-    const std::string root)
+    const std::string &root)
     : uuid(props["uuid"].GetString()), path(props["path"].GetString()),
       name(props["name"].GetString()), parser(props["parser"].GetString()),
       size(props["size"].GetUint()), md5Sum(props["hash"].GetString()),
@@ -73,14 +73,14 @@ BaseAsset::~BaseAsset() {
   return parser;
 }
 
-void BaseAsset::AddTag(const std::string tag) noexcept {
+void BaseAsset::AddTag(const std::string &tag) noexcept {
   std::scoped_lock<std::mutex> lock(tagsLock);
   if (std::find(tags.begin(), tags.end(), tag) == tags.end()) {
     tags.push_back(tag);
   }
 }
 
-[[nodiscard]] bool BaseAsset::DeleteTag(const std::string tag) noexcept {
+[[nodiscard]] bool BaseAsset::DeleteTag(const std::string &tag) noexcept {
   std::scoped_lock<std::mutex> lock(tagsLock);
   auto it = std::find(tags.begin(), tags.end(), tag);
   if (it != tags.end()) {
@@ -90,7 +90,7 @@ void BaseAsset::AddTag(const std::string tag) noexcept {
   return false;
 }
 
-[[nodiscard]] bool BaseAsset::HasTag(const std::string tag) const noexcept {
+[[nodiscard]] bool BaseAsset::HasTag(const std::string &tag) const noexcept {
   std::scoped_lock<std::mutex> lock(tagsLock);
   return std::find(tags.begin(), tags.end(), tag) != tags.end();
 }
@@ -175,18 +175,20 @@ void BaseAsset::Unload() {
   return static_cast<const uint8_t *>(data);
 }
 
-[[nodiscard]] const std::string
-BaseAsset::GetMetaObject(const std::string key) const noexcept {
+[[nodiscard]] const std::string &
+BaseAsset::GetMetaObject(const std::string &key) const noexcept {
+  static const std::string emptyMetaObject = "";
+
   std::scoped_lock<std::mutex> lock(metaObjectLock);
   auto it = metaObjects.find(key);
   if (it == metaObjects.end()) {
     logger.Warning("No asset metadata key! [%s]", key.c_str());
-    return std::string();
+    return emptyMetaObject;
   }
   return it->second;
 }
-void BaseAsset::SetMetaObject(const std::string key,
-                               const std::string value) noexcept {
+void BaseAsset::SetMetaObject(const std::string &key,
+                              const std::string &value) noexcept {
   std::scoped_lock<std::mutex> lock(metaObjectLock);
   metaObjects[key] = value;
 }
