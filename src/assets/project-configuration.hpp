@@ -12,15 +12,15 @@ namespace Assets {
 
 class Project {
 public:
-  Project(const std::string path,
-          const std::string defaultConfigFile = "projectConfig.json");
+  Project(const std::string &path,
+          const std::string &defaultConfigFile = "projectConfig.json");
 
   [[nodiscard]] std::vector<std::string> GetObjectUUIDs() const noexcept;
 
   [[nodiscard]] std::shared_ptr<BaseAsset>
-  GetObject(const std::string uuid) const noexcept;
+  GetObject(const std::string &uuid) const noexcept;
   [[nodiscard]] std::shared_ptr<BaseAsset>
-  GetObjectByPath(const std::string path) const noexcept;
+  GetObjectByPath(const std::string &path) const noexcept;
 
 private:
   const std::string rootDir;

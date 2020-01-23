@@ -5,7 +5,7 @@
 using namespace Koala::Objects;
 using namespace Magnum;
 
-Renderable::Renderable(const std::string name, const uint32_t groupId,
+Renderable::Renderable(const std::string &name, const uint32_t groupId,
                        std::shared_ptr<Scene> scene)
     : BaseObject("Renderable-" + name),
       SceneGraph::Drawable3D{*this, scene->GetRenderGroupByID(groupId).get()} {}

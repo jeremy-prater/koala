@@ -8,7 +8,7 @@ namespace Objects {
 
 class BaseObject : public Object3D {
 public:
-  BaseObject(const std::string name);
+  BaseObject(const std::string &name);
 
 protected:
   DebugLogger logger;

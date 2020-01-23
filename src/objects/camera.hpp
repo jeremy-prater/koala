@@ -23,7 +23,7 @@ namespace Objects {
 
 class Camera : BaseObject {
 public:
-  Camera(const std::string name, std::shared_ptr<Scene> scene);
+  Camera(const std::string &name, std::shared_ptr<Scene> scene);
   ~Camera();
 
 private:

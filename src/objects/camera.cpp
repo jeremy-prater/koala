@@ -6,7 +6,7 @@ using namespace Koala::Objects;
 using namespace Magnum;
 using namespace Math::Literals;
 
-Camera::Camera(const std::string name, std::shared_ptr<Scene> scene)
+Camera::Camera(const std::string &name, std::shared_ptr<Scene> scene)
     : BaseObject("Camera-" + name), cameraName(name), cameraLens{camera} {
   logger.Info("Camera Created");
   camera.setParent(scene.get()).translate(Vector3::zAxis(5.0f));

@@ -9,7 +9,7 @@ namespace Assets {
 class GLTFAsset : public BaseAsset {
 public:
   GLTFAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-            const std::string rootDir);
+            const std::string &rootDir);
   virtual ~GLTFAsset();
   [[nodiscard]] virtual bool Parse() noexcept override;
 

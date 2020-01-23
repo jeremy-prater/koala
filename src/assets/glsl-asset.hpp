@@ -10,7 +10,7 @@ namespace Assets {
 class GLSLAsset : public BaseAsset {
 public:
   GLSLAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-            const std::string rootDir);
+            const std::string &rootDir);
   virtual ~GLSLAsset();
   [[nodiscard]] virtual bool Parse() noexcept override;
 
@@ -19,8 +19,10 @@ private:
       shaderVersions;
   static const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
       shaderTypes;
-  const Magnum::GL::Version GetShaderVersionFromString(const std::string);
-  const Magnum::GL::Shader::Type GetShaderTypeFromString(const std::string);
+  const Magnum::GL::Version
+  GetShaderVersionFromString(const std::string &version) const noexcept;
+  const Magnum::GL::Shader::Type
+  GetShaderTypeFromString(const std::string &type) const noexcept;
 
   bool parsed;
 

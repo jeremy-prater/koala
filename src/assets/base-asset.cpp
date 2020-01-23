@@ -11,7 +11,7 @@
 using namespace Koala::Assets;
 
 std::shared_ptr<BaseAsset> BaseAsset::CreateObject(
-    const std::string rootDir,
+    const std::string &rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props) {
   std::shared_ptr<BaseAsset> newObject;
 

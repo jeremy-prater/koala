@@ -15,7 +15,7 @@ namespace Assets {
 class BaseAsset {
 public:
   static std::shared_ptr<BaseAsset> CreateObject(
-      const std::string rootDir,
+      const std::string &rootDir,
       rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
   [[nodiscard]] const std::string GetUUID() const noexcept;

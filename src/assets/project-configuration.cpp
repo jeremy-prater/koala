@@ -7,7 +7,7 @@
 
 using namespace Koala::Assets;
 
-Project::Project(const std::string path, const std::string defaultConfigFile)
+Project::Project(const std::string &path, const std::string &defaultConfigFile)
     : rootDir(path), configFile(defaultConfigFile),
       logger("Project-" + path, DebugLogger::DebugColor::COLOR_GREEN, false) {
   const std::string configFilePath = rootDir + "/" + configFile;
@@ -59,13 +59,13 @@ Project::Project(const std::string path, const std::string defaultConfigFile)
 }
 
 [[nodiscard]] std::shared_ptr<BaseAsset>
-Project::GetObject(const std::string uuid) const noexcept {
+Project::GetObject(const std::string &uuid) const noexcept {
   std::scoped_lock<std::mutex> lock(objectsMutex);
   return objects.at(uuid);
 }
 
 [[nodiscard]] std::shared_ptr<BaseAsset>
-Project::GetObjectByPath(const std::string path) const noexcept {
+Project::GetObjectByPath(const std::string &path) const noexcept {
   std::scoped_lock<std::mutex> lock(objectsMutex);
   return objectsByPath.at(path);
 }

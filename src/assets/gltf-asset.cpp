@@ -6,7 +6,7 @@ using namespace Koala::Assets;
 
 GLTFAsset::GLTFAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-    const std::string rootDir)
+    const std::string &rootDir)
     : BaseAsset(props, rootDir),
       logger("GLTF-Asset-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {

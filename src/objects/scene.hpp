@@ -16,6 +16,8 @@ public:
   Scene();
   virtual ~Scene();
 
+  void InstantiateObject(const std::string &assetPath) noexcept;
+
 private:
   DebugLogger logger;
 };

@@ -5,16 +5,16 @@ using namespace Koala::Assets;
 
 const std::unordered_map<std::string, const Magnum::GL::Version>
     GLSLAsset::shaderVersions{{"GL460", Magnum::GL::Version::GL460},
-                               {"GL450", Magnum::GL::Version::GL450},
-                               {"GL440", Magnum::GL::Version::GL440},
-                               {"GL430", Magnum::GL::Version::GL430},
-                               {"GL420", Magnum::GL::Version::GL420},
-                               {"GL410", Magnum::GL::Version::GL410},
-                               {"GL400", Magnum::GL::Version::GL400},
-                               {"GL330", Magnum::GL::Version::GL330},
-                               {"GL320", Magnum::GL::Version::GL320},
-                               {"GL310", Magnum::GL::Version::GL310},
-                               {"GL300", Magnum::GL::Version::GL300}};
+                              {"GL450", Magnum::GL::Version::GL450},
+                              {"GL440", Magnum::GL::Version::GL440},
+                              {"GL430", Magnum::GL::Version::GL430},
+                              {"GL420", Magnum::GL::Version::GL420},
+                              {"GL410", Magnum::GL::Version::GL410},
+                              {"GL400", Magnum::GL::Version::GL400},
+                              {"GL330", Magnum::GL::Version::GL330},
+                              {"GL320", Magnum::GL::Version::GL320},
+                              {"GL310", Magnum::GL::Version::GL310},
+                              {"GL300", Magnum::GL::Version::GL300}};
 
 const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
     GLSLAsset::shaderTypes{
@@ -27,7 +27,7 @@ const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
         {"Compute", Magnum::GL::Shader::Type::Compute}};
 
 const Magnum::GL::Version
-GLSLAsset::GetShaderVersionFromString(const std::string version) {
+GLSLAsset::GetShaderVersionFromString(const std::string &version) const noexcept {
   auto it = shaderVersions.find(version);
   if (it == shaderVersions.end()) {
     logger.Warning("Unable to get Shader version [%s] Defaulting to GL330!",
@@ -38,7 +38,7 @@ GLSLAsset::GetShaderVersionFromString(const std::string version) {
 }
 
 const Magnum::GL::Shader::Type
-GLSLAsset::GetShaderTypeFromString(const std::string type) {
+GLSLAsset::GetShaderTypeFromString(const std::string &type) const noexcept {
   auto it = shaderTypes.find(type);
   if (it == shaderTypes.end()) {
     logger.Warning("Unable to get Shader type [%s] Defaulting to Vertex");
@@ -49,7 +49,7 @@ GLSLAsset::GetShaderTypeFromString(const std::string type) {
 
 GLSLAsset::GLSLAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-    const std::string rootDir)
+    const std::string &rootDir)
     : BaseAsset(props, rootDir),
       shader(GetShaderVersionFromString(GetMetaObject("Version")),
              GetShaderTypeFromString(GetMetaObject("Type"))),
@@ -67,7 +67,8 @@ GLSLAsset::~GLSLAsset() {
 [[nodiscard]] bool GLSLAsset::Parse() noexcept {
   auto start = std::chrono::system_clock::now();
 
-  const std::string shaderString(reinterpret_cast<const char *>(GetData()), size);
+  const std::string shaderString(reinterpret_cast<const char *>(GetData()),
+                                 size);
   shader.addSource(shaderString);
   parsed = shader.compile();
   if (!parsed) {
