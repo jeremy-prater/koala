@@ -8,14 +8,13 @@
             <span class="form-control input-group-text">Parent Object</span>
           </div>
           <input type="text" class="form-control" v-model="newGroupdata.parentPath" />
-          <button class="btn btn-secondary" type="button">Browser</button>
+          <button class="btn btn-secondary" @click="showObjectBrowser" type="button">Browser</button>
         </div>
       </template>
       <template v-slot:footer>
         <button type="button" class="btn btn-secondary" @click="cancelGroupAdd">Cancel</button>
         <button type="button" class="btn btn-primary" @click="completeGroupAdd">Add Group</button>
       </template>
-      <ObjectPicker></ObjectPicker>
     </modal>
 
     <button
@@ -33,7 +32,6 @@ console.log("Creating Groups Editor");
 // in full builds helpers are exposed as Vuex.mapState
 import { mapState } from "vuex";
 import Modal from "./Modal";
-import ObjectPicker from "./ObjectPicker";
 
 export default {
   name: "Groups",
@@ -43,7 +41,7 @@ export default {
       addingGroup: false
     };
   },
-  components: { Modal, ObjectPicker },
+  components: { Modal },
   computed: mapState({
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace
