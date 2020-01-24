@@ -3,12 +3,15 @@
     <modal v-show="addingGroup" @close="cancelGroupAdd">
       <template v-slot:title>Add New Group</template>
       <template v-slot:body>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="form-control input-group-text">Parent Object</span>
+        <div class="container">
+          <div class="row no-gutters">
+            <div class="col-3">
+              <span class="form-control input-group-text">Parent Object</span>
+            </div>
+            <div class="col">
+              <Autocomplete :suggestions="getObjectList()" :selection.sync="selectedParentObject" />
+            </div>
           </div>
-          <input type="text" class="form-control" v-model="newGroupdata.parentPath" />
-          <button class="btn btn-secondary" @click="showObjectBrowser" type="button">Browser</button>
         </div>
       </template>
       <template v-slot:footer>
@@ -32,21 +35,29 @@ console.log("Creating Groups Editor");
 // in full builds helpers are exposed as Vuex.mapState
 import { mapState } from "vuex";
 import Modal from "./Modal";
+import Autocomplete from "./Autocomplete";
 
 export default {
   name: "Groups",
   data() {
     return {
-      newGroupdata: {},
+      selectedParentObject: "",
       addingGroup: false
     };
   },
-  components: { Modal },
+  components: { Modal, Autocomplete },
   computed: mapState({
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace
   }),
   methods: {
+    getObjectList() {
+      let paths = [];
+      this.project.objects.forEach(object =>
+        paths.push(object.path + "/" + object.name)
+      );
+      return paths;
+    },
     showGroupAdd() {
       this.addingGroup = true;
     },
