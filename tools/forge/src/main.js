@@ -14,6 +14,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import Home from './components/Home.vue';
 import Objects from './components/Objects.vue';
+import Groups from './components/Groups.vue';
 import Dashboard from './components/Dashboard.vue';
 import KoalaSettings from './components/settings.js';
 
@@ -31,7 +32,8 @@ const router = new VueRouter({
     routes: [
         { path: '/', component: Home },
         { path: '/dashboard', component: Dashboard },
-        { path: '/objects', component: Objects }
+        { path: '/objects', component: Objects },
+        { path: '/groups', component: Groups }
     ]
 });
 
