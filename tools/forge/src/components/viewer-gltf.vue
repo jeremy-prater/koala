@@ -52,7 +52,7 @@ export default {
       });
     },
     doRender() {
-      if (this.loaded === false)
+      if (this.loaded == false || this.render == undefined)
       {
         return;
       }
@@ -127,11 +127,9 @@ export default {
       );
     },
     unload() {
-      this.running = false;
+      this.loaded = false;
+      this.render = {};
       console.info(`Unloaded [${this.object.path}/${this.object.name}]`);
-      this.render.scene = undefined;
-      this.render.camera = undefined;
-      this.render.renderer = undefined;
     }
   }
 };
