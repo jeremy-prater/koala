@@ -12,6 +12,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import '@fortawesome/fontawesome-free/css/all.css';
 
+import VueObserveVisibility from 'vue-observe-visibility'
+
 import Home from './components/Home.vue';
 import Objects from './components/Objects.vue';
 import Groups from './components/Groups.vue';
@@ -26,6 +28,7 @@ const uuidv1 = require('uuid/v1');
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(VueObserveVisibility);
 
 const router = new VueRouter({
     mode: 'history',

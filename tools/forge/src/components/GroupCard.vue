@@ -17,7 +17,11 @@
       </div>
       <div class="card-body">
         <div class="container"></div>
-        <div class="row" v-if="parentObject.parser === 'gltf'">
+        <div
+          class="row"
+          v-if="parentObject.parser === 'gltf'"
+          v-observe-visibility="visibilityChanged"
+        >
           <h3>It's for sure GLTF</h3>
         </div>
       </div>
@@ -31,7 +35,9 @@ import { mapState } from "vuex";
 export default {
   name: "GroupCard",
   data() {
-    return {};
+    return {
+      isVisible: false
+    };
   },
   props: ["group"],
   computed: mapState({
@@ -45,6 +51,9 @@ export default {
     }
   }),
   methods: {
+    visibilityChanged(isVisible) {
+      this.isVisible = isVisible;
+    },
     deleteGroup(uuid) {
       this.$store.commit("deleteGroup", uuid);
     }
