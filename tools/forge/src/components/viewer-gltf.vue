@@ -127,12 +127,6 @@ export default {
       );
     },
     unload() {
-      if (this.loaded === true) {
-        this.loaded = false;
-      } else {
-        return;
-      }
-
       this.running = false;
       console.info(`Unloaded [${this.object.path}/${this.object.name}]`);
       this.render.scene = undefined;

@@ -33,7 +33,7 @@
       >Add Group</button>
     </div>
 
-    <GroupCard v-for="group in project.groups" v-bind:key="group.parentPath" :group="group" />
+    <GroupCard v-for="group in project.groups" v-bind:key="group.uuid" :group="group" />
   </div>
 </template>
 

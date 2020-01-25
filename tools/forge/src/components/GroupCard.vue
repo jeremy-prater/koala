@@ -31,12 +31,17 @@
 
 <script>
 import { mapState } from "vuex";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
+const remote = require("electron").remote;
+const fs = remote.require("fs");
 
 export default {
   name: "GroupCard",
   data() {
     return {
-      isVisible: false
+      loaded: false,
+      gltf: {}
     };
   },
   props: ["group"],
@@ -52,10 +57,56 @@ export default {
   }),
   methods: {
     visibilityChanged(isVisible) {
-      this.isVisible = isVisible;
+      if (isVisible) {
+        this.loadAsset();
+      } else {
+        this.unloadAsset();
+      }
     },
     deleteGroup(uuid) {
       this.$store.commit("deleteGroup", uuid);
+    },
+    loadAsset() {
+      if (this.loaded === false) {
+        this.loaded = true;
+      } else {
+        return;
+      }
+
+      console.log(`Group [${this.group.uuid}] Loading primary asset...`);
+      let loader = new GLTFLoader();
+      let data = undefined;
+      try {
+        data = fs.readFileSync(
+          this.currentWorkspace + "/" + this.parentObject.source
+        );
+      } catch (error) {
+        console.error(
+          `Error loading [${this.parentObject.path}/${this.parentObject.name}] at physical location [${this.parentObject.source}] [${error}]`
+        );
+        return;
+      }
+      loader.parse(
+        data,
+        undefined,
+        function(gltf) {
+          console.info(
+            `Loaded [${this.parentObject.path}/${this.parentObject.name}]`
+          );
+          this.gltf = gltf;
+        }.bind(this),
+        function(error) {
+          console.error(
+            `Error loading [${this.parentObject.path}/${this.parentObject.name}]`
+          );
+          console.error(error);
+        }.bind(this)
+      );
+    },
+    unloadAsset() {
+      this.loaded = false;
+      this.gltf = undefined;
+      console.log(`Group [${this.group.uuid}] Unoading primary asset...`);
     }
   }
 };
