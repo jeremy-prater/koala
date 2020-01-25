@@ -6,17 +6,20 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="deleteGroup(this.group.uuid)"
+            @click="deleteGroup(group.uuid)"
             style="margin: 7px;"
           >Delete</button>
         </div>
         <div>
           <h5>Group {{ this.group.uuid }}</h5>
-          <h5>Parent Asset {{ this.group.parentPath }}</h5>
+          <h5>Parent Asset [{{ parentObject.parser }}] {{ this.group.parentPath }}</h5>
         </div>
       </div>
       <div class="card-body">
         <div class="container"></div>
+        <div class="row" v-if="parentObject.parser === 'gltf'">
+          <h3>It's for sure GLTF</h3>
+        </div>
       </div>
     </div>
   </div>
@@ -35,7 +38,16 @@ export default {
     // arrow functions can make the code very succinct!
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace,
-    totalObjects: state => state.project.objects.length
-  })
+    parentObject: function(state) {
+      return state.project.objects.filter(
+        object => object.path + "/" + object.name === this.group.parentPath
+      )[0];
+    }
+  }),
+  methods: {
+    deleteGroup(uuid) {
+      this.$store.commit("deleteGroup", uuid);
+    }
+  }
 };
 </script>

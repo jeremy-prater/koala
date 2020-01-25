@@ -86,9 +86,6 @@ export default {
         this.$store.commit("addGroup", parentObject[0]);
       }
     },
-    deleteGroup(uuid) {
-      this.$store.commit("deleteGroup", uuid);
-    },
     getObjectByPath(path) {
       console.log(path);
       this.project.objects.forEach(object => {
