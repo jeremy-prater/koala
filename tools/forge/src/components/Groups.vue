@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:100%;">
     <modal v-show="addingGroup" @close="cancelGroupAdd">
       <template v-slot:title>Add New Group</template>
       <template v-slot:body>
@@ -9,7 +9,11 @@
               <span class="form-control input-group-text">Parent Object</span>
             </div>
             <div class="col">
-              <Autocomplete :suggestions="getObjectList()" :selection.sync="selectedParentObject" />
+              <Autocomplete
+                ref="objectPicker"
+                :suggestions="getObjectList()"
+                @updated="objectPickerUpdated"
+              />
             </div>
           </div>
         </div>
@@ -20,12 +24,34 @@
       </template>
     </modal>
 
-    <button
-      type="button"
-      class="btn btn-primary"
-      @click="showGroupAdd"
-      style="margin: 7px;"
-    >Add Group</button>
+    <div class="text-left">
+      <button
+        type="button"
+        class="btn btn-primary"
+        @click="showGroupAdd"
+        style="margin: 7px;"
+      >Add Group</button>
+    </div>
+
+    <div class="card text-left" v-for="group in project.groups" v-bind:key="group.parentPath">
+      <div class="card-header text-">
+        <div class="text-right" style="float:right;">
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteGroup(group.uuid)"
+            style="margin: 7px;"
+          >Delete</button>
+        </div>
+        <div>
+          <h5>Group {{ group.uuid }}</h5>
+          <h5>Parent Asset {{ group.parentPath }}</h5>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="container"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -51,6 +77,9 @@ export default {
     currentWorkspace: state => state.currentWorkspace
   }),
   methods: {
+    objectPickerUpdated(parent) {
+      this.selectedParentObject = parent;
+    },
     getObjectList() {
       let paths = [];
       this.project.objects.forEach(object =>
@@ -59,6 +88,7 @@ export default {
       return paths;
     },
     showGroupAdd() {
+      this.$refs.objectPicker.clear();
       this.addingGroup = true;
     },
     cancelGroupAdd() {
@@ -66,6 +96,15 @@ export default {
     },
     completeGroupAdd() {
       this.addingGroup = false;
+      const parentObject = this.project.objects.filter(
+        object => object.path + "/" + object.name === this.selectedParentObject
+      );
+      if (parentObject.length === 1) {
+        this.$store.commit("addGroup", parentObject[0]);
+      }
+    },
+    deleteGroup(uuid) {
+      this.$store.commit("deleteGroup", uuid);
     }
   }
 };

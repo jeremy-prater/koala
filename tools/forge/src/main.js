@@ -21,6 +21,7 @@ import KoalaSettings from './components/settings.js';
 const remote = require('electron').remote;
 const fs = remote.require('fs');
 const path = require('path');
+const uuidv1 = require('uuid/v1');
 
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
@@ -40,7 +41,8 @@ const router = new VueRouter({
 const defaultState = function() {
     return {
         name: 'Unnamed project',
-        objects: []
+        objects: [],
+        groups: []
     };
 };
 
@@ -50,6 +52,20 @@ const store = new Vuex.Store({
         project: defaultState()
     },
     mutations: {
+        addGroup(state, parentObject) {
+            const parentPath = `${parentObject.path}/${parentObject.name}`;
+            console.log(`Created Group from parent [${parentPath}]`);
+            state.project.groups.push({
+                uuid: uuidv1(),
+                parentPath: parentPath
+            });
+        },
+        deleteGroup(state, uuid) {
+            console.log(`Deleting Group [${uuid}]`);
+            state.project.groups = state.project.groups.filter(
+                group => group.uuid != uuid
+            );
+        },
         addObject(state, object) {
             console.log(`Created Object [${object.name}]`);
             state.project.objects.push(object);

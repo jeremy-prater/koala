@@ -2,6 +2,7 @@
 export default {
   data() {
     return {
+      selection: "",
       open: false,
       current: 0
     };
@@ -11,12 +12,6 @@ export default {
     suggestions: {
       type: Array,
       required: true
-    },
-
-    selection: {
-      type: String,
-      required: true,
-      twoWay: true
     }
   },
 
@@ -35,9 +30,15 @@ export default {
   },
 
   methods: {
+    clear() {
+      this.selection = "";
+    },
     enter() {
-      this.selection = this.matches[this.current];
-      this.open = false;
+      if (this.open === true) {
+        this.selection = this.matches[this.current];
+        this.$emit("updated", this.selection);
+        this.open = false;
+      }
     },
 
     up() {
@@ -57,10 +58,12 @@ export default {
         this.open = true;
         this.current = 0;
       }
+      this.$emit("updated", this.selection);
     },
 
     suggestionClick(index) {
       this.selection = this.matches[index];
+      this.$emit("updated", this.selection);
       this.open = false;
     }
   }
@@ -78,7 +81,7 @@ export default {
       @keydown.up="up"
       @input="change"
     />
-    <div class="" v-if="openSuggestion">
+    <div class v-if="openSuggestion">
       <a
         class="dropdown-item"
         v-for="(suggestion, index) in matches"
