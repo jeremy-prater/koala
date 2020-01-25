@@ -33,25 +33,7 @@
       >Add Group</button>
     </div>
 
-    <div class="card text-left" v-for="group in project.groups" v-bind:key="group.parentPath">
-      <div class="card-header text-">
-        <div class="text-right" style="float:right;">
-          <button
-            type="button"
-            class="btn btn-danger"
-            @click="deleteGroup(group.uuid)"
-            style="margin: 7px;"
-          >Delete</button>
-        </div>
-        <div>
-          <h5>Group {{ group.uuid }}</h5>
-          <h5>Parent Asset {{ group.parentPath }}</h5>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="container"></div>
-      </div>
-    </div>
+    <GroupCard v-for="group in project.groups" v-bind:key="group.parentPath" :group="group" />
   </div>
 </template>
 
@@ -62,6 +44,7 @@ console.log("Creating Groups Editor");
 import { mapState } from "vuex";
 import Modal from "./Modal";
 import Autocomplete from "./Autocomplete";
+import GroupCard from "./GroupCard";
 
 export default {
   name: "Groups",
@@ -71,7 +54,7 @@ export default {
       addingGroup: false
     };
   },
-  components: { Modal, Autocomplete },
+  components: { Modal, Autocomplete, GroupCard },
   computed: mapState({
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace
@@ -105,6 +88,16 @@ export default {
     },
     deleteGroup(uuid) {
       this.$store.commit("deleteGroup", uuid);
+    },
+    getObjectByPath(path) {
+      console.log(path);
+      this.project.objects.forEach(object => {
+        const computedPath = object.path + "/" + object.name;
+        console.log(computedPath);
+        if (path === computedPath) return object;
+      });
+      console.log("no object found");
+      return undefined;
     }
   }
 };
