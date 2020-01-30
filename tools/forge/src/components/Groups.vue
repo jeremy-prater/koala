@@ -25,15 +25,22 @@
     </modal>
 
     <div class="text-left">
-      <button
-        type="button"
-        class="btn btn-primary"
-        @click="showGroupAdd"
-        style="margin: 7px;"
-      >Add Group</button>
+      <div class="input-group mb-3">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="showGroupAdd"
+          style="margin-right: 7px;"
+        >Add Group</button>
+
+        <div class="input-group-prepend">
+          <span class="form-control input-group-text">Group Filter</span>
+        </div>
+        <input type="text" class="form-control" v-model="groupFilter" />
+      </div>
     </div>
 
-    <GroupCard v-for="group in project.groups" v-bind:key="group.uuid" :group="group" />
+    <GroupCard v-for="group in filteredGroups" v-bind:key="group.uuid" :group="group" />
   </div>
 </template>
 
@@ -51,13 +58,25 @@ export default {
   data() {
     return {
       selectedParentObject: "",
-      addingGroup: false
+      addingGroup: false,
+      groupFilter: ""
     };
   },
   components: { Modal, Autocomplete, GroupCard },
   computed: mapState({
     project: state => state.project,
-    currentWorkspace: state => state.currentWorkspace
+    currentWorkspace: state => state.currentWorkspace,
+    filteredGroups() {
+      let groups = [];
+      this.project.groups.forEach(group => {
+        if (this.groupFilter) {
+          if (group.parentPath.includes(this.groupFilter)) {
+            groups.push(group);
+          }
+        } else groups.push(group);
+      });
+      return groups;
+    }
   }),
   methods: {
     objectPickerUpdated(parent) {

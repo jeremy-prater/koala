@@ -30,10 +30,7 @@ import GroupCardGLTF from "./GroupCardGLTF";
 export default {
   name: "GroupCard",
   data() {
-    return {
-      loaded: false,
-      gltf: {}
-    };
+    return {};
   },
   props: ["group"],
   computed: mapState({
