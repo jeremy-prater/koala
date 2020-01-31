@@ -11,7 +11,7 @@
           >Delete</button>
         </div>
         <div>
-          <h5>Group {{ this.group.uuid }}</h5>
+          <h5>Group {{ this.group.name }} [{{ this.group.uuid }}]</h5>
           <h5>Parent Asset [{{ parentObject.parser }}] {{ this.group.parentPath }}</h5>
         </div>
       </div>

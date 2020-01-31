@@ -24,6 +24,12 @@
         <span class="form-control input-group-text">Node Filter</span>
       </div>
       <input type="text" class="form-control" v-model="nodeFilter" @input="updateNodeVisibility()" />
+      <button
+        type="button"
+        class="btn btn-success"
+        @click="assignSelected"
+        style="margin-left: 7px; margin-right: 7px;"
+      >Assign Selected</button>
     </div>
     <ul>
       <li v-for="node in visibleNodes" v-bind:key="node.uuid">
@@ -86,6 +92,7 @@ export default {
         node.selected = node.filtered;
       });
     },
+    assignSelected() {},
     updateNodeVisibility() {
       this.nodes.forEach(node => {
         if (this.nodeFilter) {
@@ -111,7 +118,7 @@ export default {
     getChildNodes(parent, path) {
       let nodes = [];
       parent.children.forEach(child => {
-        nodes.push(...this.getChildNodes(child, path + parent.name + "."));
+        nodes.push(...this.getChildNodes(child, path + parent.name + "/"));
       });
       nodes.push({
         name: path + parent.name,

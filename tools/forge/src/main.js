@@ -12,7 +12,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import VueObserveVisibility from 'vue-observe-visibility'
+import VueObserveVisibility from 'vue-observe-visibility';
 
 import Home from './components/Home.vue';
 import Objects from './components/Objects.vue';
@@ -55,12 +55,13 @@ const store = new Vuex.Store({
         project: defaultState()
     },
     mutations: {
-        addGroup(state, parentObject) {
-            const parentPath = `${parentObject.path}/${parentObject.name}`;
+        addGroup(state, groupDescription) {
+            const parentPath = `${groupDescription.parentObject.path}/${groupDescription.parentObject.name}`;
             console.log(`Created Group from parent [${parentPath}]`);
             state.project.groups.push({
                 uuid: uuidv1(),
-                parentPath: parentPath
+                parentPath: parentPath,
+                name: groupDescription.name
             });
         },
         deleteGroup(state, uuid) {

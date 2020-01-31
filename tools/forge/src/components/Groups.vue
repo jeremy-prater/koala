@@ -6,6 +6,14 @@
         <div class="container">
           <div class="row no-gutters">
             <div class="col-3">
+              <span class="form-control input-group-text">Group Name</span>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" v-model="newGroupName" />
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="col-3">
               <span class="form-control input-group-text">Parent Object</span>
             </div>
             <div class="col">
@@ -59,7 +67,8 @@ export default {
     return {
       selectedParentObject: "",
       addingGroup: false,
-      groupFilter: ""
+      groupFilter: "",
+      newGroupName: ""
     };
   },
   components: { Modal, Autocomplete, GroupCard },
@@ -81,6 +90,7 @@ export default {
   methods: {
     objectPickerUpdated(parent) {
       this.selectedParentObject = parent;
+      this.newGroupName = parent;
     },
     getObjectList() {
       let paths = [];
@@ -102,7 +112,10 @@ export default {
         object => object.path + "/" + object.name === this.selectedParentObject
       );
       if (parentObject.length === 1) {
-        this.$store.commit("addGroup", parentObject[0]);
+        this.$store.commit("addGroup", {
+          parentObject: parentObject[0],
+          name: this.newGroupName
+        });
       }
     },
     getObjectByPath(path) {
