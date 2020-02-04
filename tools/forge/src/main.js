@@ -61,9 +61,23 @@ const store = new Vuex.Store({
             state.project.groups.push({
                 uuid: uuidv1(),
                 parentPath: parentPath,
-                name: groupDescription.name
+                name: groupDescription.name,
+                nodes: {}
             });
         },
+        setGroupData(state, groupData)
+        {
+            let targetGroup = state.project.groups.filter(
+                group => group.uuid == groupData.uuid
+            );
+            if (targetGroup.length != 1)
+            {
+                console.warn("TargetGroup length mismatch!");
+                return;
+            }
+            console.log(`Setting Group Data [${groupData.uuid}] [${groupData.node}]`);
+            targetGroup[0].nodes[groupData.node] = groupData.data;
+        }
         deleteGroup(state, uuid) {
             console.log(`Deleting Group [${uuid}]`);
             state.project.groups = state.project.groups.filter(
