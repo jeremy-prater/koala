@@ -77,7 +77,10 @@
           <span>
             Node: {{ node.name }}
             <ul>
-              <li v-for="thing in group.nodes[node.name]" v-bind:key="thing">{{ thing.type }} : {{ thing.asset }}</li>
+              <li
+                v-for="thing in group.nodes[node.name]"
+                v-bind:key="thing.type+thing.asset"
+              >{{ thing.type }} : {{ thing.asset }}</li>
             </ul>
           </span>
         </li>
@@ -161,8 +164,6 @@ export default {
     completeAssign() {
       this.assignGroupOpen = false;
       this.selectedNodes().forEach(node => {
-        console.log(node);
-
         this.$store.commit("setGroupData", {
           uuid: this.group.uuid,
           node: node.name,
