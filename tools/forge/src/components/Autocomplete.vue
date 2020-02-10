@@ -12,6 +12,10 @@ export default {
     suggestions: {
       type: Array,
       required: true
+    },
+    index: {
+      type: Number,
+      required: false
     }
   },
 
@@ -36,7 +40,7 @@ export default {
     enter() {
       if (this.open === true) {
         this.selection = this.matches[this.current];
-        this.$emit("updated", this.selection);
+        this.$emit("updated", this.selection, this.index);
         this.open = false;
       }
     },
@@ -58,12 +62,12 @@ export default {
         this.open = true;
         this.current = 0;
       }
-      this.$emit("updated", this.selection);
+      this.$emit("updated", this.selection, this.index);
     },
 
     suggestionClick(index) {
       this.selection = this.matches[index];
-      this.$emit("updated", this.selection);
+      this.$emit("updated", this.selection, this.index);
       this.open = false;
     }
   }

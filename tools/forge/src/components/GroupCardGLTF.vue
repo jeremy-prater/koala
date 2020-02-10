@@ -1,48 +1,91 @@
 <template>
-  <div v-observe-visibility="visibilityChanged">
-    <div class="input-group mb-3">
-      <button
-        type="button"
-        class="btn btn-primary"
-        @click="selectAll"
-        style="margin-left: 7px; margin-right: 7px;"
-      >Select All</button>
-      <button
-        type="button"
-        class="btn btn-secondary"
-        @click="selectVisible"
-        style="margin-left: 7px; margin-right: 7px;"
-      >Select Visible</button>
-      <button
-        type="button"
-        class="btn btn-danger"
-        @click="selectNone"
-        style="margin-left: 7px; margin-right: 7px;"
-      >Select None</button>
+  <div>
+    <modal v-show="assignGroupOpen" @close="cancelAssign" style="max-height: 70vh;">
+      <template v-slot:title>Assign Assets to group Node</template>
+      <template v-slot:body>
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="margin:10px;"
+          @click="addNodeAsset"
+        >Add Asset</button>
+        <div class="container">
+          <div v-for="(node, index) in nodeAssignment" v-bind:key="index" class="row no-gutters">
+            <div class="col-3">
+              <input
+                type="text form-control input-group-text"
+                class="form-control"
+                v-model="nodeAssignment[index].type"
+              />
+            </div>
+            <div class="col">
+              <Autocomplete
+                ref="objectPicker"
+                :index="index"
+                :suggestions="getObjectList()"
+                @updated="objectPickerUpdated"
+              />
+            </div>
+          </div>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <button type="button" class="btn btn-secondary" @click="cancelAssign">Cancel</button>
+        <button type="button" class="btn btn-primary" @click="completeAssign">Assign to node</button>
+      </template>
+    </modal>
+    <div v-observe-visibility="visibilityChanged">
+      <div class="input-group mb-3">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="selectAll"
+          style="margin-left: 7px; margin-right: 7px;"
+        >Select All</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="selectVisible"
+          style="margin-left: 7px; margin-right: 7px;"
+        >Select Visible</button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="selectNone"
+          style="margin-left: 7px; margin-right: 7px;"
+        >Select None</button>
 
-      <div class="input-group-prepend">
-        <span class="form-control input-group-text">Node Filter</span>
+        <div class="input-group-prepend">
+          <span class="form-control input-group-text">Node Filter</span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          v-model="nodeFilter"
+          @input="updateNodeVisibility()"
+        />
+        <button
+          type="button"
+          class="btn btn-success"
+          @click="assignSelected"
+          style="margin-left: 7px; margin-right: 7px;"
+        >Assign Selected</button>
       </div>
-      <input type="text" class="form-control" v-model="nodeFilter" @input="updateNodeVisibility()" />
-      <button
-        type="button"
-        class="btn btn-success"
-        @click="assignSelected"
-        style="margin-left: 7px; margin-right: 7px;"
-      >Assign Selected</button>
+      <ul>
+        <li v-for="node in visibleNodes" v-bind:key="node.uuid">
+          <input type="checkbox" class="form-check-input" v-model="node.selected" />
+          <span>Node: {{ node.name }}</span>
+        </li>
+      </ul>
     </div>
-    <ul>
-      <li v-for="node in visibleNodes" v-bind:key="node.uuid">
-        <input type="checkbox" class="form-check-input" v-model="node.selected" />
-        <span>Node: {{ node.name }}</span>
-      </li>
-    </ul>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import Modal from "./Modal";
+import Autocomplete from "./Autocomplete";
 
 const remote = require("electron").remote;
 const fs = remote.require("fs");
@@ -55,10 +98,13 @@ export default {
       loaded: false,
       nodes: [],
       nodeFilter: "",
-      gltf: {}
+      gltf: {},
+      assignGroupOpen: false,
+      nodeAssignment: []
     };
   },
   props: ["group"],
+  components: { Modal, Autocomplete },
   computed: mapState({
     // arrow functions can make the code very succinct!
     project: state => state.project,
@@ -77,6 +123,48 @@ export default {
     }
   }),
   methods: {
+    selectedNodes() {
+      let nodes = [];
+      this.nodes.forEach(node => {
+        if (node.selected) nodes.push(node);
+      });
+      return nodes;
+    },
+    objectPickerUpdated(parent, index) {
+      this.nodeAssignment[index].asset = parent;
+    },
+    getObjectList() {
+      let paths = [];
+      this.project.objects.forEach(object =>
+        paths.push(object.path + "/" + object.name)
+      );
+      return paths;
+    },
+    addNodeAsset() {
+      this.nodeAssignment.push({
+        type: "unknown",
+        asset: ""
+      });
+    },
+    assignSelected() {
+      this.nodeAssignment = [];
+      this.assignGroupOpen = true;
+    },
+    cancelAssign() {
+      this.assignGroupOpen = false;
+    },
+    completeAssign() {
+      this.assignGroupOpen = false;
+      this.selectedNodes().forEach(node => {
+        console.log(node);
+
+        this.$store.commit("setGroupData", {
+          uuid: this.group.uuid,
+          node: node.name,
+          data: this.nodeAssignment
+        });
+      });
+    },
     selectAll() {
       this.nodes.forEach(node => {
         node.selected = true;
@@ -92,7 +180,6 @@ export default {
         node.selected = node.filtered;
       });
     },
-    assignSelected() {},
     updateNodeVisibility() {
       this.nodes.forEach(node => {
         if (this.nodeFilter) {

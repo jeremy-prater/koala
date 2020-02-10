@@ -77,7 +77,7 @@ const store = new Vuex.Store({
             }
             console.log(`Setting Group Data [${groupData.uuid}] [${groupData.node}]`);
             targetGroup[0].nodes[groupData.node] = groupData.data;
-        }
+        },
         deleteGroup(state, uuid) {
             console.log(`Deleting Group [${uuid}]`);
             state.project.groups = state.project.groups.filter(
