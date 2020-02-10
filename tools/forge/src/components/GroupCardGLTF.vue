@@ -74,7 +74,12 @@
       <ul>
         <li v-for="node in visibleNodes" v-bind:key="node.uuid">
           <input type="checkbox" class="form-check-input" v-model="node.selected" />
-          <span>Node: {{ node.name }}</span>
+          <span>
+            Node: {{ node.name }}
+            <ul>
+              <li v-for="thing in group.nodes[node.name]" v-bind:key="thing">{{ thing.type }} : {{ thing.asset }}</li>
+            </ul>
+          </span>
         </li>
       </ul>
     </div>
