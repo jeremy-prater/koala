@@ -118,7 +118,7 @@ export default {
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace,
     parentObject: function(state) {
-      return state.project.objects.filter(
+      return state.project.assets.filter(
         object => object.path + "/" + object.name === this.group.parentPath
       )[0];
     },
@@ -143,7 +143,7 @@ export default {
     },
     getObjectList() {
       let paths = [];
-      this.project.objects.forEach(object =>
+      this.project.assets.forEach(object =>
         paths.push(object.path + "/" + object.name)
       );
       return paths;

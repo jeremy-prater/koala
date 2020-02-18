@@ -31,41 +31,53 @@ Project::Project(const std::string &path, const std::string &defaultConfigFile)
   logger.SetDebugModuleName(std::string("Project-") +
                             configDocument["name"].GetString());
 
-  auto objects = configDocument["objects"].GetArray();
+  auto objects = configDocument["assets"].GetArray();
   logger.Info(
       "Loaded Project Config [%s] ==> [%d bytes]... Creating [%d] objects",
       configFile.c_str(), configStats.st_size, objects.Size());
 
   {
-    std::scoped_lock<std::mutex> lock(objectsMutex);
+    std::scoped_lock<std::mutex> lock(assetsMutex);
     for (auto &object : objects) {
 
       auto newObject = BaseAsset::CreateObject(path, object.GetObject());
-      this->objects[newObject->GetUUID()] = newObject;
-      this->objectsByPath[newObject->GetPath() + "/" + newObject->GetName()] =
+      this->assets[newObject->GetUUID()] = newObject;
+      this->assetsByPath[newObject->GetPath() + "/" + newObject->GetName()] =
           newObject;
     }
   }
 }
 
-[[nodiscard]] std::vector<std::string> Project::GetObjectUUIDs() const
+[[nodiscard]] std::vector<std::string> Project::GetAssetUUIDs() const
     noexcept {
-  std::scoped_lock<std::mutex> lock(objectsMutex);
+  std::scoped_lock<std::mutex> lock(assetsMutex);
   std::vector<std::string> keys;
-  for (const auto &[key, value] : objects) {
+  for (const auto &[key, value] : assets) {
     keys.push_back(key);
   }
   return keys;
 }
 
 [[nodiscard]] std::shared_ptr<BaseAsset>
-Project::GetObject(const std::string &uuid) const noexcept {
-  std::scoped_lock<std::mutex> lock(objectsMutex);
-  return objects.at(uuid);
+Project::GetAsset(const std::string &uuid) const noexcept {
+  std::scoped_lock<std::mutex> lock(assetsMutex);
+  return assets.at(uuid);
 }
 
 [[nodiscard]] std::shared_ptr<BaseAsset>
-Project::GetObjectByPath(const std::string &path) const noexcept {
-  std::scoped_lock<std::mutex> lock(objectsMutex);
-  return objectsByPath.at(path);
+Project::GetAssetByPath(const std::string &path) const noexcept {
+  std::scoped_lock<std::mutex> lock(assetsMutex);
+  return assetsByPath.at(path);
+}
+
+[[nodiscard]] std::shared_ptr<BaseGroup>
+Project::GetGroup(const std::string &uuid) const noexcept {
+  std::scoped_lock<std::mutex> lock(groupsMutex);
+  return groups.at(uuid);
+}
+
+[[nodiscard]] std::shared_ptr<BaseGroup>
+Project::GetGroupByPath(const std::string &path) const noexcept {
+  std::scoped_lock<std::mutex> lock(groupsMutex);
+  return groupsByPath.at(path);
 }

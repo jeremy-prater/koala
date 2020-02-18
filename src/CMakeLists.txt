@@ -56,8 +56,10 @@ set(KOALA_OBJECT_SRCS "objects/base-object.cpp"
 # Add Koala assets
 set(KOALA_ASSET_SRCS "assets/project-configuration.cpp"
                      "assets/base-asset.cpp"
+                     "assets/base-group.cpp"
                      "assets/gltf-asset.cpp"
-                     "assets/glsl-asset.cpp")
+                     "assets/glsl-asset.cpp"
+                     )
 
 # Add Koala Cloud
 set(KOALA_CLOUD_SRCS "cloud/cloud.cpp"

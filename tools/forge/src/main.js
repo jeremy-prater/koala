@@ -15,7 +15,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import VueObserveVisibility from 'vue-observe-visibility';
 
 import Home from './components/Home.vue';
-import Objects from './components/Objects.vue';
+import Assets from './components/Assets.vue';
 import Groups from './components/Groups.vue';
 import Dashboard from './components/Dashboard.vue';
 import KoalaSettings from './components/settings.js';
@@ -36,7 +36,7 @@ const router = new VueRouter({
     routes: [
         { path: '/', component: Home },
         { path: '/dashboard', component: Dashboard },
-        { path: '/objects', component: Objects },
+        { path: '/assets', component: Assets },
         { path: '/groups', component: Groups }
     ]
 });
@@ -44,7 +44,7 @@ const router = new VueRouter({
 const defaultState = function() {
     return {
         name: 'Unnamed project',
-        objects: [],
+        assets: [],
         groups: []
     };
 };
@@ -86,16 +86,16 @@ const store = new Vuex.Store({
         },
         addObject(state, object) {
             console.log(`Created Object [${object.name}]`);
-            state.project.objects.push(object);
+            state.project.assets.push(object);
         },
         deleteObject(state, uuid) {
             console.log(`Deleting Object [${uuid}]`);
-            state.project.objects = state.project.objects.filter(
+            state.project.assets = state.project.assets.filter(
                 object => object.uuid != uuid
             );
         },
         addMetadata(state, metadata) {
-            state.project.objects.forEach(object => {
+            state.project.assets.forEach(object => {
                 if (object.uuid == metadata.uuid) {
                     console.log(
                         `Adding metadata ${metadata.uuid} [${metadata.key}] ==> [${metadata.value}]`
@@ -105,7 +105,7 @@ const store = new Vuex.Store({
             });
         },
         deleteMetadata(state, metadata) {
-            state.project.objects.forEach(object => {
+            state.project.assets.forEach(object => {
                 if (
                     object.uuid == metadata.uuid &&
                     object.metadata.hasOwnProperty(metadata.key)
@@ -135,7 +135,7 @@ const store = new Vuex.Store({
                     ...JSON.parse(fs.readFileSync(inputSettings))
                 };
                 console.log(
-                    `Loaded [${state.project.objects.length}] objects!`
+                    `Loaded [${state.project.assets.length}] assets!`
                 );
             } else {
                 console.warn(

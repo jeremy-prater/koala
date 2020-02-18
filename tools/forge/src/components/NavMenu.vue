@@ -167,9 +167,9 @@
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/objects" class="nav-link" exact>
+                <router-link to="/assets" class="nav-link" exact>
                   <i class="fas fa-object-group" />
-                  Objects
+                  Assets
                 </router-link>
               </li>
               <li class="nav-item">
@@ -288,7 +288,7 @@ export default {
     },
     saveProject: function() {
       this.cancelSave = false;
-      const totalCount = this.project.objects.length + 1;
+      const totalCount = this.project.assets.length + 1;
       let currentCount = 0;
       let outputFile = path.join(this.currentWorkspace, "projectConfig.json");
 
@@ -299,7 +299,7 @@ export default {
 
         const saveObject = function() {
           if (currentCount != totalCount - 1) {
-            let object = this.project.objects[currentCount];
+            let object = this.project.assets[currentCount];
             this.updateSaveProgress(++currentCount, totalCount);
             let outputFile = path.join(this.currentWorkspace, object.uuid);
             const sourceFile = this.currentWorkspace + "/" + object.source;

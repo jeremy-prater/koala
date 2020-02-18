@@ -117,7 +117,7 @@ import Modal from "./Modal";
 import ViewerglTF from "./viewer-gltf";
 
 export default {
-  name: "Objects",
+  name: "Assets",
   data() {
     return {
       editorVisible: false,
@@ -137,20 +137,20 @@ export default {
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace,
     getObjectsInView(state) {
-      let objects = [];
+      let assets = [];
 
-      state.project.objects.forEach(object => {
+      state.project.assets.forEach(object => {
         let add = false;
         if (this.filter == "") {
           add = true;
         }
 
         if (add) {
-          objects.push(object);
+          assets.push(object);
         }
       });
 
-      return objects;
+      return assets;
     }
   }),
   methods: {

@@ -6,14 +6,14 @@
           <div class="card-body">
             <h5 class="card-title">{{ project.name }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Worspace : [{{ currentWorkspace }}]</h6>
-            <p class="card-text">{{ totalObjects }} objects</p>
+            <p class="card-text">{{ totalObjects }} assets</p>
           </div>
         </div>
       </div>
       <div class="col-sm">
         <div class="card" style="width: 100%;">
           <div class="card-body">
-            <h5 class="card-title">{{ totalObjects }} objects</h5>
+            <h5 class="card-title">{{ totalObjects }} assets</h5>
             <h6 class="card-subtitle mb-2 text-muted">Tags</h6>
             <p class="card-text">
               <span class="badge badge-primary" v-for="tag in objectTags" v-bind:key="tag">{{ tag }}</span>
@@ -56,10 +56,10 @@ export default {
     // arrow functions can make the code very succinct!
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace,
-    totalObjects: state => state.project.objects.length,
+    totalObjects: state => state.project.assets.length,
     objectTags(state) {
       let tags = [];
-      state.project.objects.forEach(object => {
+      state.project.assets.forEach(object => {
         tags.push(...object.tags.split(" "));
       });
 
@@ -67,7 +67,7 @@ export default {
     },
     objectParsers(state) {
       let parsers = [];
-      state.project.objects.forEach(object => {
+      state.project.assets.forEach(object => {
         parsers.push(object.parser);
       });
 
@@ -75,7 +75,7 @@ export default {
     },
     objectPaths(state) {
       let paths = [];
-      state.project.objects.forEach(object => {
+      state.project.assets.forEach(object => {
         paths.push(object.path);
       });
 

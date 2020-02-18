@@ -32,11 +32,11 @@ KoalaTest::KoalaTest(const Arguments &arguments)
 
   project = std::make_shared<Assets::Project>(projectRoot);
 
-  auto uuids = project->GetObjectUUIDs();
+  auto uuids = project->GetAssetUUIDs();
   for (auto uuid : uuids) {
-    auto object = project->GetObject(uuid);
-    object->Load();
-    object->Parse();
+    auto asset = project->GetAsset(uuid);
+    asset->Load();
+    asset->Parse();
   }
 
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -49,7 +49,7 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   cloud = std::make_unique<Cloud::Cloud>();
 
   auto o_asset = std::dynamic_pointer_cast<Assets::GLTFAsset>(
-      project->GetObjectByPath("/default/o"));
+      project->GetAssetByPath("/default/o"));
 
 
 }

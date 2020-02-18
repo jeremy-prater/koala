@@ -94,7 +94,7 @@ export default {
     },
     getObjectList() {
       let paths = [];
-      this.project.objects.forEach(object =>
+      this.project.assets.forEach(object =>
         paths.push(object.path + "/" + object.name)
       );
       return paths;
@@ -108,7 +108,7 @@ export default {
     },
     completeGroupAdd() {
       this.addingGroup = false;
-      const parentObject = this.project.objects.filter(
+      const parentObject = this.project.assets.filter(
         object => object.path + "/" + object.name === this.selectedParentObject
       );
       if (parentObject.length === 1) {
@@ -120,7 +120,7 @@ export default {
     },
     getObjectByPath(path) {
       console.log(path);
-      this.project.objects.forEach(object => {
+      this.project.assets.forEach(object => {
         const computedPath = object.path + "/" + object.name;
         console.log(computedPath);
         if (path === computedPath) return object;

@@ -38,7 +38,7 @@ export default {
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace,
     parentObject: function(state) {
-      return state.project.objects.filter(
+      return state.project.assets.filter(
         object => object.path + "/" + object.name === this.group.parentPath
       )[0];
     }
