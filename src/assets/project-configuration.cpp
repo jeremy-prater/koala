@@ -31,25 +31,35 @@ Project::Project(const std::string &path, const std::string &defaultConfigFile)
   logger.SetDebugModuleName(std::string("Project-") +
                             configDocument["name"].GetString());
 
-  auto objects = configDocument["assets"].GetArray();
-  logger.Info(
-      "Loaded Project Config [%s] ==> [%d bytes]... Creating [%d] objects",
-      configFile.c_str(), configStats.st_size, objects.Size());
+  logger.Info("Loaded Project Config [%s] ==> [%d bytes]", configFile.c_str(),
+              configStats.st_size);
 
+  auto assets = configDocument["assets"].GetArray();
+  logger.Info("Creating [%d] assets", assets.Size()); 
   {
     std::scoped_lock<std::mutex> lock(assetsMutex);
-    for (auto &object : objects) {
+    for (auto &asset : assets) {
+      auto newAsset = BaseAsset::CreateAsset(path, asset.GetObject());
+      this->assets[newAsset->GetUUID()] = newAsset;
+      this->assetsByPath[newAsset->GetPath() + "/" + newAsset->GetName()] =
+          newAsset;
+    }
+  }
 
-      auto newObject = BaseAsset::CreateObject(path, object.GetObject());
-      this->assets[newObject->GetUUID()] = newObject;
-      this->assetsByPath[newObject->GetPath() + "/" + newObject->GetName()] =
-          newObject;
+  auto groups = configDocument["groups"].GetArray();
+  logger.Info("Creating [%d] groups", groups.Size()); 
+  {
+    std::scoped_lock<std::mutex> lock(groupsMutex);
+    for (auto &group : groups) {
+      auto newGroup = BaseGroup::CreateGroup(this, group.GetObject());
+      this->groups[newGroup->GetUUID()] = newGroup;
+      this->groupsByPath[newGroup->GetPath()] =
+          newGroup;
     }
   }
 }
 
-[[nodiscard]] std::vector<std::string> Project::GetAssetUUIDs() const
-    noexcept {
+[[nodiscard]] std::vector<std::string> Project::GetAssetUUIDs() const noexcept {
   std::scoped_lock<std::mutex> lock(assetsMutex);
   std::vector<std::string> keys;
   for (const auto &[key, value] : assets) {

@@ -51,6 +51,7 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   auto o_asset = std::dynamic_pointer_cast<Assets::GLTFAsset>(
       project->GetAssetByPath("/default/o"));
 
+  //auto grid_group = project->Cre
 
 }
 

@@ -10,31 +10,31 @@
 
 using namespace Koala::Assets;
 
-std::shared_ptr<BaseAsset> BaseAsset::CreateObject(
+std::shared_ptr<BaseAsset> BaseAsset::CreateAsset(
     const std::string &rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props) {
-  std::shared_ptr<BaseAsset> newObject;
+  std::shared_ptr<BaseAsset> newAsset;
 
   const std::string parser = props["parser"].GetString();
 
-  if (newObject.operator bool()) {
-    std::scoped_lock<std::mutex> lock(newObject->tagsLock);
+  if (newAsset.operator bool()) {
+    std::scoped_lock<std::mutex> lock(newAsset->tagsLock);
     const std::string tagStringRaw = props["tags"].GetString();
-    boost::split(newObject->tags, tagStringRaw,
+    boost::split(newAsset->tags, tagStringRaw,
                  [](char c) { return c == ' '; });
   }
 
   if (parser == "gltf") {
-    newObject = std::dynamic_pointer_cast<BaseAsset>(
+    newAsset = std::dynamic_pointer_cast<BaseAsset>(
         std::make_shared<GLTFAsset>(props, rootDir));
   }
 
   if (parser == "glsl") {
-    newObject = std::dynamic_pointer_cast<BaseAsset>(
+    newAsset = std::dynamic_pointer_cast<BaseAsset>(
         std::make_shared<GLSLAsset>(props, rootDir));
   }
 
-  return newObject;
+  return newAsset;
 }
 
 BaseAsset::BaseAsset(
@@ -44,7 +44,7 @@ BaseAsset::BaseAsset(
       name(props["name"].GetString()), parser(props["parser"].GetString()),
       size(props["size"].GetUint()), md5Sum(props["hash"].GetString()),
       rootDir(root), parsed(false), data(nullptr),
-      logger("Object" + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
+      logger("Asset : " + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
              false) {
   logger.Info("Created Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
   for (auto &value : props["metadata"].GetObject()) {

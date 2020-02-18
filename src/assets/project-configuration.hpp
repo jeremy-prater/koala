@@ -3,13 +3,16 @@
 #include "base-asset.hpp"
 #include "base-group.hpp"
 #include "debuglogger/debuglogger.hpp"
-#include "rapidjson/document.h"
+#include <rapidjson/pointer.h>
+#include <rapidjson/rapidjson.h>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
 
 namespace Koala {
 namespace Assets {
+
+class BaseGroup;
 
 class Project {
 public:

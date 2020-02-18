@@ -14,7 +14,7 @@ namespace Assets {
 
 class BaseAsset {
 public:
-  static std::shared_ptr<BaseAsset> CreateObject(
+  static std::shared_ptr<BaseAsset> CreateAsset(
       const std::string &rootDir,
       rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
