@@ -189,7 +189,16 @@ export default {
     updateNodeVisibility() {
       this.nodes.forEach(node => {
         if (this.nodeFilter) {
-          node.filtered = node.name.includes(this.nodeFilter);
+          var branches = node.name.split("/");
+
+          //node.name.includes(this.nodeFilter);
+          // This must evaluate to true or false at the end...
+          //var result = branches.filter(branch => branch == this.nodeFilter);
+          //branches.includes(this.nodeFilter)
+
+          //console.log(result);
+
+          node.filtered = branches.includes(this.nodeFilter);
         } else {
           node.filtered = true;
         }
