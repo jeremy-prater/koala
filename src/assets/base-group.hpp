@@ -36,7 +36,8 @@ public:
             rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
 protected:
-  std::unordered_map<std::string, std::unordered_map<std::string, std::string>>
+  std::unordered_map<
+      std::string, std::unordered_map<std::string, std::shared_ptr<BaseAsset>>>
       nodes;
   DebugLogger logger;
 };

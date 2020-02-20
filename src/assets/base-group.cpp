@@ -32,16 +32,17 @@ BaseGroup::BaseGroup(
   for (auto &node : nodes) {
     std::string nodeName = node.name.GetString();
 
-    logger.Info("Loading Node --> %s", nodeName.c_str());
+    //logger.Info("Loading Node --> %s", nodeName.c_str());
 
     auto nodeDataElements = node.value.GetArray();
     for (auto &nodeDataElement : nodeDataElements) {
       auto nodeObject = nodeDataElement.GetObject();
       const std::string type = nodeObject["type"].GetString();
       const std::string asset = nodeObject["asset"].GetString();
-      logger.Info("Loading Node --> %s [%s] ==> [%s]", nodeName.c_str(),
+      logger.Info("Linking Node --> %s [%s] ==> [%s]", nodeName.c_str(),
                   type.c_str(), asset.c_str());
       // nodeDataElement.name
+      this->nodes[nodeName][type] = project->GetAssetByPath(asset);
     }
   }
 }
