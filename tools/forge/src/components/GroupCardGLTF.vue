@@ -191,14 +191,19 @@ export default {
         if (this.nodeFilter) {
           var branches = node.name.split("/");
 
-          //node.name.includes(this.nodeFilter);
-          // This must evaluate to true or false at the end...
-          //var result = branches.filter(branch => branch == this.nodeFilter);
-          //branches.includes(this.nodeFilter)
+          // This really should just be a REGEX...
 
-          //console.log(result);
+          let exactMatch = this.nodeFilter.startsWith("'");
+          let matchString = this.nodeFilter;
 
-          node.filtered = branches.includes(this.nodeFilter);
+          if (exactMatch) {
+            node.filtered = branches.includes(matchString.substring(1));
+          } else {
+            node.filtered = false;
+            branches.forEach(branch => {
+              node.filtered |= branch.includes(matchString);
+            });
+          }
         } else {
           node.filtered = true;
         }
