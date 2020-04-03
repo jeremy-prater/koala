@@ -60,12 +60,18 @@ BaseGroup::BaseGroup(
   return parentPath;
 }
 
-[[nodiscard]] const std::vector<std::string> BaseGroup::GetNodeList() const
+[[nodiscard]] const std::vector<std::string> &BaseGroup::GetNodeList() const
     noexcept {
   return nodeNames;
 }
 
 [[nodiscard]] const std::unordered_map<std::string, std::shared_ptr<BaseAsset>>
-BaseGroup::GetNodeLinks(const std::string &nodeName) const noexcept {
+    &BaseGroup::GetNodeLinks(const std::string &nodeName) const noexcept {
   return nodes.at(nodeName);
+}
+
+[[nodiscard]] const size_t &
+BaseGroup::GetNodeHash(const std::string &nodeName) const noexcept {
+  auto nodeLinks = GetNodeLinks(nodeName);
+  
 }

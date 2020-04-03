@@ -20,6 +20,7 @@ public:
 
   [[nodiscard]] const std::string GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
+  [[nodiscard]] const std::string GetFullPath() const noexcept;
   [[nodiscard]] const std::string GetName() const noexcept;
   [[nodiscard]] const std::string GetParser() const noexcept;
 
@@ -65,6 +66,7 @@ protected:
   const std::string uuid;
   const std::string path;
   const std::string name;
+  const std::string fullPath;
   const std::string parser;
   const ssize_t size;
   const std::string md5Sum;

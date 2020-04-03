@@ -20,8 +20,7 @@ std::shared_ptr<BaseAsset> BaseAsset::CreateAsset(
   if (newAsset.operator bool()) {
     std::scoped_lock<std::mutex> lock(newAsset->tagsLock);
     const std::string tagStringRaw = props["tags"].GetString();
-    boost::split(newAsset->tags, tagStringRaw,
-                 [](char c) { return c == ' '; });
+    boost::split(newAsset->tags, tagStringRaw, [](char c) { return c == ' '; });
   }
 
   if (parser == "gltf") {
@@ -41,11 +40,11 @@ BaseAsset::BaseAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
     const std::string &root)
     : uuid(props["uuid"].GetString()), path(props["path"].GetString()),
-      name(props["name"].GetString()), parser(props["parser"].GetString()),
-      size(props["size"].GetUint()), md5Sum(props["hash"].GetString()),
-      rootDir(root), parsed(false), data(nullptr),
-      logger("Asset : " + path + "/" + name, DebugLogger::DebugColor::COLOR_GREEN,
-             false) {
+      name(props["name"].GetString()), fullPath(path + "/" + name),
+      parser(props["parser"].GetString()), size(props["size"].GetUint()),
+      md5Sum(props["hash"].GetString()), rootDir(root), parsed(false),
+      data(nullptr), logger("Asset : " + fullPath,
+                            DebugLogger::DebugColor::COLOR_GREEN, false) {
   logger.Info("Created Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
   for (auto &value : props["metadata"].GetObject()) {
     std::string metaName = value.name.GetString();
@@ -65,6 +64,9 @@ BaseAsset::~BaseAsset() {
 }
 [[nodiscard]] const std::string BaseAsset::GetPath() const noexcept {
   return path;
+}
+[[nodiscard]] const std::string BaseAsset::GetFullPath() const noexcept {
+  return fullPath;
 }
 [[nodiscard]] const std::string BaseAsset::GetName() const noexcept {
   return name;

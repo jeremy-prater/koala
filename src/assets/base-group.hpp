@@ -30,9 +30,9 @@ public:
   [[nodiscard]] const std::string GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
   [[nodiscard]] const std::string GetParentPath() const noexcept;
-  [[nodiscard]] const std::vector<std::string> GetNodeList() const noexcept;
+  [[nodiscard]] const std::vector<std::string> &GetNodeList() const noexcept;
   [[nodiscard]] const std::unordered_map<std::string,
-                                         std::shared_ptr<BaseAsset>>
+                                         std::shared_ptr<BaseAsset>> &
   GetNodeLinks(const std::string &nodeName) const noexcept;
 
   BaseGroup(Project *project,
