@@ -48,11 +48,9 @@ KoalaTest::KoalaTest(const Arguments &arguments)
 
   cloud = std::make_unique<Cloud::Cloud>();
 
-  auto o_asset = std::dynamic_pointer_cast<Assets::GLTFAsset>(
-      project->GetAssetByPath("/default/o"));
+  auto x_group = project->GetGroupByPath("/default/x/the-x");
 
-  //auto grid_group = project->Cre
-
+  scene->CreateRenderableFromGroup(x_group);
 }
 
 void KoalaTest::drawEvent() {

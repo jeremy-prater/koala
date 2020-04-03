@@ -12,6 +12,8 @@
 namespace Koala {
 namespace Objects {
 
+class Scene;
+
 class Renderable : public BaseObject, public Magnum::SceneGraph::Drawable3D {
 public:
   explicit Renderable(const std::string &name, const uint32_t groupId,

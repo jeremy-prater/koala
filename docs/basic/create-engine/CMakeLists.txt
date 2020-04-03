@@ -3,12 +3,14 @@ project(${PROJ_NAME})
 
 find_package(RapidJSON)
 find_package(Magnum REQUIRED GL Sdl2Application)
+find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 # Add Debuglogger to Koala
 include_directories("../../../src/"
                     ${RAPIDJSON_INCLUDE_DIRS}
+                    ${Boost_INCLUDE_DIRS}
 )
 
 add_executable(${PROJ_NAME} koala.cpp)

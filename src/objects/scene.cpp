@@ -7,3 +7,12 @@ Scene::Scene() : logger("Scene", DebugLogger::DebugColor::COLOR_YELLOW, false) {
 }
 
 Scene::~Scene() { logger.Info("Destroyed Scene"); }
+
+void Scene::CreateRenderableFromGroup(
+    const std::shared_ptr<Koala::Assets::BaseGroup> group) {
+  logger.Info("Creating Renderabler from group [%s]", group->GetPath().c_str());
+  auto nodeList = group->GetNodeList();
+  for (auto &node : nodeList) {
+    logger.Info("Node : %s", node.c_str());
+  }
+}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "assets/base-group.hpp"
 #include "debuglogger/debuglogger.hpp"
 #include "engine/typedefs.hpp"
 #include "objects/scene-renderable-groups.hpp"
@@ -16,7 +17,8 @@ public:
   Scene();
   virtual ~Scene();
 
-  void InstantiateObject(const std::string &assetPath) noexcept;
+  void CreateRenderableFromGroup(
+      const std::shared_ptr<Koala::Assets::BaseGroup> group);
 
 private:
   DebugLogger logger;

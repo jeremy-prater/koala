@@ -11,7 +11,7 @@
 
 class KoalaTest : public Koala::Engine::Engine {
 public:
-  KoalaTest(const Arguments &arguments);
+  explicit KoalaTest(const Arguments &arguments);
   virtual ~KoalaTest();
 
 protected:

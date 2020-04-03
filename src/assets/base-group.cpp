@@ -25,14 +25,15 @@ BaseGroup::BaseGroup(
       name(props["name"].GetString()),
       parent(project->GetAssetByPath(parentPath)),
       logger("Group : " + uuid, DebugLogger::DebugColor::COLOR_CYAN, true) {
-  logger.Info("Created Group [%s]", uuid.c_str());
+  logger.Info("Created Group [%s][%s]", GetPath().c_str(), uuid.c_str());
 
   auto nodes = props["nodes"].GetObject();
 
   for (auto &node : nodes) {
     std::string nodeName = node.name.GetString();
+    nodeNames.push_back(nodeName);
 
-    //logger.Info("Loading Node --> %s", nodeName.c_str());
+    // logger.Info("Loading Node --> %s", nodeName.c_str());
 
     auto nodeDataElements = node.value.GetArray();
     for (auto &nodeDataElement : nodeDataElements) {
@@ -57,4 +58,14 @@ BaseGroup::BaseGroup(
 
 [[nodiscard]] const std::string BaseGroup::GetParentPath() const noexcept {
   return parentPath;
+}
+
+[[nodiscard]] const std::vector<std::string> BaseGroup::GetNodeList() const
+    noexcept {
+  return nodeNames;
+}
+
+[[nodiscard]] const std::unordered_map<std::string, std::shared_ptr<BaseAsset>>
+BaseGroup::GetNodeLinks(const std::string &nodeName) const noexcept {
+  return nodes.at(nodeName);
 }
