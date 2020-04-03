@@ -1,5 +1,6 @@
 #include "base-group.hpp"
 #include "debuglogger/debuglogger.hpp"
+#include <boost/algorithm/string.hpp>
 
 using namespace Koala::Assets;
 
@@ -22,6 +23,7 @@ BaseGroup::BaseGroup(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props)
     : uuid(props["uuid"].GetString()),
       parentPath(props["parentPath"].GetString()),
+      nodeTypeHash(static_cast<uint32_t>(NodeType::Unknown)),
       name(props["name"].GetString()),
       parent(project->GetAssetByPath(parentPath)),
       logger("Group : " + uuid, DebugLogger::DebugColor::COLOR_CYAN, true) {
@@ -30,8 +32,18 @@ BaseGroup::BaseGroup(
   auto nodes = props["nodes"].GetObject();
 
   for (auto &node : nodes) {
-    std::string nodeName = node.name.GetString();
-    nodeNames.push_back(nodeName);
+    const std::string nodeName =
+        boost::algorithm::to_lower_copy(node.name.GetString());
+
+    NodeType nodeType = NodeType::Unknown;
+
+    if (nodeName == "vertex") {
+      nodeType = NodeType::VertexShader;
+    } else if (nodeName == "fragment") {
+      nodeType = NodeType::FragmentShader;
+    }
+
+    nodeTypeHash |= static_cast<uint32_t>(nodeType);
 
     // logger.Info("Loading Node --> %s", nodeName.c_str());
 
@@ -48,7 +60,7 @@ BaseGroup::BaseGroup(
   }
 }
 
-[[nodiscard]] const std::string BaseGroup::GetUUID() const noexcept {
+[[nodiscard]] const boost::uuids::uuid BaseGroup::GetUUID() const noexcept {
   return uuid;
 }
 
@@ -60,18 +72,11 @@ BaseGroup::BaseGroup(
   return parentPath;
 }
 
-[[nodiscard]] const std::vector<std::string> &BaseGroup::GetNodeList() const
-    noexcept {
-  return nodeNames;
+[[nodiscard]] uint32_t BaseGroup::GetNodeTypeHash() const noexcept {
+  return nodeTypeHash;
 }
 
-[[nodiscard]] const std::unordered_map<std::string, std::shared_ptr<BaseAsset>>
-    &BaseGroup::GetNodeLinks(const std::string &nodeName) const noexcept {
-  return nodes.at(nodeName);
-}
-
-[[nodiscard]] const size_t &
-BaseGroup::GetNodeHash(const std::string &nodeName) const noexcept {
-  auto nodeLinks = GetNodeLinks(nodeName);
-  
+[[nodiscard]] const std::unordered_map<NodeType, std::shared_ptr<BaseAsset>> &
+BaseGroup::GetNodeLinks(const BaseGroup::NodeType nodeType) const noexcept {
+  return nodes.at(nodeType);
 }

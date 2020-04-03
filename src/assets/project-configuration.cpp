@@ -35,7 +35,7 @@ Project::Project(const std::string &path, const std::string &defaultConfigFile)
               configStats.st_size);
 
   auto assets = configDocument["assets"].GetArray();
-  logger.Info("Creating [%d] assets", assets.Size()); 
+  logger.Info("Creating [%d] assets", assets.Size());
   {
     std::scoped_lock<std::mutex> lock(assetsMutex);
     for (auto &asset : assets) {
@@ -44,32 +44,35 @@ Project::Project(const std::string &path, const std::string &defaultConfigFile)
       this->assetsByPath[newAsset->GetPath() + "/" + newAsset->GetName()] =
           newAsset;
     }
+
+    for (const auto &[m_uuid, m_asset] : this->assets) {
+      this->assetsUUIDs.push_back(m_uuid);
+    }
   }
 
   auto groups = configDocument["groups"].GetArray();
-  logger.Info("Creating [%d] groups", groups.Size()); 
+  logger.Info("Creating [%d] groups", groups.Size());
   {
     std::scoped_lock<std::mutex> lock(groupsMutex);
     for (auto &group : groups) {
       auto newGroup = BaseGroup::CreateGroup(this, group.GetObject());
       this->groups[newGroup->GetUUID()] = newGroup;
-      this->groupsByPath[newGroup->GetPath()] =
-          newGroup;
+      this->groupsByPath[newGroup->GetPath()] = newGroup;
+    }
+
+    for (const auto &[m_uuid, m_group] : this->groups) {
+      this->groupsUUIDs.push_back(m_uuid);
     }
   }
 }
 
-[[nodiscard]] std::vector<std::string> Project::GetAssetUUIDs() const noexcept {
-  std::scoped_lock<std::mutex> lock(assetsMutex);
-  std::vector<std::string> keys;
-  for (const auto &[key, value] : assets) {
-    keys.push_back(key);
-  }
-  return keys;
+[[nodiscard]] const std::vector<boost::uuids::uuid>
+Project::GetAssetUUIDs() const noexcept {
+  return assetsUUIDs;
 }
 
 [[nodiscard]] std::shared_ptr<BaseAsset>
-Project::GetAsset(const std::string &uuid) const noexcept {
+Project::GetAsset(const boost::uuids::uuid &uuid) const noexcept {
   std::scoped_lock<std::mutex> lock(assetsMutex);
   return assets.at(uuid);
 }
@@ -80,8 +83,13 @@ Project::GetAssetByPath(const std::string &path) const noexcept {
   return assetsByPath.at(path);
 }
 
+[[nodiscard]] const std::vector<boost::uuids::uuid>
+Project::GetGroupUUIDs() const noexcept {
+  return groupsUUIDs;
+}
+
 [[nodiscard]] std::shared_ptr<BaseGroup>
-Project::GetGroup(const std::string &uuid) const noexcept {
+Project::GetGroup(const boost::uuids::uuid &uuid) const noexcept {
   std::scoped_lock<std::mutex> lock(groupsMutex);
   return groups.at(uuid);
 }

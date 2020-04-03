@@ -2,6 +2,7 @@
 
 #include "debuglogger/debuglogger.hpp"
 #include <boost/signals2.hpp>
+#include <boost/uuid/uuid.hpp>
 #include <memory>
 #include <mutex>
 #include <rapidjson/pointer.h>
@@ -18,7 +19,7 @@ public:
       const std::string &rootDir,
       rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
-  [[nodiscard]] const std::string GetUUID() const noexcept;
+  [[nodiscard]] const boost::uuids::uuid GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
   [[nodiscard]] const std::string GetFullPath() const noexcept;
   [[nodiscard]] const std::string GetName() const noexcept;
@@ -63,7 +64,7 @@ public:
   boost::signals2::signal<void()> onReleased();
 
 protected:
-  const std::string uuid;
+  const boost::uuids::uuid uuid;
   const std::string path;
   const std::string name;
   const std::string fullPath;

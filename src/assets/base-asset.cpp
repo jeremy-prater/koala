@@ -59,7 +59,7 @@ BaseAsset::~BaseAsset() {
   logger.Info("Destroyed Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
 }
 
-[[nodiscard]] const std::string BaseAsset::GetUUID() const noexcept {
+[[nodiscard]] const boost::uuids::uuid BaseAsset::GetUUID() const noexcept {
   return uuid;
 }
 [[nodiscard]] const std::string BaseAsset::GetPath() const noexcept {

@@ -3,6 +3,7 @@
 #include "base-asset.hpp"
 #include "debuglogger/debuglogger.hpp"
 #include "project-configuration.hpp"
+#include <boost/uuid/uuid.hpp>
 #include <memory>
 #include <mutex>
 #include <rapidjson/pointer.h>
@@ -17,7 +18,13 @@ class Project;
 
 class BaseGroup {
 public:
-  const std::string uuid;
+  enum class NodeType : uint32_t {
+    Unknown = 0x00000000,
+    VertexShader = 0x00000001,
+    FragmentShader = 0x00000002,
+  };
+
+  const boost::uuids::uuid uuid;
   const std::string parentPath;
   const std::string name;
 
@@ -27,12 +34,11 @@ public:
       Project *project,
       rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
-  [[nodiscard]] const std::string GetUUID() const noexcept;
+  [[nodiscard]] const boost::uuids::uuid GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
   [[nodiscard]] const std::string GetParentPath() const noexcept;
-  [[nodiscard]] const std::vector<std::string> &GetNodeList() const noexcept;
-  [[nodiscard]] const std::unordered_map<std::string,
-                                         std::shared_ptr<BaseAsset>> &
+  [[nodiscard]] uint32_t GetNodeTypeHash() const noexcept;
+  [[nodiscard]] const std::unordered_map<NodeType, std::shared_ptr<BaseAsset>> &
   GetNodeLinks(const std::string &nodeName) const noexcept;
 
   BaseGroup(Project *project,
@@ -40,9 +46,10 @@ public:
 
 protected:
   std::mutex nodeMutex;
-  std::vector<std::string> nodeNames;
+  uint32_t nodeTypeHash;
   std::unordered_map<
-      std::string, std::unordered_map<std::string, std::shared_ptr<BaseAsset>>>
+      boost::uuids::uuid,
+      std::unordered_map<std::string, std::shared_ptr<BaseAsset>>>
       nodes;
   DebugLogger logger;
 };
