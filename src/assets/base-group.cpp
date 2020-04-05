@@ -1,6 +1,8 @@
 #include "base-group.hpp"
 #include "debuglogger/debuglogger.hpp"
 #include <boost/algorithm/string.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <engine/engine.hpp>
 
 using namespace Koala::Assets;
 
@@ -21,13 +23,16 @@ std::shared_ptr<BaseGroup> BaseGroup::CreateGroup(
 BaseGroup::BaseGroup(
     Project *project,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props)
-    : uuid(props["uuid"].GetString()),
+    : uuid(Koala::Engine::Engine::StringUUIDGenerator(
+          props["uuid"].GetString())),
       parentPath(props["parentPath"].GetString()),
-      nodeTypeHash(static_cast<uint32_t>(NodeType::Unknown)),
       name(props["name"].GetString()),
       parent(project->GetAssetByPath(parentPath)),
-      logger("Group : " + uuid, DebugLogger::DebugColor::COLOR_CYAN, true) {
-  logger.Info("Created Group [%s][%s]", GetPath().c_str(), uuid.c_str());
+      nodeTypeHash(static_cast<uint32_t>(NodeType::Unknown)),
+      logger("Group : " + boost::uuids::to_string(uuid),
+             DebugLogger::DebugColor::COLOR_CYAN, true) {
+  logger.Info("Created Group [%s][%s]", GetPath().c_str(),
+              boost::uuids::to_string(uuid).c_str());
 
   auto nodes = props["nodes"].GetObject();
 
@@ -54,8 +59,13 @@ BaseGroup::BaseGroup(
       const std::string asset = nodeObject["asset"].GetString();
       logger.Info("Linking Node --> %s [%s] ==> [%s]", nodeName.c_str(),
                   type.c_str(), asset.c_str());
-      // nodeDataElement.name
-      this->nodes[nodeName][type] = project->GetAssetByPath(asset);
+
+      // Optimize me...
+      //
+      // 1. First nodeTypeHash is a bitmap
+      // 2. The local string type is possible an element of nodeTypeHash
+
+      // this->nodes[nodeName][type] = project->GetAssetByPath(asset);
     }
   }
 }
@@ -76,7 +86,8 @@ BaseGroup::BaseGroup(
   return nodeTypeHash;
 }
 
-[[nodiscard]] const std::unordered_map<NodeType, std::shared_ptr<BaseAsset>> &
-BaseGroup::GetNodeLinks(const BaseGroup::NodeType nodeType) const noexcept {
-  return nodes.at(nodeType);
+[[nodiscard]] const std::unordered_map<BaseGroup::NodeType,
+                                       std::shared_ptr<BaseAsset>> &
+BaseGroup::GetNodeLinks(const boost::uuids::uuid nodeUUID) const noexcept {
+  return nodes.at(nodeUUID);
 }

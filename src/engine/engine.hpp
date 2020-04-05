@@ -13,6 +13,7 @@
 #include <Magnum/SceneGraph/Object.h>
 #include <Magnum/SceneGraph/Scene.h>
 #include <Magnum/SceneGraph/SceneGraph.h>
+#include <boost/uuid/string_generator.hpp>
 #include <memory>
 
 namespace Koala {
@@ -20,6 +21,8 @@ namespace Engine {
 
 class Engine : public Magnum::Platform::Application {
 public:
+  static boost::uuids::string_generator StringUUIDGenerator;
+
   explicit Engine(const Arguments &arguments);
   virtual ~Engine();
 

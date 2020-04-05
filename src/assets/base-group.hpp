@@ -39,7 +39,7 @@ public:
   [[nodiscard]] const std::string GetParentPath() const noexcept;
   [[nodiscard]] uint32_t GetNodeTypeHash() const noexcept;
   [[nodiscard]] const std::unordered_map<NodeType, std::shared_ptr<BaseAsset>> &
-  GetNodeLinks(const std::string &nodeName) const noexcept;
+  GetNodeLinks(const boost::uuids::uuid nodeUUID) const noexcept;
 
   BaseGroup(Project *project,
             rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
@@ -47,9 +47,9 @@ public:
 protected:
   std::mutex nodeMutex;
   uint32_t nodeTypeHash;
-  std::unordered_map<
-      boost::uuids::uuid,
-      std::unordered_map<std::string, std::shared_ptr<BaseAsset>>>
+  std::unordered_map<boost::uuids::uuid,
+                     std::unordered_map<NodeType, std::shared_ptr<BaseAsset>>,
+                     boost::hash<boost::uuids::uuid>>
       nodes;
   DebugLogger logger;
 };

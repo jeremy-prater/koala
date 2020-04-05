@@ -1,8 +1,10 @@
 #include "base-asset.hpp"
+#include "engine/engine.hpp"
 #include "glsl-asset.hpp"
 #include "gltf-asset.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -39,13 +41,17 @@ std::shared_ptr<BaseAsset> BaseAsset::CreateAsset(
 BaseAsset::BaseAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
     const std::string &root)
-    : uuid(props["uuid"].GetString()), path(props["path"].GetString()),
-      name(props["name"].GetString()), fullPath(path + "/" + name),
-      parser(props["parser"].GetString()), size(props["size"].GetUint()),
-      md5Sum(props["hash"].GetString()), rootDir(root), parsed(false),
-      data(nullptr), logger("Asset : " + fullPath,
-                            DebugLogger::DebugColor::COLOR_GREEN, false) {
-  logger.Info("Created Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
+    : uuid(Koala::Engine::Engine::StringUUIDGenerator(
+          props["uuid"].GetString())),
+      path(props["path"].GetString()), name(props["name"].GetString()),
+      fullPath(path + "/" + name), parser(props["parser"].GetString()),
+      size(props["size"].GetUint()), md5Sum(props["hash"].GetString()),
+      rootDir(root), parsed(false), data(nullptr),
+      logger("Asset : " + fullPath, DebugLogger::DebugColor::COLOR_GREEN,
+             false) {
+  logger.Info("Created Asset [%s] ==> [%s]",
+
+              boost::uuids::to_string(uuid).c_str(), parser.c_str());
   for (auto &value : props["metadata"].GetObject()) {
     std::string metaName = value.name.GetString();
     std::string metaValue = value.value.GetString();
@@ -56,7 +62,8 @@ BaseAsset::BaseAsset(
 }
 
 BaseAsset::~BaseAsset() {
-  logger.Info("Destroyed Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
+  logger.Info("Destroyed Asset [%s] ==> [%s]",
+              boost::uuids::to_string(uuid).c_str(), parser.c_str());
 }
 
 [[nodiscard]] const boost::uuids::uuid BaseAsset::GetUUID() const noexcept {
@@ -111,17 +118,17 @@ void BaseAsset::Load() {
 
   if (data == nullptr) {
     logger.Error("Failed to load : Unable allocate memory [%s][%d] ==> [%s]",
-                 uuid.c_str(), size, strerror(errno));
+                 boost::uuids::to_string(uuid).c_str(), size, strerror(errno));
     return;
   }
 
-  const std::string fullPath = rootDir + "/" + uuid;
+  const std::string fullPath = rootDir + "/" + boost::uuids::to_string(uuid);
 
   auto fd = open(fullPath.c_str(), O_RDONLY);
 
   if (fd == -1) {
-    logger.Error("Failed to load : Unable to open [%s] ==> [%s]", uuid.c_str(),
-                 strerror(errno));
+    logger.Error("Failed to load : Unable to open [%s] ==> [%s]",
+                 boost::uuids::to_string(uuid).c_str(), strerror(errno));
     free(data);
     data = nullptr;
     return;
