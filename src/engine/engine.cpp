@@ -4,6 +4,8 @@
 using namespace Koala::Engine;
 using namespace Magnum;
 
+boost::uuids::string_generator Engine::StringUUIDGenerator;
+
 Engine::Engine(const Arguments &arguments)
     : Platform::Application{arguments},
       logger("Main", DebugLogger::DebugColor::COLOR_WHITE, false) {

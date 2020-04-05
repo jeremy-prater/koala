@@ -1,4 +1,5 @@
 #include "glsl-asset.hpp"
+#include <boost/uuid/uuid_io.hpp>
 #include <chrono>
 
 using namespace Koala::Assets;
@@ -56,12 +57,14 @@ GLSLAsset::GLSLAsset(
              GetShaderTypeFromString(GetMetaObject("Type"))),
       logger("GLSL-Object-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {
-  logger.Info("Created GLSL Shader [%s] ==> [%s][%s]", uuid.c_str(),
+  logger.Info("Created GLSL Shader [%s] ==> [%s][%s]",
+              boost::uuids::to_string(uuid).c_str(),
               GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 
 GLSLAsset::~GLSLAsset() {
-  logger.Info("Destroyed GLSL Shader [%s] ==> [%s][%s]", uuid.c_str(),
+  logger.Info("Destroyed GLSL Shader [%s] ==> [%s][%s]",
+              boost::uuids::to_string(uuid).c_str(),
               GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 

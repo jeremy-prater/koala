@@ -38,7 +38,8 @@ BaseGroup::BaseGroup(
 
   for (auto &node : nodes) {
     const std::string nodeName =
-        boost::algorithm::to_lower_copy(node.name.GetString());
+        boost::algorithm::to_lower_copy<const std::string>(
+            node.name.GetString());
 
     NodeType nodeType = NodeType::Unknown;
 

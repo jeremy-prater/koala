@@ -1,5 +1,6 @@
 #include "gltf-asset.hpp"
 #include <Corrade/Containers/ArrayView.h>
+#include <boost/uuid/uuid_io.hpp>
 #include <chrono>
 
 using namespace Koala::Assets;
@@ -10,12 +11,13 @@ GLTFAsset::GLTFAsset(
     : BaseAsset(props, rootDir),
       logger("GLTF-Asset-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {
-  logger.Info("Created GLTF Asset [%s] ==> [%s]", uuid.c_str(), parser.c_str());
+  logger.Info("Created GLTF Asset [%s] ==> [%s]",
+              boost::uuids::to_string(uuid).c_str(), parser.c_str());
 }
 
 GLTFAsset::~GLTFAsset() {
-  logger.Info("Destroyed GLTF Asset [%s] ==> [%s]", uuid.c_str(),
-              parser.c_str());
+  logger.Info("Destroyed GLTF Asset [%s] ==> [%s]",
+              boost::uuids::to_string(uuid).c_str(), parser.c_str());
 }
 
 [[nodiscard]] bool GLTFAsset::Parse() noexcept {
