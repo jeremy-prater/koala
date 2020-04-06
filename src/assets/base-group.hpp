@@ -3,6 +3,7 @@
 #include "base-asset.hpp"
 #include "debuglogger/debuglogger.hpp"
 #include "project-configuration.hpp"
+#include <boost/container_hash/hash.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <memory>
 #include <mutex>
