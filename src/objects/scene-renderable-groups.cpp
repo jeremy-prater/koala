@@ -3,13 +3,6 @@
 
 using namespace Koala::Objects;
 
-[[nodiscard]] const std::vector<uint32_t> GetRenderGroups() const noexcept;
-
-[[nodiscard]] std::shared_ptr<Magnum::SceneGraph::Drawable3D>
-GetRenderGroupByID(const uint32_t groupID) const noexcept;
-
-void AddRenderToGroup(std::shared_ptr<Renderable>) noexcept;
-
 /////////////////////////////////////////////////////////////////////
 //
 // Remember...  this is with-in the context of Koala::Objects::Scene
