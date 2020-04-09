@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/classes.hpp"
+
 #include "base-asset.hpp"
 #include "base-group.hpp"
 #include "debuglogger/debuglogger.hpp"
@@ -13,8 +15,6 @@
 
 namespace Koala {
 namespace Assets {
-
-class BaseGroup;
 
 class Project {
 public:

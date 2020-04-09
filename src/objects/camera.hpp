@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/classes.hpp"
+
 #include "debuglogger/debuglogger.hpp"
 #include "engine/typedefs.hpp"
 #include "objects/base-object.hpp"

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/classes.hpp"
+
 #include "base-asset.hpp"
 #include <MagnumPlugins/TinyGltfImporter/TinyGltfImporter.h>
 

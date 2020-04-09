@@ -51,6 +51,7 @@ set(KOALA_ENGINE_SRCS "engine/engine.cpp")
 set(KOALA_OBJECT_SRCS "objects/base-object.cpp"
                       "objects/camera.cpp"
                       "objects/renderable.cpp"
+                      "objects/scene-renderable-groups.cpp"
                       "objects/scene.cpp")
 
 # Add Koala assets

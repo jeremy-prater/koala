@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/classes.hpp"
+
 #include "debuglogger/debuglogger.hpp"
 #include "engine/typedefs.hpp"
 #include "objects/base-object.hpp"
@@ -16,7 +18,9 @@ class Scene;
 
 class Renderable : public BaseObject, public Magnum::SceneGraph::Drawable3D {
 public:
-  explicit Renderable(const std::string &name, const uint32_t groupId,
+  explicit Renderable(const std::string &name,
+                      std::shared_ptr<Koala::Objects::SceneRenderableGroup>
+                          SceneRenderableGroup,
                       std::shared_ptr<Scene> scene);
   ~Renderable();
 

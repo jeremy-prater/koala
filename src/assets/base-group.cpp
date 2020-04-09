@@ -1,5 +1,6 @@
 #include "base-group.hpp"
 #include "debuglogger/debuglogger.hpp"
+#include "objects/scene-renderable-groups.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <engine/engine.hpp>
@@ -20,6 +21,22 @@ std::shared_ptr<BaseGroup> BaseGroup::CreateGroup(
   return newGroup;
 }
 
+[[nodiscard]] const BaseGroup::NodeType
+BaseGroup::ConvertStringToNodeType(const std::string &nodeTypeName) noexcept {
+  const std::string nodeName =
+      boost::algorithm::to_lower_copy<const std::string>(nodeTypeName);
+
+  if (nodeName == "vertex") {
+    return NodeType::VertexShader;
+  } else if (nodeName == "fragment") {
+    return NodeType::FragmentShader;
+  } else {
+    logger.Warning("ConvertStringToNodeType ==> Unknown type! [%s]",
+                   nodeTypeName.c_str());
+    return NodeType::Unknown;
+  }
+}
+
 BaseGroup::BaseGroup(
     Project *project,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props)
@@ -28,7 +45,6 @@ BaseGroup::BaseGroup(
       parentPath(props["parentPath"].GetString()),
       name(props["name"].GetString()),
       parent(project->GetAssetByPath(parentPath)),
-      nodeTypeHash(static_cast<uint32_t>(NodeType::Unknown)),
       logger("Group : " + boost::uuids::to_string(uuid),
              DebugLogger::DebugColor::COLOR_CYAN, true) {
   logger.Info("Created Group [%s][%s]", GetPath().c_str(),
@@ -37,37 +53,33 @@ BaseGroup::BaseGroup(
   auto nodes = props["nodes"].GetObject();
 
   for (auto &node : nodes) {
-    const std::string nodeName =
-        boost::algorithm::to_lower_copy<const std::string>(
-            node.name.GetString());
-
-    NodeType nodeType = NodeType::Unknown;
-
-    if (nodeName == "vertex") {
-      nodeType = NodeType::VertexShader;
-    } else if (nodeName == "fragment") {
-      nodeType = NodeType::FragmentShader;
-    }
-
-    nodeTypeHash |= static_cast<uint32_t>(nodeType);
-
     // logger.Info("Loading Node --> %s", nodeName.c_str());
 
+    std::unordered_map<BaseGroup::NodeType,
+                       std::shared_ptr<Koala::Assets::BaseAsset>>
+        nodeElementsMap;
+
+    const std::string nodeName = node.name.GetString();
     auto nodeDataElements = node.value.GetArray();
     for (auto &nodeDataElement : nodeDataElements) {
       auto nodeObject = nodeDataElement.GetObject();
+
       const std::string type = nodeObject["type"].GetString();
-      const std::string asset = nodeObject["asset"].GetString();
-      logger.Info("Linking Node --> %s [%s] ==> [%s]", nodeName.c_str(),
-                  type.c_str(), asset.c_str());
+      const std::string assetPath = nodeObject["asset"].GetString();
 
-      // Optimize me...
-      //
-      // 1. First nodeTypeHash is a bitmap
-      // 2. The local string type is possible an element of nodeTypeHash
-
-      // this->nodes[nodeName][type] = project->GetAssetByPath(asset);
+      auto asset = project->GetAssetByPath(assetPath);
+      if (asset.operator bool() == true) {
+        nodeElementsMap[ConvertStringToNodeType(type)] = asset;
+      } else {
+        logger.Warning("BaseGroup ==> Unable to find asset [%s] for group [%s]",
+                       assetPath.c_str(), nodeName.c_str());
+      }
     }
+
+    Koala::Objects::SceneRenderableGroup::GetRenderGroupByAssetSet(
+        nodeElementsMap);
+
+    logger.Info("Linking Node --> %s RenderGroup [%d]", nodeName.c_str(), 0);
   }
 }
 
@@ -83,12 +95,7 @@ BaseGroup::BaseGroup(
   return parentPath;
 }
 
-[[nodiscard]] uint32_t BaseGroup::GetNodeTypeHash() const noexcept {
-  return nodeTypeHash;
-}
-
-[[nodiscard]] const std::unordered_map<BaseGroup::NodeType,
-                                       std::shared_ptr<BaseAsset>> &
+[[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
 BaseGroup::GetNodeLinks(const boost::uuids::uuid nodeUUID) const noexcept {
   return nodes.at(nodeUUID);
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/classes.hpp"
+
 #include "base-asset.hpp"
 #include "debuglogger/debuglogger.hpp"
 #include "project-configuration.hpp"
@@ -31,25 +33,26 @@ public:
 
   std::shared_ptr<BaseAsset> parent;
 
-  static std::shared_ptr<BaseGroup> CreateGroup(
+  [[nodiscard]] static std::shared_ptr<BaseGroup> CreateGroup(
       Project *project,
       rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
   [[nodiscard]] const boost::uuids::uuid GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
   [[nodiscard]] const std::string GetParentPath() const noexcept;
-  [[nodiscard]] uint32_t GetNodeTypeHash() const noexcept;
-  [[nodiscard]] const std::unordered_map<NodeType, std::shared_ptr<BaseAsset>> &
+  [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
   GetNodeLinks(const boost::uuids::uuid nodeUUID) const noexcept;
+
+  [[nodiscard]] const NodeType
+  ConvertStringToNodeType(const std::string &nodeTypeName) noexcept;
 
   BaseGroup(Project *project,
             rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
 
 protected:
   std::mutex nodeMutex;
-  uint32_t nodeTypeHash;
   std::unordered_map<boost::uuids::uuid,
-                     std::unordered_map<NodeType, std::shared_ptr<BaseAsset>>,
+                     std::shared_ptr<Koala::Objects::SceneRenderableGroup>,
                      boost::hash<boost::uuids::uuid>>
       nodes;
   DebugLogger logger;

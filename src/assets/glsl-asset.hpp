@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/classes.hpp"
+
 #include "base-asset.hpp"
 #include <Magnum/GL/Shader.h>
 #include <Magnum/GL/Version.h>
