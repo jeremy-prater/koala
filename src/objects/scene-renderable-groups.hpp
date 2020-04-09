@@ -19,37 +19,56 @@ namespace Objects {
 // A scene has 1 set of render groups...
 //
 
-class SceneRenderableGroup {
+class SceneRenderableGroup : public Magnum::SceneGraph::DrawableGroup3D {
 
-/////////////////////////////////////////////////////////////////////
-//
-// Static methods for SceneRenderableGroup management
-//
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Static methods for SceneRenderableGroup management
+  //
 
 public:
-  [[nodiscard]] static std::shared_ptr<Magnum::SceneGraph::DrawableGroup3D>
+  [[nodiscard]] static std::shared_ptr<SceneRenderableGroup>
   GetRenderGroupByAssetSet(
       const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                                std::shared_ptr<Koala::Assets::BaseAsset>>
           &assetSet) noexcept;
 
 private:
+  [[nodiscard]] static bool CompareAssetSets(
+      const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
+                               std::shared_ptr<Koala::Assets::BaseAsset>> &a,
+      const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
+                               std::shared_ptr<Koala::Assets::BaseAsset>>
+          &b) noexcept;
+
   static std::mutex groupMappingsMutex;
+  static Koala::DebugLogger groupLogger;
   static std::unordered_map<
-      std::shared_ptr<Magnum::SceneGraph::DrawableGroup3D>,
+      std::shared_ptr<SceneRenderableGroup>,
       std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                          std::shared_ptr<Koala::Assets::BaseAsset>>>
       groupMappings;
 
-/////////////////////////////////////////////////////////////////////
-//
-// SceneRenderableGroup implementation
-//
+  /////////////////////////////////////////////////////////////////////
+  //
+  // SceneRenderableGroup implementation
+  //
 
 public:
-  [[nodiscard]] Magnum::SceneGraph::DrawableGroup3D * getInstance() const noexcept;
+  SceneRenderableGroup(
+      const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
+                               std::shared_ptr<Koala::Assets::BaseAsset>>
+          assetTemplate);
 
+  [[nodiscard]] Magnum::SceneGraph::DrawableGroup3D *getInstance() noexcept;
 
+  const boost::uuids::uuid uuid;
+
+private:
+  const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
+                           std::shared_ptr<Koala::Assets::BaseAsset>>
+      assetMap;
+  DebugLogger logger;
 };
 
 } // namespace Objects

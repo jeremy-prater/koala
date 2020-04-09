@@ -5,6 +5,7 @@ using namespace Koala::Engine;
 using namespace Magnum;
 
 boost::uuids::string_generator Engine::StringUUIDGenerator;
+boost::uuids::basic_random_generator<boost::mt19937> Engine::RandomUUIDGenerator;
 
 Engine::Engine(const Arguments &arguments)
     : Platform::Application{arguments},

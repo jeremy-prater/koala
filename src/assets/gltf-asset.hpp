@@ -17,6 +17,8 @@ public:
 
   Magnum::Trade::TinyGltfImporter gltfImporter;
 
+  const tinygltf::Model *state;
+
 private:
   bool parsed;
 

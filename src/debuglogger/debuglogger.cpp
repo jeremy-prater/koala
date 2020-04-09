@@ -5,6 +5,11 @@
 
 using namespace Koala;
 
+[[nodiscard]] const std::string
+DebugLogger::ConvertBoolToString(bool value) noexcept {
+  return value ? "true" : "false";
+}
+
 const char
     *DebugLogger::debugLevels[DebugLogger::DebugLevel::DEBUG_NUM_LEVELS] = {
         "     ERROR", "   WARNING", "  STATUS  ", "  INFO    ", "VERBOSE   ",

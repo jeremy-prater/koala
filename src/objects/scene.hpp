@@ -14,8 +14,6 @@
 namespace Koala {
 namespace Objects {
 
-class SceneRenderableGroup;
-
 class Scene : public Scene3D {
 public:
   Scene();
@@ -23,8 +21,6 @@ public:
 
   void CreateRenderableFromGroup(
       const std::shared_ptr<Koala::Assets::BaseGroup> group);
-
-  SceneRenderableGroup SceneRenderableGroups;
 
 private:
   DebugLogger logger;

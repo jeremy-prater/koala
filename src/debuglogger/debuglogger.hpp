@@ -29,6 +29,8 @@ public:
     DEBUG_NUM_COLORS,
   } DebugColor;
 
+  [[nodiscard]] static const std::string ConvertBoolToString(bool value) noexcept;
+  
   DebugLogger(std::string debugTag, DebugColor color, bool bold);
 
   void Error(const char *format, ...) const noexcept;

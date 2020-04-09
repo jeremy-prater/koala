@@ -21,7 +21,7 @@ std::shared_ptr<BaseGroup> BaseGroup::CreateGroup(
   return newGroup;
 }
 
-[[nodiscard]] const BaseGroup::NodeType
+[[nodiscard]] BaseGroup::NodeType
 BaseGroup::ConvertStringToNodeType(const std::string &nodeTypeName) noexcept {
   const std::string nodeName =
       boost::algorithm::to_lower_copy<const std::string>(nodeTypeName);
@@ -50,17 +50,17 @@ BaseGroup::BaseGroup(
   logger.Info("Created Group [%s][%s]", GetPath().c_str(),
               boost::uuids::to_string(uuid).c_str());
 
-  auto nodes = props["nodes"].GetObject();
+  auto jsonNodes = props["nodes"].GetObject();
 
-  for (auto &node : nodes) {
+  for (auto &jsonNode : jsonNodes) {
     // logger.Info("Loading Node --> %s", nodeName.c_str());
 
     std::unordered_map<BaseGroup::NodeType,
                        std::shared_ptr<Koala::Assets::BaseAsset>>
         nodeElementsMap;
 
-    const std::string nodeName = node.name.GetString();
-    auto nodeDataElements = node.value.GetArray();
+    const std::string nodeName = jsonNode.name.GetString();
+    auto nodeDataElements = jsonNode.value.GetArray();
     for (auto &nodeDataElement : nodeDataElements) {
       auto nodeObject = nodeDataElement.GetObject();
 
@@ -76,10 +76,12 @@ BaseGroup::BaseGroup(
       }
     }
 
-    Koala::Objects::SceneRenderableGroup::GetRenderGroupByAssetSet(
-        nodeElementsMap);
+    std::shared_ptr<Koala::Objects::SceneRenderableGroup> renderGroup =
+        Koala::Objects::SceneRenderableGroup::GetRenderGroupByAssetSet(
+            nodeElementsMap);
 
-    logger.Info("Linking Node --> %s RenderGroup [%d]", nodeName.c_str(), 0);
+    logger.Info("Linking Node --> %s RenderGroup [%s]", nodeName.c_str(),
+                boost::uuids::to_string(renderGroup->uuid).c_str());
   }
 }
 
@@ -96,6 +98,6 @@ BaseGroup::BaseGroup(
 }
 
 [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-BaseGroup::GetNodeLinks(const boost::uuids::uuid nodeUUID) const noexcept {
+BaseGroup::GetNodeRenderGroup(const boost::uuids::uuid nodeUUID) const noexcept {
   return nodes.at(nodeUUID);
 }

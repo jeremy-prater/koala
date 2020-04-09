@@ -26,6 +26,8 @@ GLTFAsset::~GLTFAsset() {
   parsed = gltfImporter.openData(Corrade::Containers::ArrayView<const char>{
       reinterpret_cast<const char *>(GetData()), static_cast<size_t>(size)});
 
+  state = gltfImporter.importerState();
+
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
                       std::chrono::system_clock::now() - start)
                       .count();

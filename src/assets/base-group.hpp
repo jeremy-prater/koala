@@ -41,9 +41,9 @@ public:
   [[nodiscard]] const std::string GetPath() const noexcept;
   [[nodiscard]] const std::string GetParentPath() const noexcept;
   [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-  GetNodeLinks(const boost::uuids::uuid nodeUUID) const noexcept;
+  GetNodeRenderGroup(const boost::uuids::uuid nodeUUID) const noexcept;
 
-  [[nodiscard]] const NodeType
+  [[nodiscard]] NodeType
   ConvertStringToNodeType(const std::string &nodeTypeName) noexcept;
 
   BaseGroup(Project *project,
