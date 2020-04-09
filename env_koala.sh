@@ -12,7 +12,7 @@ HOST_OS=`uname`
 if [ $HOST_OS = 'Linux' ]
 then
     NUM_CORES=`nproc`
-elif [ $HOST_PS = 'Darwin' ]
+elif [ $HOST_OS = 'Darwin' ]
 then
     NUM_CORES=`sysctl -n hw.logicalcpu`
 else
