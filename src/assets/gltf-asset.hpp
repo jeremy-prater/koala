@@ -2,8 +2,10 @@
 
 #include "engine/classes.hpp"
 
+#include <unordered_map>
 #include "base-asset.hpp"
 #include <MagnumPlugins/TinyGltfImporter/TinyGltfImporter.h>
+#include <Magnum/GL/Mesh.h>
 
 namespace Koala {
 namespace Assets {
@@ -18,6 +20,8 @@ public:
   Magnum::Trade::TinyGltfImporter gltfImporter;
 
   const tinygltf::Model *state;
+
+  std::unordered_map<std::string, Magnum::GL::Mesh> compiledMeshes;
 
 private:
   bool parsed;

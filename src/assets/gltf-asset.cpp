@@ -1,9 +1,10 @@
 #include "gltf-asset.hpp"
 #include <Corrade/Containers/ArrayView.h>
+#include <Corrade/Containers/Optional.h>
+#include <Magnum/MeshTools/Compile.h>
+#include <Magnum/Trade/MeshData3D.h>
 #include <boost/uuid/uuid_io.hpp>
 #include <chrono>
-#include <corrade/Containers/Optional.h>
-#include <magnum/Trade/MeshData3D.h>
 
 using namespace Koala::Assets;
 
@@ -30,19 +31,22 @@ GLTFAsset::~GLTFAsset() {
 
   state = gltfImporter.importerState();
 
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-                      std::chrono::system_clock::now() - start)
-                      .count();
-
   auto meshCount = gltfImporter.mesh3DCount();
 
-  logger.Info("GLTF parsed [%d] objects in [%d] us", meshCount, duration);
-  for (int meshID = 0; meshID < meshCount; meshID++) {
+  for (uint32_t meshID = 0; meshID < meshCount; meshID++) {
     const std::string meshName = gltfImporter.mesh3DName(meshID);
     logger.Info("GLTF mesh -> %s", meshName.c_str());
     Corrade::Containers::Optional<Magnum::Trade::MeshData3D> meshData =
         gltfImporter.mesh3D(meshID);
+
+    compiledMeshes[meshName] = Magnum::MeshTools::compile(*meshData);
   }
+
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                      std::chrono::system_clock::now() - start)
+                      .count();
+
+  logger.Info("GLTF parsed [%d] objects in [%d] ms", meshCount, duration);
 
   return parsed;
 }
