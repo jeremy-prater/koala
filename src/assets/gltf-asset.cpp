@@ -2,6 +2,8 @@
 #include <Corrade/Containers/ArrayView.h>
 #include <boost/uuid/uuid_io.hpp>
 #include <chrono>
+#include <corrade/Containers/Optional.h>
+#include <magnum/Trade/MeshData3D.h>
 
 using namespace Koala::Assets;
 
@@ -32,8 +34,15 @@ GLTFAsset::~GLTFAsset() {
                       std::chrono::system_clock::now() - start)
                       .count();
 
-  logger.Info("GLTF parsed [%d] objects in [%d] us",
-              gltfImporter.object3DCount(), duration);
+  auto meshCount = gltfImporter.mesh3DCount();
+
+  logger.Info("GLTF parsed [%d] objects in [%d] us", meshCount, duration);
+  for (int meshID = 0; meshID < meshCount; meshID++) {
+    const std::string meshName = gltfImporter.mesh3DName(meshID);
+    logger.Info("GLTF mesh -> %s", meshName.c_str());
+    Corrade::Containers::Optional<Magnum::Trade::MeshData3D> meshData =
+        gltfImporter.mesh3D(meshID);
+  }
 
   return parsed;
 }
