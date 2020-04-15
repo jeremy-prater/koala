@@ -2,7 +2,7 @@
 
 #include "engine/classes.hpp"
 
-#include <unordered_map>
+#include <vector>
 #include "base-asset.hpp"
 #include <MagnumPlugins/TinyGltfImporter/TinyGltfImporter.h>
 #include <Magnum/GL/Mesh.h>
@@ -21,7 +21,8 @@ public:
 
   const tinygltf::Model *state;
 
-  std::unordered_map<std::string, Magnum::GL::Mesh> compiledMeshes;
+  std::vector<std::string> meshNames;
+  std::vector<Magnum::GL::Mesh> compiledMeshes;
 
 private:
   bool parsed;

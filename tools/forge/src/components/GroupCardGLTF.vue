@@ -225,10 +225,10 @@ export default {
     getChildNodes(parent, path) {
       let nodes = [];
       parent.children.forEach(child => {
-        nodes.push(...this.getChildNodes(child, path + parent.name + "/"));
+        nodes.push(...this.getChildNodes(child, path + parent.userData.name + "/"));
       });
       nodes.push({
-        name: path + parent.name,
+        name: path + parent.userData.name,
         uuid: uuidv1(),
         selected: false,
         filtered: false
@@ -269,6 +269,7 @@ export default {
           console.info(
             `Loaded [${this.parentObject.path}/${this.parentObject.name}]`
           );
+          console.log(gltf);
           this.gltf = gltf;
           this.getNodes();
         }.bind(this),

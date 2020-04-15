@@ -75,7 +75,7 @@ const store = new Vuex.Store({
                 console.warn("TargetGroup length mismatch!");
                 return;
             }
-            console.log(`Setting Group Data [${groupData.uuid}] [${groupData.node}]`);
+            console.log(`Setting Group Data [${groupData.uuid}] [${groupData.node}] = ${JSON.stringify(groupData.data)}`);
             targetGroup[0].nodes[groupData.node] = groupData.data;
         },
         deleteGroup(state, uuid) {

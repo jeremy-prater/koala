@@ -35,11 +35,13 @@ GLTFAsset::~GLTFAsset() {
 
   for (uint32_t meshID = 0; meshID < meshCount; meshID++) {
     const std::string meshName = gltfImporter.mesh3DName(meshID);
-    logger.Info("GLTF mesh -> %s", meshName.c_str());
-    Corrade::Containers::Optional<Magnum::Trade::MeshData3D> meshData =
-        gltfImporter.mesh3D(meshID);
+    logger.Info("Compiling mesh : %s", meshName.c_str());
+    meshNames.push_back(meshName);
+    // Corrade::Containers::Optional<Magnum::Trade::MeshData3D> meshData =
+    //         gltfImporter.mesh3D(meshID);
 
-    compiledMeshes[meshName] = Magnum::MeshTools::compile(*meshData);
+    compiledMeshes.push_back(
+        Magnum::MeshTools::compile(*gltfImporter.mesh3D(meshID)));
   }
 
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
