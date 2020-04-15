@@ -269,7 +269,6 @@ export default {
           console.info(
             `Loaded [${this.parentObject.path}/${this.parentObject.name}]`
           );
-          console.log(gltf);
           this.gltf = gltf;
           this.getNodes();
         }.bind(this),
