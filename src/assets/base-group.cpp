@@ -98,6 +98,7 @@ BaseGroup::BaseGroup(
 }
 
 [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-BaseGroup::GetNodeRenderGroup(const boost::uuids::uuid nodeUUID) const noexcept {
+BaseGroup::GetNodeRenderGroup(const boost::uuids::uuid nodeUUID) const
+    noexcept {
   return nodes.at(nodeUUID);
 }

@@ -2,10 +2,10 @@
 
 #include "engine/classes.hpp"
 
-#include <vector>
 #include "base-asset.hpp"
-#include <MagnumPlugins/TinyGltfImporter/TinyGltfImporter.h>
 #include <Magnum/GL/Mesh.h>
+#include <MagnumPlugins/TinyGltfImporter/TinyGltfImporter.h>
+#include <vector>
 
 namespace Koala {
 namespace Assets {
@@ -25,6 +25,9 @@ public:
   std::vector<Magnum::GL::Mesh> compiledMeshes;
 
 private:
+  void BuildChildTree(const std::string path,
+                      Magnum::UnsignedInt parentNode) noexcept;
+
   bool parsed;
 
   DebugLogger logger;
