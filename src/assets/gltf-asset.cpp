@@ -2,7 +2,7 @@
 #include <Corrade/Containers/ArrayView.h>
 #include <Corrade/Containers/Optional.h>
 #include <Magnum/MeshTools/Compile.h>
-#include <Magnum/Trade/MeshData3D.h>
+#include <Magnum/Trade/MeshData.h>
 #include <Magnum/Trade/MeshObjectData3D.h>
 #include <Magnum/Trade/SceneData.h>
 #include <boost/uuid/uuid_io.hpp>
@@ -25,7 +25,7 @@ GLTFAsset::~GLTFAsset() {
               boost::uuids::to_string(uuid).c_str(), parser.c_str());
 }
 
-void GLTFAsset::BuildChildTree(const std::string path,
+void GLTFAsset::BuildChildTree(const std::string &path,
                                Magnum::UnsignedInt parentNode) noexcept {
 
   auto objectNode = gltfImporter.object3D(parentNode);
@@ -34,8 +34,8 @@ void GLTFAsset::BuildChildTree(const std::string path,
   logger.Info("Parsing scene : [%s/%s]", path.c_str(), objectName.c_str());
 
   auto childNodes = objectNode->children();
-  for (auto parentNode : childNodes) {
-    BuildChildTree(objectName, parentNode);
+  for (auto currentNode : childNodes) {
+    BuildChildTree(objectName, currentNode);
   }
 }
 
@@ -44,8 +44,6 @@ void GLTFAsset::BuildChildTree(const std::string path,
 
   parsed = gltfImporter.openData(Corrade::Containers::ArrayView<const char>{
       reinterpret_cast<const char *>(GetData()), static_cast<size_t>(size)});
-
-  state = gltfImporter.importerState();
 
   auto sceneCount = gltfImporter.sceneCount();
 

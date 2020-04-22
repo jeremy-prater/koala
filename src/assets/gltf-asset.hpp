@@ -19,16 +19,12 @@ public:
 
   Magnum::Trade::TinyGltfImporter gltfImporter;
 
-  const tinygltf::Model *state;
-
   std::vector<std::string> meshNames;
   std::vector<Magnum::GL::Mesh> compiledMeshes;
 
 private:
-  void BuildChildTree(const std::string path,
+  void BuildChildTree(const std::string &path,
                       Magnum::UnsignedInt parentNode) noexcept;
-
-  bool parsed;
 
   DebugLogger logger;
 };

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "=========> Updating submodules"
+./update_submodules.sh
+
 git submodule init
 git submodule update
 git submodule sync
