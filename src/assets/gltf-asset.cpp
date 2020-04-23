@@ -30,8 +30,11 @@ void GLTFAsset::BuildChildTree(const std::string &path,
 
   auto objectNode = gltfImporter.object3D(parentNode);
   const std::string objectName =
-      path + "/" + gltfImporter.object3DName(objectNode->instance());
-  logger.Info("Parsing scene : [%s]", objectName.c_str());
+      path + (path.empty() ? "" : "/") +
+      gltfImporter.object3DName(objectNode->instance());
+  logger.Info("Parsing scene : [%d] = [%s]", parentNode, objectName.c_str());
+
+  meshNames[parentNode] = objectName;
 
   auto childNodes = objectNode->children();
   for (auto currentNode : childNodes) {
@@ -53,25 +56,25 @@ void GLTFAsset::BuildChildTree(const std::string &path,
     const std::string sceneName = gltfImporter.sceneName(sceneID);
     Magnum::Trade::SceneData sceneData = *gltfImporter.scene(sceneID);
 
+    auto meshCount = gltfImporter.meshCount();
+    meshNames.resize(meshCount);
+    compiledMeshes.resize(meshCount);
+
     auto sceneChildren = sceneData.children3D();
     for (auto parentNode : sceneChildren) {
       BuildChildTree("", parentNode);
     }
 
-    auto meshCount = gltfImporter.meshCount();
     logger.Info("Parsing GLTF scene : [%s] w/ [%d] nodes", sceneName.c_str(),
                 meshCount);
+
     for (uint32_t meshID = 0; meshID < meshCount; meshID++) {
       const std::string meshName = gltfImporter.meshName(meshID);
 
-      logger.Info("Compiling mesh : %s", meshName.c_str());
+      logger.Info("Compiling mesh : %s", meshNames[meshID].c_str());
 
-      meshNames.push_back(meshName);
-      Corrade::Containers::Optional<Magnum::Trade::MeshData> meshData =
-          gltfImporter.mesh(meshID);
-
-      compiledMeshes.push_back(
-          Magnum::MeshTools::compile(*meshData));
+      compiledMeshes[meshID] =
+          Magnum::MeshTools::compile(*gltfImporter.mesh(meshID));
       nodeCount++;
     }
   }
