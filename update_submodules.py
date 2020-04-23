@@ -26,6 +26,6 @@ git(".", ["submodule", "sync"])
 for repo in repoList:
     print ("Updating Repo ==> [{}] to [{}]".format(repo[0], repo[1]))
     repoDir = curdir + "/" + repo[0]
-    git(repoDir, ["reset", "--hard", "origin/head"])
+    git(repoDir, ["reset", "--hard", "origin/HEAD"])
     git(repoDir, ["fetch", "--all"])
     git(repoDir, ["checkout", repo[1]])
