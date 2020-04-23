@@ -1,11 +1,7 @@
 #!/bin/bash
 
 echo "=========> Updating submodules"
-./update_submodules.sh
-
-git submodule init
-git submodule update
-git submodule sync
+python3 ./update_submodules.py
 
 echo "=========> Build : Destroying build"
 rm -rf build
