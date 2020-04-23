@@ -10,5 +10,5 @@ Scene::~Scene() { logger.Info("Destroyed Scene"); }
 
 void Scene::CreateRenderableFromGroup(
     const std::shared_ptr<Koala::Assets::BaseGroup> group) {
-  logger.Info("Creating Renderabler from group [%s]", group->GetPath().c_str());
+  logger.Info("Creating Renderable from group [%s]", group->GetPath().c_str());
 }
