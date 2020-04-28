@@ -40,9 +40,13 @@ public:
   [[nodiscard]] const boost::uuids::uuid GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
   [[nodiscard]] const std::string GetParentPath() const noexcept;
+
   [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
   GetNodeRenderGroup(const boost::uuids::uuid nodeUUID) const noexcept;
-
+  [[nodiscard]] const std::vector<const boost::uuids::uuid> GetNodeUUIDs();
+  [[nodiscard]] const std::unordered_map<
+      BaseGroup::NodeType, std::shared_ptr<Koala::Assets::BaseAsset>>
+  GetNodeAssets();
   [[nodiscard]] NodeType
   ConvertStringToNodeType(const std::string &nodeTypeName) noexcept;
 
@@ -55,6 +59,9 @@ protected:
                      std::shared_ptr<Koala::Objects::SceneRenderableGroup>,
                      boost::hash<boost::uuids::uuid>>
       nodes;
+  std::unordered_map<BaseGroup::NodeType,
+                     std::shared_ptr<Koala::Assets::BaseAsset>>
+      nodeElementsMap;
   DebugLogger logger;
 };
 

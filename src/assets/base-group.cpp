@@ -55,10 +55,6 @@ BaseGroup::BaseGroup(
   for (auto &jsonNode : jsonNodes) {
     // logger.Info("Loading Node --> %s", nodeName.c_str());
 
-    std::unordered_map<BaseGroup::NodeType,
-                       std::shared_ptr<Koala::Assets::BaseAsset>>
-        nodeElementsMap;
-
     const std::string nodeName = jsonNode.name.GetString();
     auto nodeDataElements = jsonNode.value.GetArray();
     for (auto &nodeDataElement : nodeDataElements) {
@@ -101,4 +97,10 @@ BaseGroup::BaseGroup(
 BaseGroup::GetNodeRenderGroup(const boost::uuids::uuid nodeUUID) const
     noexcept {
   return nodes.at(nodeUUID);
+}
+
+[[nodiscard]] const std::unordered_map<
+    BaseGroup::NodeType, std::shared_ptr<Koala::Assets::BaseAsset>>
+BaseGroup::GetNodeAssets() {
+  return nodeElementsMap;
 }

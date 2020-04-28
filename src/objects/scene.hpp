@@ -20,6 +20,7 @@ public:
   virtual ~Scene();
 
   void CreateRenderableFromGroup(
+      const std::shared_ptr<Koala::Assets::Project> project,
       const std::shared_ptr<Koala::Assets::BaseGroup> group);
 
 private:

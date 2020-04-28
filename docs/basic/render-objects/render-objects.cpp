@@ -32,12 +32,12 @@ KoalaTest::KoalaTest(const Arguments &arguments)
 
   project = std::make_shared<Assets::Project>(projectRoot);
 
-  auto uuids = project->GetAssetUUIDs();
-  for (auto uuid : uuids) {
-    auto asset = project->GetAsset(uuid);
-    asset->Load();
-    asset->Parse();
-  }
+  // auto uuids = project->GetAssetUUIDs();
+  // for (auto uuid : uuids) {
+  //   auto asset = project->GetAsset(uuid);
+  //   asset->Load();
+  //   asset->Parse();
+  // }
 
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
                       std::chrono::system_clock::now() - start)
@@ -50,7 +50,7 @@ KoalaTest::KoalaTest(const Arguments &arguments)
 
   auto x_group = project->GetGroupByPath("/default/x/the-x");
 
-  scene->CreateRenderableFromGroup(x_group);
+  scene->CreateRenderableFromGroup(project, x_group);
 }
 
 void KoalaTest::drawEvent() {
