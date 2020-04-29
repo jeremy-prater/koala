@@ -60,8 +60,8 @@ SceneRenderableGroup::GetRenderGroupByAssetSet(
     }
   }
 
-  groupLogger.Info("GetRenderGroupByAssetSet addNewGroup [%s]",
-                   DebugLogger::ConvertBoolToString(addNewGroup).c_str());
+  // groupLogger.Info("GetRenderGroupByAssetSet addNewGroup [%s]",
+  //                  DebugLogger::ConvertBoolToString(addNewGroup).c_str());
 
   if (addNewGroup) {
     sceneRenderGroupTest = std::make_shared<SceneRenderableGroup>(assetSet);

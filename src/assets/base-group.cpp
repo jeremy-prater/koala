@@ -43,6 +43,7 @@ BaseGroup::BaseGroup(
     : uuid(Koala::Engine::Engine::StringUUIDGenerator(
           props["uuid"].GetString())),
       parentPath(props["parentPath"].GetString()),
+      parentUUID(project->GetAssetByPath(parentPath)->GetUUID()),
       name(props["name"].GetString()),
       parent(project->GetAssetByPath(parentPath)),
       logger("Group : " + boost::uuids::to_string(uuid),
@@ -78,6 +79,8 @@ BaseGroup::BaseGroup(
 
     logger.Info("Linking Node --> %s RenderGroup [%s]", nodeName.c_str(),
                 boost::uuids::to_string(renderGroup->uuid).c_str());
+
+    renderGroupNodes[nodeName] = renderGroup;
   }
 }
 
@@ -93,10 +96,14 @@ BaseGroup::BaseGroup(
   return parentPath;
 }
 
+[[nodiscard]] const boost::uuids::uuid
+BaseGroup::GetParentUUID() const noexcept {
+  return parentUUID;
+}
+
 [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-BaseGroup::GetNodeRenderGroup(const boost::uuids::uuid nodeUUID) const
-    noexcept {
-  return nodes.at(nodeUUID);
+BaseGroup::GetNodeRenderGroup(const std::string nodeName) const noexcept {
+  return renderGroupNodes.at(nodeName);
 }
 
 [[nodiscard]] const std::unordered_map<

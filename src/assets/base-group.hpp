@@ -29,6 +29,7 @@ public:
 
   const boost::uuids::uuid uuid;
   const std::string parentPath;
+  const boost::uuids::uuid parentUUID;
   const std::string name;
 
   std::shared_ptr<BaseAsset> parent;
@@ -39,10 +40,13 @@ public:
 
   [[nodiscard]] const boost::uuids::uuid GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
+
   [[nodiscard]] const std::string GetParentPath() const noexcept;
+  [[nodiscard]] const boost::uuids::uuid GetParentUUID() const noexcept;
 
   [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-  GetNodeRenderGroup(const boost::uuids::uuid nodeUUID) const noexcept;
+  GetNodeRenderGroup(const std::string nodeName) const noexcept;
+
   [[nodiscard]] const std::vector<const boost::uuids::uuid> GetNodeUUIDs();
   [[nodiscard]] const std::unordered_map<
       BaseGroup::NodeType, std::shared_ptr<Koala::Assets::BaseAsset>>
@@ -55,10 +59,9 @@ public:
 
 protected:
   std::mutex nodeMutex;
-  std::unordered_map<boost::uuids::uuid,
-                     std::shared_ptr<Koala::Objects::SceneRenderableGroup>,
-                     boost::hash<boost::uuids::uuid>>
-      nodes;
+  std::unordered_map<std::string,
+                     std::shared_ptr<Koala::Objects::SceneRenderableGroup>>
+      renderGroupNodes;
   std::unordered_map<BaseGroup::NodeType,
                      std::shared_ptr<Koala::Assets::BaseAsset>>
       nodeElementsMap;

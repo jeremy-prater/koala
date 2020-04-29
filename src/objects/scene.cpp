@@ -14,7 +14,15 @@ void Scene::CreateRenderableFromGroup(
   logger.Info("Creating Renderable from group [%s]", group->GetPath().c_str());
 
   // Get and load primary asset...
-  auto primaryAsset = project->GetAsset(group->GetUUID());
+  auto primaryAsset = project->GetAsset(group->GetParentUUID());
+
+  if (!primaryAsset.operator bool() ||
+      primaryAsset->GetType() != Koala::Assets::BaseAsset::AssetType::GLTF) {
+    logger.Error("Can not create renderable from group! [%s]",
+                 group->name.c_str());
+    return;
+  }
+
   if (!primaryAsset->IsLoaded()) {
     primaryAsset->Load();
   }

@@ -17,6 +17,12 @@ namespace Assets {
 
 class BaseAsset {
 public:
+  enum class AssetType : uint32_t {
+    Unknown = 0x00000000,
+    GLTF = 0x00000001,
+    GLSL = 0x00000002,
+  };
+
   static std::shared_ptr<BaseAsset> CreateAsset(
       const std::string &rootDir,
       rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
@@ -26,6 +32,7 @@ public:
   [[nodiscard]] const std::string GetFullPath() const noexcept;
   [[nodiscard]] const std::string GetName() const noexcept;
   [[nodiscard]] const std::string GetParser() const noexcept;
+  [[nodiscard]] AssetType GetType() const noexcept;
 
   void AddTag(const std::string &tag) noexcept;
   [[nodiscard]] bool DeleteTag(const std::string &tag) noexcept;
@@ -40,8 +47,8 @@ public:
 
   [[nodiscard]] const uint8_t *GetData() const noexcept;
 
-  [[nodiscard]] const std::string &GetMetaObject(const std::string &key) const
-      noexcept;
+  [[nodiscard]] const std::string &
+  GetMetaObject(const std::string &key) const noexcept;
   void SetMetaObject(const std::string &key, const std::string &value) noexcept;
 
   BaseAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
@@ -71,10 +78,14 @@ protected:
   const std::string name;
   const std::string fullPath;
   const std::string parser;
+  const AssetType type;
   const ssize_t size;
   const std::string md5Sum;
   const std::string rootDir;
   bool parsed;
+
+  [[nodiscard]] static AssetType
+  ConvertAssetType(const std::string &parser) noexcept;
 
 private:
   mutable std::mutex loadLock;

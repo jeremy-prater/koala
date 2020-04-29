@@ -12,6 +12,18 @@
 
 using namespace Koala::Assets;
 
+[[nodiscard]] BaseAsset::AssetType
+BaseAsset::ConvertAssetType(const std::string &parser) noexcept {
+  auto lowParser = boost::algorithm::to_lower_copy<const std::string>(parser);
+
+  if (lowParser == "gltf")
+    return AssetType::GLTF;
+  else if (lowParser == "glsl")
+    return AssetType::GLSL;
+  else
+    return AssetType::Unknown;
+}
+
 std::shared_ptr<BaseAsset> BaseAsset::CreateAsset(
     const std::string &rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props) {
@@ -45,10 +57,10 @@ BaseAsset::BaseAsset(
           props["uuid"].GetString())),
       path(props["path"].GetString()), name(props["name"].GetString()),
       fullPath(path + "/" + name), parser(props["parser"].GetString()),
-      size(props["size"].GetUint()), md5Sum(props["hash"].GetString()),
-      rootDir(root), parsed(false), data(nullptr),
-      logger("Asset : " + fullPath, DebugLogger::DebugColor::COLOR_GREEN,
-             false) {
+      type(ConvertAssetType(parser)), size(props["size"].GetUint()),
+      md5Sum(props["hash"].GetString()), rootDir(root), parsed(false),
+      data(nullptr), logger("Asset : " + fullPath,
+                            DebugLogger::DebugColor::COLOR_GREEN, false) {
   logger.Info("Created Asset [%s] ==> [%s]",
 
               boost::uuids::to_string(uuid).c_str(), parser.c_str());
@@ -80,6 +92,10 @@ BaseAsset::~BaseAsset() {
 }
 [[nodiscard]] const std::string BaseAsset::GetParser() const noexcept {
   return parser;
+}
+
+[[nodiscard]] BaseAsset::AssetType BaseAsset::GetType() const noexcept {
+  return type;
 }
 
 void BaseAsset::AddTag(const std::string &tag) noexcept {
