@@ -27,11 +27,20 @@ void Scene::CreateRenderableFromGroup(
     primaryAsset->Load();
   }
 
+  if (!primaryAsset->IsParsed()) {
+    primaryAsset->Parse();
+  }
+
   // Load all children
   auto nodeAssets = group->GetNodeAssets();
   for (auto nodeAsset : nodeAssets) {
-    if (!nodeAsset.second->IsLoaded()) {
-      nodeAsset.second->Load();
+    auto &childAsset = nodeAsset.second;
+    if (!childAsset->IsLoaded()) {
+      childAsset->Load();
+    }
+
+    if (!childAsset->IsParsed()) {
+      childAsset->Parse();
     }
   }
 }
