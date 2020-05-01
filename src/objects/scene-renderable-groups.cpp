@@ -46,13 +46,11 @@ SceneRenderableGroup::GetRenderGroupByAssetSet(
   bool addNewGroup = true;
 
   std::shared_ptr<SceneRenderableGroup> sceneRenderGroupTest;
-  std::unordered_map<Koala::Assets::BaseGroup::NodeType,
-                     std::shared_ptr<Koala::Assets::BaseAsset>>
-      assetSetTest;
 
   for (auto &groupMapping : groupMappings) {
+
     sceneRenderGroupTest = groupMapping.first;
-    assetSetTest = groupMapping.second;
+    auto &assetSetTest = groupMapping.second;
 
     if (CompareAssetSets(assetSet, assetSetTest)) {
       addNewGroup = false;
