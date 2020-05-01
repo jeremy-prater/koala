@@ -1,4 +1,5 @@
 #include "objects/scene.hpp"
+#include "base-object.hpp"
 
 using namespace Koala::Objects;
 
@@ -43,4 +44,8 @@ void Scene::CreateRenderableFromGroup(
       childAsset->Parse();
     }
   }
+
+  // Add a root node to the scene graph to hold all the top level nodes for this
+  std::shared_ptr<BaseObject> newObject = std::make_shared<BaseObject>(group->name);
+  
 }
