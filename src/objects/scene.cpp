@@ -1,5 +1,9 @@
 #include "objects/scene.hpp"
+#include "assets/gltf-asset.hpp"
 #include "base-object.hpp"
+#include <Magnum/Trade/MeshData.h>
+#include <Magnum/Trade/MeshObjectData3D.h>
+#include <Magnum/Trade/SceneData.h>
 
 using namespace Koala::Objects;
 
@@ -45,7 +49,24 @@ void Scene::CreateRenderableFromGroup(
     }
   }
 
+  // Get a pointer to the GLTF asset
+  auto gltfAsset =
+      std::dynamic_pointer_cast<Koala::Assets::GLTFAsset>(primaryAsset);
+
   // Add a root node to the scene graph to hold all the top level nodes for this
-  std::shared_ptr<BaseObject> newObject = std::make_shared<BaseObject>(group->name);
-  
+  std::shared_ptr<BaseObject> newObject =
+      std::make_shared<BaseObject>(group->name);
+
+  auto sceneCount = gltfAsset->gltfImporter.sceneCount;
+  for (uint32_t sceneID = 0; sceneID < sceneCount; sceneID++) {
+    // const std::string sceneName = gltfAsset->gltfImporter.sceneName(sceneID);
+    Magnum::Trade::SceneData sceneData =
+        *gltfAsset->gltfImporter.scene(sceneID);
+
+    auto topLevelNodes = sceneData.children3D();
+    for (auto node : topLevelNodes) {
+      // Renderable
+    }
+    // newObject->p
+  }
 }
