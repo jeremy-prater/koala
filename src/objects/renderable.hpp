@@ -18,13 +18,15 @@ class Scene;
 
 class Renderable : public BaseObject, public Magnum::SceneGraph::Drawable3D {
 public:
-  explicit Renderable(const std::string &name,
+  explicit Renderable(const std::string &name, BaseObject *parent,
                       std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-                          SceneRenderableGroup,
-                      std::shared_ptr<Scene> scene);
+                          SceneRenderableGroup);
   ~Renderable();
 
 private:
+  void draw(const Magnum::Matrix4 &transformationMatrix,
+            Magnum::SceneGraph::Camera3D &camera) override;
+
   std::unordered_map<std::string, std::string> properties;
 };
 

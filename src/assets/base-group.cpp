@@ -96,13 +96,13 @@ BaseGroup::BaseGroup(
   return parentPath;
 }
 
-[[nodiscard]] const boost::uuids::uuid
-BaseGroup::GetParentUUID() const noexcept {
+[[nodiscard]] const boost::uuids::uuid BaseGroup::GetParentUUID() const
+    noexcept {
   return parentUUID;
 }
 
 [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-BaseGroup::GetNodeRenderGroup(const std::string nodeName) const noexcept {
+BaseGroup::GetNodeRenderGroup(const std::string &nodeName) const noexcept {
   return renderGroupNodes.at(nodeName);
 }
 

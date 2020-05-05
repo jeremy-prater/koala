@@ -5,11 +5,14 @@
 using namespace Koala::Objects;
 using namespace Magnum;
 
-Renderable::Renderable(const std::string &name,
-                       std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-                           SceneRenderableGroup,
-                       std::shared_ptr<Scene> scene)
-    : BaseObject("Renderable-" + name),
-      SceneGraph::Drawable3D{*this, SceneRenderableGroup->getInstance()} {}
+Renderable::Renderable(
+    const std::string &name, BaseObject *parent,
+    std::shared_ptr<Koala::Objects::SceneRenderableGroup> SceneRenderableGroup)
+    : BaseObject(name, parent), SceneGraph::Drawable3D{
+                                    *this,
+                                    SceneRenderableGroup->getInstance()} {}
 
 Renderable::~Renderable() {}
+
+void Renderable::draw(const Magnum::Matrix4 &transformationMatrix,
+                      Magnum::SceneGraph::Camera3D &camera) {}

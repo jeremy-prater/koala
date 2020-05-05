@@ -45,7 +45,7 @@ public:
   [[nodiscard]] const boost::uuids::uuid GetParentUUID() const noexcept;
 
   [[nodiscard]] std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-  GetNodeRenderGroup(const std::string nodeName) const noexcept;
+  GetNodeRenderGroup(const std::string &nodeName) const noexcept;
 
   [[nodiscard]] const std::vector<const boost::uuids::uuid> GetNodeUUIDs();
   [[nodiscard]] const std::unordered_map<
