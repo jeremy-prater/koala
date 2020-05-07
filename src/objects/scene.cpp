@@ -70,6 +70,7 @@ void Scene::CreateRenderableFromGroup(
       // Renderable
       auto nodeName = gltfAsset->gltfImporter.meshName(nodeID);
       auto node = gltfAsset->gltfImporter.object3D(nodeID);
+      auto &mesh = gltfAsset->compiledMeshes[nodeID];
 
       Magnum::Quaternion rotation{Magnum::Math::IdentityInit};
       Magnum::Vector3 scaling{1.0f, 1.0f, 1.0f};

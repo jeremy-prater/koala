@@ -2,6 +2,7 @@
 
 #include "engine/classes.hpp"
 
+#include "assets/base-group.hpp"
 #include "debuglogger/debuglogger.hpp"
 #include "engine/typedefs.hpp"
 #include "objects/base-object.hpp"
@@ -27,6 +28,9 @@ private:
   void draw(const Magnum::Matrix4 &transformationMatrix,
             Magnum::SceneGraph::Camera3D &camera) override;
 
+  std::unordered_map<Koala::Assets::BaseGroup::NodeType,
+                     std::shared_ptr<Koala::Assets::BaseAsset>>
+      assets;
   std::unordered_map<std::string, std::string> properties;
 };
 
