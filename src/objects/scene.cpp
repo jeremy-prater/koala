@@ -6,6 +6,7 @@
 #include <Magnum/Trade/MeshData.h>
 #include <Magnum/Trade/MeshObjectData3D.h>
 #include <Magnum/Trade/SceneData.h>
+#include <chrono>
 
 using namespace Koala::Objects;
 
@@ -15,9 +16,43 @@ Scene::Scene() : logger("Scene", DebugLogger::DebugColor::COLOR_YELLOW, false) {
 
 Scene::~Scene() { logger.Info("Destroyed Scene"); }
 
+static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
+                    BaseObject *parent,
+                    std::shared_ptr<Koala::Assets::GLTFAsset> gltfAsset,
+                    uint32_t nodeID, Koala::DebugLogger *logger,
+                    const std::string &pathPrefix) {
+  auto nodeName = gltfAsset->gltfImporter.meshName(nodeID);
+  auto node = gltfAsset->gltfImporter.object3D(nodeID);
+  auto &mesh = gltfAsset->compiledMeshes[nodeID];
+
+  Magnum::Quaternion rotation{Magnum::Math::IdentityInit};
+  Magnum::Vector3 scaling{1.0f, 1.0f, 1.0f};
+  Magnum::Vector3 translation{Magnum::Math::ZeroInit};
+
+  std::string nodePath = group->name + "/" + nodeName;
+
+  if (node->flags() &
+      Magnum::Trade::ObjectFlag3D::HasTranslationRotationScaling) {
+    logger->Info("%s has TRS!", nodePath.c_str());
+    rotation = node->rotation();
+    scaling = node->scaling();
+    translation = node->translation();
+  }
+
+  auto newRenderable = new Koala::Objects::Renderable(
+      nodePath, parent, group->GetNodeRenderGroup(pathPrefix + nodeName));
+  auto children = node->children();
+  for (auto &child : children) {
+    AddNode(group, newRenderable, gltfAsset, child, logger,
+            nodeName + "/" + pathPrefix);
+  }
+}
+
 void Scene::CreateRenderableFromGroup(
     const std::shared_ptr<Assets::Project> project,
     const std::shared_ptr<Koala::Assets::BaseGroup> group) {
+  auto start = std::chrono::system_clock::now();
+
   logger.Info("Creating Renderable from group [%s]", group->GetPath().c_str());
 
   // Get and load primary asset...
@@ -68,27 +103,12 @@ void Scene::CreateRenderableFromGroup(
     auto topLevelNodes = sceneData.children3D();
     for (auto nodeID : topLevelNodes) {
       // Renderable
-      auto nodeName = gltfAsset->gltfImporter.meshName(nodeID);
-      auto node = gltfAsset->gltfImporter.object3D(nodeID);
-      auto &mesh = gltfAsset->compiledMeshes[nodeID];
-
-      Magnum::Quaternion rotation{Magnum::Math::IdentityInit};
-      Magnum::Vector3 scaling{1.0f, 1.0f, 1.0f};
-      Magnum::Vector3 translation{Magnum::Math::ZeroInit};
-
-      std::string nodePath = group->name + "/" + nodeName;
-
-      if (node->flags() &
-          Magnum::Trade::ObjectFlag3D::HasTranslationRotationScaling) {
-        logger.Info("%s has TRS!", nodePath.c_str());
-        rotation = node->rotation();
-        scaling = node->scaling();
-        translation = node->translation();
-      }
-
-      auto newRenderable = new Koala::Objects::Renderable(
-          nodePath, newObject, group->GetNodeRenderGroup(nodeName));
+      AddNode(group, newObject, gltfAsset, nodeID, &logger, "");
     }
-    // newObject->p
   }
+
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                      std::chrono::system_clock::now() - start)
+                      .count();
+  logger.Info("GLTF instance inserted into scene graph in [%d] us", duration);
 }
