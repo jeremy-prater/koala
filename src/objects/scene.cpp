@@ -19,8 +19,7 @@ Scene::~Scene() { logger.Info("Destroyed Scene"); }
 static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
                     BaseObject *parent,
                     std::shared_ptr<Koala::Assets::GLTFAsset> gltfAsset,
-                    uint32_t nodeID, Koala::DebugLogger *logger,
-                    const std::string &pathPrefix) {
+                    uint32_t nodeID, const std::string &pathPrefix) {
   auto nodeName = gltfAsset->gltfImporter.meshName(nodeID);
   auto node = gltfAsset->gltfImporter.object3D(nodeID);
   auto &mesh = gltfAsset->compiledMeshes[nodeID];
@@ -33,7 +32,7 @@ static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
 
   if (node->flags() &
       Magnum::Trade::ObjectFlag3D::HasTranslationRotationScaling) {
-    logger->Info("%s has TRS!", nodePath.c_str());
+    // logger->Info("%s has TRS!", nodePath.c_str());
     rotation = node->rotation();
     scaling = node->scaling();
     translation = node->translation();
@@ -43,7 +42,7 @@ static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
       nodePath, parent, group->GetNodeRenderGroup(pathPrefix + nodeName));
   auto children = node->children();
   for (auto &child : children) {
-    AddNode(group, newRenderable, gltfAsset, child, logger,
+    AddNode(group, newRenderable, gltfAsset, child,
             nodeName + "/" + pathPrefix);
   }
 }
@@ -103,7 +102,7 @@ void Scene::CreateRenderableFromGroup(
     auto topLevelNodes = sceneData.children3D();
     for (auto nodeID : topLevelNodes) {
       // Renderable
-      AddNode(group, newObject, gltfAsset, nodeID, &logger, "");
+      AddNode(group, newObject, gltfAsset, nodeID, "");
     }
   }
 
