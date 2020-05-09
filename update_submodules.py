@@ -29,3 +29,4 @@ for repo in repoList:
     git(repoDir, ["reset", "--hard", "origin/HEAD"])
     git(repoDir, ["fetch", "--all"])
     git(repoDir, ["checkout", repo[1]])
+    git(repoDir, ["pull"])
