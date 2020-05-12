@@ -1,5 +1,6 @@
 #include "render-objects.hpp"
 #include "assets/gltf-asset.hpp"
+#include "objects/scene-renderable-groups.hpp"
 
 using namespace Koala;
 using namespace Magnum;
@@ -54,9 +55,14 @@ KoalaTest::KoalaTest(const Arguments &arguments)
 }
 
 void KoalaTest::drawEvent() {
-  GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
+  GL::defaultFramebuffer.clear(GL::FramebufferClear::Color |
+                               GL::FramebufferClear::Depth);
 
-  /* TODO: Add your drawing code here */
+  auto &renderGroups = Koala::Objects::SceneRenderableGroup::GetRenderGroups();
+  for (auto &renderGroup : renderGroups) {
+    camera->cameraLens.draw(dynamic_cast<Magnum::SceneGraph::DrawableGroup3D &>(
+        *renderGroup.first));
+  }
 
   swapBuffers();
 }

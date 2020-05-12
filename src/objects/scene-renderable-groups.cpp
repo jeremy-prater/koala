@@ -69,6 +69,14 @@ SceneRenderableGroup::GetRenderGroupByAssetSet(
   return sceneRenderGroupTest;
 }
 
+[[nodiscard]] const std::unordered_map<
+    std::shared_ptr<SceneRenderableGroup>,
+    std::unordered_map<Koala::Assets::BaseGroup::NodeType,
+                       std::shared_ptr<Koala::Assets::BaseAsset>>>
+SceneRenderableGroup::GetRenderGroups() noexcept {
+  return groupMappings;
+}
+
 /////////////////////////////////////////////////////////////////////
 //
 // Instance Members

@@ -33,6 +33,12 @@ public:
                                std::shared_ptr<Koala::Assets::BaseAsset>>
           &assetSet) noexcept;
 
+  [[nodiscard]] static const std::unordered_map<
+      std::shared_ptr<SceneRenderableGroup>,
+      std::unordered_map<Koala::Assets::BaseGroup::NodeType,
+                         std::shared_ptr<Koala::Assets::BaseAsset>>>
+  GetRenderGroups() noexcept;
+
 private:
   [[nodiscard]] static bool CompareAssetSets(
       const std::unordered_map<Koala::Assets::BaseGroup::NodeType,

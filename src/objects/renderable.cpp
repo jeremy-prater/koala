@@ -15,4 +15,6 @@ Renderable::Renderable(
 Renderable::~Renderable() {}
 
 void Renderable::draw(const Magnum::Matrix4 &transformationMatrix,
-                      Magnum::SceneGraph::Camera3D &camera) {}
+                      Magnum::SceneGraph::Camera3D &camera) {
+  logger.Info("draw");
+}

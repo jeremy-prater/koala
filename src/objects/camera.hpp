@@ -28,11 +28,12 @@ public:
   Camera(const std::string &name, std::shared_ptr<Scene> scene);
   ~Camera();
 
+  Object3D camera;
+  Magnum::SceneGraph::Camera3D cameraLens;
+
 private:
   const std::string cameraName;
 
-  Object3D camera;
-  Magnum::SceneGraph::Camera3D cameraLens;
 };
 
 } // namespace Objects

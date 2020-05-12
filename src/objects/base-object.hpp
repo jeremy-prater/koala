@@ -14,9 +14,9 @@ class BaseObject : public Object3D {
 public:
   explicit BaseObject(const std::string &name, Object3D *parent);
 
-protected:
   boost::uuids::uuid uuid;
   DebugLogger logger;
+protected:
 };
 
 } // namespace Objects
