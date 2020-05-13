@@ -22,7 +22,7 @@ static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
                     uint32_t nodeID, const std::string &pathPrefix) {
   auto nodeName = gltfAsset->gltfImporter.meshName(nodeID);
   auto node = gltfAsset->gltfImporter.object3D(nodeID);
-  auto &mesh = gltfAsset->compiledMeshes[nodeID];
+  const auto &mesh = gltfAsset->compiledMeshes[nodeID];
 
   Magnum::Quaternion rotation{Magnum::Math::IdentityInit};
   Magnum::Vector3 scaling{1.0f, 1.0f, 1.0f};
@@ -39,7 +39,8 @@ static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
   }
 
   auto newRenderable = new Koala::Objects::Renderable(
-      nodePath, parent, group->GetNodeRenderGroup(pathPrefix + nodeName));
+      nodePath, parent, group->GetNodeRenderGroup(pathPrefix + nodeName),
+      translation, rotation, scaling, mesh);
   auto children = node->children();
   for (auto &child : children) {
     AddNode(group, newRenderable, gltfAsset, child,

@@ -84,7 +84,7 @@ SceneRenderableGroup::GetRenderGroups() noexcept {
 SceneRenderableGroup::SceneRenderableGroup(
     const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                              std::shared_ptr<Koala::Assets::BaseAsset>>
-        assetTemplate)
+        &assetTemplate)
     : uuid(Engine::Engine::RandomUUIDGenerator()), assetMap(assetTemplate),
       logger("SceneRenderableGroup-" + boost::uuids::to_string(uuid),
              DebugLogger::COLOR_YELLOW, false) {

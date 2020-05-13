@@ -64,16 +64,17 @@ public:
   SceneRenderableGroup(
       const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                                std::shared_ptr<Koala::Assets::BaseAsset>>
-          assetTemplate);
+          &assetTemplate);
 
   [[nodiscard]] Magnum::SceneGraph::DrawableGroup3D *getInstance() noexcept;
 
   const boost::uuids::uuid uuid;
 
-private:
   const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                            std::shared_ptr<Koala::Assets::BaseAsset>>
       assetMap;
+
+private:
   DebugLogger logger;
 };
 

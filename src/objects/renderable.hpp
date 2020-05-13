@@ -21,13 +21,20 @@ class Renderable : public BaseObject, public Magnum::SceneGraph::Drawable3D {
 public:
   explicit Renderable(const std::string &name, BaseObject *parent,
                       std::shared_ptr<Koala::Objects::SceneRenderableGroup>
-                          SceneRenderableGroup);
+                          SceneRenderableGroup,
+                      const Magnum::Vector3 &translation,
+                      const Magnum::Quaternion &rotation,
+                      const Magnum::Vector3 &scaling,
+                      const Magnum::GL::Mesh &mesh);
   ~Renderable();
 
 private:
   void draw(const Magnum::Matrix4 &transformationMatrix,
             Magnum::SceneGraph::Camera3D &camera) override;
 
+  Magnum::GL::Mesh &_mesh;
+
+  std::shared_ptr<Koala::Objects::SceneRenderableGroup> sceneRenderableGroup;
   std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                      std::shared_ptr<Koala::Assets::BaseAsset>>
       assets;
