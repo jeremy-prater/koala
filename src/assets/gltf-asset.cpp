@@ -42,7 +42,7 @@ void GLTFAsset::BuildChildTree(const std::string &path,
   }
 }
 
-[[nodiscard]] bool GLTFAsset::Parse() noexcept {
+[[nodiscard]] bool GLTFAsset::ParseInternal() noexcept {
   auto start = std::chrono::system_clock::now();
 
   parsed = gltfImporter.openData(Corrade::Containers::ArrayView<const char>{

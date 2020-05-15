@@ -68,7 +68,7 @@ GLSLAsset::~GLSLAsset() {
               GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 
-[[nodiscard]] bool GLSLAsset::Parse() noexcept {
+[[nodiscard]] bool GLSLAsset::ParseInternal() noexcept {
   auto start = std::chrono::system_clock::now();
 
   const std::string shaderString(reinterpret_cast<const char *>(GetData()),

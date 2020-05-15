@@ -42,13 +42,15 @@ public:
   void Unload();
   [[nodiscard]] bool IsLoaded() const noexcept;
 
-  [[nodiscard]] virtual bool Parse() noexcept = 0;
+  [[nodiscard]] bool Parse() noexcept;
   [[nodiscard]] bool IsParsed() const noexcept;
+
+  void LoadParse() noexcept;
 
   [[nodiscard]] const uint8_t *GetData() const noexcept;
 
-  [[nodiscard]] const std::string &
-  GetMetaObject(const std::string &key) const noexcept;
+  [[nodiscard]] const std::string &GetMetaObject(const std::string &key) const
+      noexcept;
   void SetMetaObject(const std::string &key, const std::string &value) noexcept;
 
   BaseAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
@@ -86,6 +88,8 @@ protected:
 
   [[nodiscard]] static AssetType
   ConvertAssetType(const std::string &parser) noexcept;
+
+  [[nodiscard]] virtual bool ParseInternal() noexcept = 0;
 
 private:
   mutable std::mutex loadLock;

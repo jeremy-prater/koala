@@ -7,6 +7,7 @@
 #include "engine/typedefs.hpp"
 #include "objects/base-object.hpp"
 #include "objects/scene.hpp"
+#include <Magnum/GL/Mesh.h>
 #include <Magnum/SceneGraph/Drawable.h>
 #include <memory>
 #include <rapidjson/pointer.h>
@@ -24,8 +25,7 @@ public:
                           SceneRenderableGroup,
                       const Magnum::Vector3 &translation,
                       const Magnum::Quaternion &rotation,
-                      const Magnum::Vector3 &scaling,
-                      const Magnum::GL::Mesh &mesh);
+                      const Magnum::Vector3 &scaling, Magnum::GL::Mesh &mesh);
   ~Renderable();
 
 private:

@@ -22,7 +22,7 @@ static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
                     uint32_t nodeID, const std::string &pathPrefix) {
   auto nodeName = gltfAsset->gltfImporter.meshName(nodeID);
   auto node = gltfAsset->gltfImporter.object3D(nodeID);
-  const auto &mesh = gltfAsset->compiledMeshes[nodeID];
+  auto &mesh = gltfAsset->compiledMeshes[nodeID];
 
   Magnum::Quaternion rotation{Magnum::Math::IdentityInit};
   Magnum::Vector3 scaling{1.0f, 1.0f, 1.0f};
@@ -65,25 +65,13 @@ void Scene::CreateRenderableFromGroup(
     return;
   }
 
-  if (!primaryAsset->IsLoaded()) {
-    primaryAsset->Load();
-  }
-
-  if (!primaryAsset->IsParsed()) {
-    primaryAsset->Parse();
-  }
+  primaryAsset->LoadParse();
 
   // Load all children
   auto nodeAssets = group->GetNodeAssets();
   for (auto nodeAsset : nodeAssets) {
     auto &childAsset = nodeAsset.second;
-    if (!childAsset->IsLoaded()) {
-      childAsset->Load();
-    }
-
-    if (!childAsset->IsParsed()) {
-      childAsset->Parse();
-    }
+    childAsset->LoadParse();
   }
 
   // Get a pointer to the GLTF asset

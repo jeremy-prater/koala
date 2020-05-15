@@ -4,6 +4,7 @@
 
 #include "assets/base-asset.hpp"
 #include "assets/base-group.hpp"
+#include "objects/shader-program.hpp"
 #include <Magnum/SceneGraph/Drawable.h>
 #include <memory>
 #include <mutex>
@@ -69,6 +70,7 @@ public:
   [[nodiscard]] Magnum::SceneGraph::DrawableGroup3D *getInstance() noexcept;
 
   const boost::uuids::uuid uuid;
+  ShaderProgram shaderProgram;
 
   const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                            std::shared_ptr<Koala::Assets::BaseAsset>>

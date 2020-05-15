@@ -182,13 +182,21 @@ void BaseAsset::Unload() {
 }
 
 [[nodiscard]] bool BaseAsset::Parse() noexcept {
-  auto start = std::chrono::system_clock::now();
+  if (parsed) {
+    logger.Warning("Already parsed!");
+    return parsed;
+  }
+  return ParseInternal();
+}
 
-  logger.Info("Parsing complete [%d] us",
-              std::chrono::duration_cast<std::chrono::microseconds>(
-                  std::chrono::system_clock::now() - start)
-                  .count());
-  return true;
+void BaseAsset::LoadParse() noexcept {
+  if (!IsLoaded()) {
+    Load();
+  }
+
+  if (!IsParsed()) {
+    Parse();
+  }
 }
 
 [[nodiscard]] bool BaseAsset::IsLoaded() const noexcept {

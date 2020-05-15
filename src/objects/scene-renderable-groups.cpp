@@ -85,7 +85,8 @@ SceneRenderableGroup::SceneRenderableGroup(
     const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                              std::shared_ptr<Koala::Assets::BaseAsset>>
         &assetTemplate)
-    : uuid(Engine::Engine::RandomUUIDGenerator()), assetMap(assetTemplate),
+    : uuid(Engine::Engine::RandomUUIDGenerator()), shaderProgram(assetTemplate),
+      assetMap(assetTemplate),
       logger("SceneRenderableGroup-" + boost::uuids::to_string(uuid),
              DebugLogger::COLOR_YELLOW, false) {
   logger.Info("Created SceneRenderableGroup");

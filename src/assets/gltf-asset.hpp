@@ -15,7 +15,7 @@ public:
   GLTFAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
             const std::string &rootDir);
   virtual ~GLTFAsset();
-  [[nodiscard]] virtual bool Parse() noexcept override;
+  [[nodiscard]] virtual bool ParseInternal() noexcept override;
 
   Magnum::Trade::TinyGltfImporter gltfImporter;
 

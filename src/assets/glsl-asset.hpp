@@ -14,7 +14,9 @@ public:
   GLSLAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
             const std::string &rootDir);
   virtual ~GLSLAsset();
-  [[nodiscard]] virtual bool Parse() noexcept override;
+  [[nodiscard]] virtual bool ParseInternal() noexcept override;
+
+  Magnum::GL::Shader shader;
 
 private:
   static const std::unordered_map<std::string, const Magnum::GL::Version>
@@ -25,8 +27,6 @@ private:
   GetShaderVersionFromString(const std::string &version) const noexcept;
   Magnum::GL::Shader::Type
   GetShaderTypeFromString(const std::string &type) const noexcept;
-
-  Magnum::GL::Shader shader;
 
   DebugLogger logger;
 };
