@@ -46,35 +46,41 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   logger.Info("Asset loading complete in [%d] ms", duration);
 
   camera = std::make_unique<Objects::Camera>("default", scene);
-  camera->camera.setTransformation(Matrix4::lookAt(
-      {5.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, Vector3::yAxis()));
+  UpdateCameraPosition();
 
   cloud = std::make_unique<Cloud::Cloud>();
 
   auto x_group = project->GetGroupByPath("/default/x/the-x");
 
   scene->CreateRenderableFromGroup(project, x_group);
+  lastFrameTime = std::chrono::system_clock::now();
+}
 
-  gameThread = std::thread([this]() {
-    running = true;
-    while (running) {
-      auto start = std::chrono::system_clock::now();
+void KoalaTest::UpdateCameraPosition() noexcept {
+  static const float dX = 5.0;
+  static const float dY = 0.0;
+  static const float dZ = 5.0;
+  camera->camera.setTransformation(
+      Matrix4::lookAt({dX * cos(dTime), dY * cos(dTime), dZ * sin(dTime)},
+                      {0.0f, 0.0f, 0.0f}, Vector3::yAxis()));
+}
 
-      redraw();
-      usleep(250 * 1000);
+void KoalaTest::tickEvent() {
+  auto currentFrameTime = std::chrono::system_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                      currentFrameTime - lastFrameTime)
+                      .count();
 
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
-                          std::chrono::system_clock::now() - start)
-                          .count();
-
-      logger.Info("Render frame took [%d] us ... %f FPS", duration,
-                  static_cast<double>(1000 * 1000) / duration);
-      // running = false;
-    }
-  });
+  logger.Info("Tick took [%d] us ... %f FPS", duration,
+              static_cast<double>(1000 * 1000) / duration);
+  dTime += (duration * 0.000001f);
+  UpdateCameraPosition();
+  redraw();
+  lastFrameTime = currentFrameTime;
 }
 
 void KoalaTest::drawEvent() {
+
   GL::defaultFramebuffer.clear(GL::FramebufferClear::Color |
                                GL::FramebufferClear::Depth);
 
@@ -87,11 +93,6 @@ void KoalaTest::drawEvent() {
   swapBuffers();
 }
 
-KoalaTest::~KoalaTest() {
-  running = false;
-
-  if (gameThread.joinable())
-    gameThread.join();
-}
+KoalaTest::~KoalaTest() {}
 
 MAGNUM_APPLICATION_MAIN(KoalaTest)

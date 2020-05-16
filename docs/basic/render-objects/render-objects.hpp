@@ -21,9 +21,12 @@ protected:
   std::shared_ptr<Koala::Assets::Project> project;
 
 private:
-  bool running;
-  std::thread gameThread;
+  std::chrono::time_point<std::chrono::system_clock> lastFrameTime;
+  float dTime;
   void drawEvent() override;
+  void tickEvent() override;
+
+  void UpdateCameraPosition() noexcept;
 
   Koala::DebugLogger logger;
 };
