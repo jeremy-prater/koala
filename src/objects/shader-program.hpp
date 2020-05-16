@@ -17,6 +17,19 @@ public:
                                std::shared_ptr<Koala::Assets::BaseAsset>>
           &assetTemplate);
 
+  template <class T>
+  [[nodiscard]] ShaderProgram &setShaderUniform(const std::string &uniformName,
+                                                T value) {
+    auto location = uniformLocation(uniformName);
+    if (location == -1) {
+      logger.Warning("Unable to find uniform [%s]", uniformName.c_str());
+    } else {
+      setUniform(location, value);
+    }
+
+    return *this;
+  }
+
 private:
   const boost::uuids::uuid uuid;
   std::unordered_map<Koala::Assets::BaseGroup::NodeType,

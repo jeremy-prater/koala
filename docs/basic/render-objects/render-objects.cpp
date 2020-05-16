@@ -46,12 +46,32 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   logger.Info("Asset loading complete in [%d] ms", duration);
 
   camera = std::make_unique<Objects::Camera>("default", scene);
+  camera->camera.setTransformation(Matrix4::lookAt(
+      {5.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, Vector3::yAxis()));
 
   cloud = std::make_unique<Cloud::Cloud>();
 
   auto x_group = project->GetGroupByPath("/default/x/the-x");
 
   scene->CreateRenderableFromGroup(project, x_group);
+
+  gameThread = std::thread([this]() {
+    running = true;
+    while (running) {
+      auto start = std::chrono::system_clock::now();
+
+      redraw();
+      usleep(250 * 1000);
+
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                          std::chrono::system_clock::now() - start)
+                          .count();
+
+      logger.Info("Render frame took [%d] us ... %f FPS", duration,
+                  static_cast<double>(1000 * 1000) / duration);
+      // running = false;
+    }
+  });
 }
 
 void KoalaTest::drawEvent() {
@@ -67,6 +87,11 @@ void KoalaTest::drawEvent() {
   swapBuffers();
 }
 
-KoalaTest::~KoalaTest() {}
+KoalaTest::~KoalaTest() {
+  running = false;
+
+  if (gameThread.joinable())
+    gameThread.join();
+}
 
 MAGNUM_APPLICATION_MAIN(KoalaTest)

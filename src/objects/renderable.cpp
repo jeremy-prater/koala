@@ -14,13 +14,22 @@ Renderable::Renderable(
     const Magnum::Vector3 &scaling, Magnum::GL::Mesh &mesh)
     : BaseObject(name, parent),
       SceneGraph::Drawable3D{*this, SceneRenderableGroup->getInstance()},
-      sceneRenderableGroup(SceneRenderableGroup), _mesh(mesh) {}
+      sceneRenderableGroup(SceneRenderableGroup), _mesh(mesh),
+      _translation(translation), _rotation(rotation), _scaling(scaling) {}
 
 Renderable::~Renderable() {}
 
 void Renderable::draw(const Magnum::Matrix4 &transformationMatrix,
                       Magnum::SceneGraph::Camera3D &camera) {
 
-  // auto &props = sceneRenderableGroup->assetMap;
-  sceneRenderableGroup->shaderProgram.draw(_mesh);
+  const Magnum::Matrix4 localMatrix =
+      Magnum::Matrix4::from(_rotation.toMatrix(), _translation);
+
+  sceneRenderableGroup->shaderProgram
+      .setShaderUniform<const Magnum::Matrix4 &>("localMatrix", localMatrix)
+      .setShaderUniform<const Magnum::Matrix4 &>("transformationMatrix",
+                                                 transformationMatrix)
+      .setShaderUniform<const Magnum::Matrix4 &>("projectionMatrix",
+                                                 camera.projectionMatrix())
+      .draw(_mesh);
 }

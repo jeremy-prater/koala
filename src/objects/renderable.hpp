@@ -32,9 +32,12 @@ private:
   void draw(const Magnum::Matrix4 &transformationMatrix,
             Magnum::SceneGraph::Camera3D &camera) override;
 
-  Magnum::GL::Mesh &_mesh;
-
   std::shared_ptr<Koala::Objects::SceneRenderableGroup> sceneRenderableGroup;
+  Magnum::GL::Mesh &_mesh;
+  Magnum::Vector3 _translation;
+  Magnum::Quaternion _rotation;
+  Magnum::Vector3 _scaling;
+
   std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                      std::shared_ptr<Koala::Assets::BaseAsset>>
       assets;

@@ -7,6 +7,7 @@
 #include <chrono>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <thread>
 #include <unistd.h>
 
 class KoalaTest : public Koala::Engine::Engine {
@@ -20,6 +21,8 @@ protected:
   std::shared_ptr<Koala::Assets::Project> project;
 
 private:
+  bool running;
+  std::thread gameThread;
   void drawEvent() override;
 
   Koala::DebugLogger logger;

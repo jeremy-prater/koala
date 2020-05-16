@@ -27,16 +27,16 @@ const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
          Magnum::GL::Shader::Type::TessellationEvaluation},
         {"Compute", Magnum::GL::Shader::Type::Compute}};
 
-Magnum::GL::Version
-GLSLAsset::GetShaderVersionFromString(const std::string &version) const
-    noexcept {
-  auto it = shaderVersions.find(version);
-  if (it == shaderVersions.end()) {
-    logger.Warning("Unable to get Shader version [%s] Defaulting to GL330!",
-                   version.c_str());
-    return Magnum::GL::Version::GL330;
-  }
-  return it->second;
+Magnum::GL::Version GLSLAsset::GetShaderVersionFromString(
+    const std::string &version) const noexcept {
+  // auto it = shaderVersions.find(version);
+  // if (it == shaderVersions.end()) {
+  //   logger.Warning("Unable to get Shader version [%s] Defaulting to GL330!",
+  //                  version.c_str());
+  //   return Magnum::GL::Version::GL330;
+  // }
+  // return it->second;
+  return Magnum::GL::Version::None;
 }
 
 Magnum::GL::Shader::Type
