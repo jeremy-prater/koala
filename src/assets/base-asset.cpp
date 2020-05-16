@@ -128,7 +128,7 @@ void BaseAsset::Load() {
   if (data == nullptr) {
     data = static_cast<uint8_t *>(malloc(size));
   } else {
-    logger.Warning("Failed to load : already loaded");
+    // logger.Warning("Failed to load : already loaded");
     return;
   }
 
@@ -183,7 +183,7 @@ void BaseAsset::Unload() {
 
 [[nodiscard]] bool BaseAsset::Parse() noexcept {
   if (parsed) {
-    logger.Warning("Already parsed!");
+    // logger.Warning("Already parsed!");
     return parsed;
   }
   return ParseInternal();

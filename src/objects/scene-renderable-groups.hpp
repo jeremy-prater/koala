@@ -39,6 +39,7 @@ public:
       std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                          std::shared_ptr<Koala::Assets::BaseAsset>>>
   GetRenderGroups() noexcept;
+  static void Shutdown();
 
 private:
   [[nodiscard]] static bool CompareAssetSets(

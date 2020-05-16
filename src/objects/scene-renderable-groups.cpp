@@ -77,6 +77,11 @@ SceneRenderableGroup::GetRenderGroups() noexcept {
   return groupMappings;
 }
 
+void SceneRenderableGroup::Shutdown()
+{
+  groupMappings.clear();
+}
+
 /////////////////////////////////////////////////////////////////////
 //
 // Instance Members
