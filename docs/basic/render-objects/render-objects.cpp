@@ -56,20 +56,20 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   cloud = std::make_unique<Cloud::Cloud>();
 
   scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/default/grid/the-grid"),
+      project, project->GetGroupByPath("/models/grid/the-grid"),
       Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
 
   scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/default/x/the-x"),
+      project, project->GetGroupByPath("/models/x/the-x"),
       Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
 
   scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/default/o/the-o"),
+      project, project->GetGroupByPath("/models/o/the-o"),
       Magnum::Matrix4::rotationX(Rad{90.0_degf}) *
           Magnum::Matrix4::translation({10.0f, 0.0f, 0.0f}));
 
   scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/default/o/the-o"),
+      project, project->GetGroupByPath("/models/o/the-o"),
       Magnum::Matrix4::rotationX(Rad{90.0_degf}) *
           Magnum::Matrix4::translation({0.0f, 10.0f, 0.0f}));
 

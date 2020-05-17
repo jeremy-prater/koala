@@ -61,6 +61,7 @@ set(KOALA_ASSET_SRCS "assets/project-configuration.cpp"
                      "assets/base-group.cpp"
                      "assets/gltf-asset.cpp"
                      "assets/glsl-asset.cpp"
+                     "assets/png-asset.cpp"
                      )
 
 # Add Koala Cloud

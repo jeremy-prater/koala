@@ -2,6 +2,7 @@
 #include "engine/engine.hpp"
 #include "glsl-asset.hpp"
 #include "gltf-asset.hpp"
+#include "png-asset.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -20,6 +21,8 @@ BaseAsset::ConvertAssetType(const std::string &parser) noexcept {
     return AssetType::GLTF;
   else if (lowParser == "glsl")
     return AssetType::GLSL;
+  else if (lowParser == "png")
+    return AssetType::PNG;
   else
     return AssetType::Unknown;
 }
@@ -40,11 +43,12 @@ std::shared_ptr<BaseAsset> BaseAsset::CreateAsset(
   if (parser == "gltf") {
     newAsset = std::dynamic_pointer_cast<BaseAsset>(
         std::make_shared<GLTFAsset>(props, rootDir));
-  }
-
-  if (parser == "glsl") {
+  } else if (parser == "glsl") {
     newAsset = std::dynamic_pointer_cast<BaseAsset>(
         std::make_shared<GLSLAsset>(props, rootDir));
+  } else if (parser == "png") {
+    newAsset = std::dynamic_pointer_cast<BaseAsset>(
+        std::make_shared<PNGAsset>(props, rootDir));
   }
 
   return newAsset;

@@ -21,6 +21,7 @@ public:
     Unknown = 0x00000000,
     GLTF = 0x00000001,
     GLSL = 0x00000002,
+    PNG = 0x00000003,
   };
 
   static std::shared_ptr<BaseAsset> CreateAsset(

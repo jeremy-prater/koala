@@ -62,7 +62,7 @@
             <div class="col">
               <h5 class="card-title">{{ object.source }}</h5>
               <p class="card-text">Tags : {{ object.tags }}</p>
-              <p class="card-text">Parse : {{ object.parser }}</p>
+              <p class="card-text">Parser : {{ object.parser }}</p>
               <p class="card-text">Size : {{ object.size }}</p>
               <p class="card-text">MD5 : {{ object.hash }}</p>
             </div>
