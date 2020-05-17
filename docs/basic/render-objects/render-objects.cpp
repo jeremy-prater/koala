@@ -2,6 +2,7 @@
 #include "assets/gltf-asset.hpp"
 #include "objects/scene-renderable-groups.hpp"
 #include <Magnum/GL/Renderer.h>
+#include <Magnum/Math/Angle.h>
 #include <Magnum/Math/Matrix4.h>
 
 using namespace Koala;
@@ -55,12 +56,22 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   cloud = std::make_unique<Cloud::Cloud>();
 
   scene->CreateRenderableFromGroup(
+      project, project->GetGroupByPath("/default/grid/the-grid"),
+      Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
+
+  scene->CreateRenderableFromGroup(
       project, project->GetGroupByPath("/default/x/the-x"),
       Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
 
   scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/default/grid/the-grid"),
-      Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
+      project, project->GetGroupByPath("/default/o/the-o"),
+      Magnum::Matrix4::rotationX(Rad{90.0_degf}) *
+          Magnum::Matrix4::translation({10.0f, 0.0f, 0.0f}));
+
+  scene->CreateRenderableFromGroup(
+      project, project->GetGroupByPath("/default/o/the-o"),
+      Magnum::Matrix4::rotationX(Rad{90.0_degf}) *
+          Magnum::Matrix4::translation({0.0f, 10.0f, 0.0f}));
 
   Magnum::GL::Renderer::enable(GL::Renderer::Feature::DepthTest);
   Magnum::GL::Renderer::setClearColor(0x4040FF_rgbf);
