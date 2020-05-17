@@ -1,12 +1,15 @@
 #include "render-objects.hpp"
 #include "assets/gltf-asset.hpp"
 #include "objects/scene-renderable-groups.hpp"
+#include <Magnum/GL/Renderer.h>
+#include <Magnum/Math/Matrix4.h>
 
 using namespace Koala;
 using namespace Magnum;
+using namespace Math::Literals;
 
 KoalaTest::KoalaTest(const Arguments &arguments)
-    : Engine::Engine(arguments),
+    : Engine::Engine(arguments), dTime(0),
       logger("render-objects", DebugLogger::DebugColor::COLOR_BLUE, false) {
   if (arguments.argc != 2) {
     logger.Error("No path given! Usage : %s <path to project>",
@@ -44,22 +47,29 @@ KoalaTest::KoalaTest(const Arguments &arguments)
                       std::chrono::system_clock::now() - start)
                       .count();
   logger.Info("Asset loading complete in [%d] ms", duration);
+  lastFrameTime = std::chrono::system_clock::now();
 
   camera = std::make_unique<Objects::Camera>("default", scene);
   UpdateCameraPosition();
 
   cloud = std::make_unique<Cloud::Cloud>();
 
-  auto x_group = project->GetGroupByPath("/default/x/the-x");
+  scene->CreateRenderableFromGroup(
+      project, project->GetGroupByPath("/default/x/the-x"),
+      Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
 
-  scene->CreateRenderableFromGroup(project, x_group);
-  lastFrameTime = std::chrono::system_clock::now();
+  scene->CreateRenderableFromGroup(
+      project, project->GetGroupByPath("/default/grid/grid"),
+      Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
+
+  Magnum::GL::Renderer::enable(GL::Renderer::Feature::DepthTest);
+  Magnum::GL::Renderer::setClearColor(0x4040FF_rgbf);
 }
 
 void KoalaTest::UpdateCameraPosition() noexcept {
-  static const float dX = 5.0;
-  static const float dY = 0.0;
-  static const float dZ = 5.0;
+  static const float dX = 15.0;
+  static const float dY = 5.0;
+  static const float dZ = 15.0;
   camera->camera.setTransformation(
       Matrix4::lookAt({dX * cos(dTime), dY * cos(dTime), dZ * sin(dTime)},
                       {0.0f, 0.0f, 0.0f}, Vector3::yAxis()));
@@ -67,16 +77,21 @@ void KoalaTest::UpdateCameraPosition() noexcept {
 
 void KoalaTest::tickEvent() {
   auto currentFrameTime = std::chrono::system_clock::now();
+
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
                       currentFrameTime - lastFrameTime)
                       .count();
-
-  logger.Info("Tick took [%d] us ... %f FPS", duration,
-              static_cast<double>(1000 * 1000) / duration);
   dTime += (duration * 0.000001f);
   UpdateCameraPosition();
   redraw();
   lastFrameTime = currentFrameTime;
+  // logger.WriteLog(duration > 25000 ? DebugLogger::DebugLevel::DEBUG_WARNING
+  //                                  : DebugLogger::DebugLevel::DEBUG_INFO,
+  //                 "Tick took [%d] us ... %f FPS dTime %f", duration,
+  //                 static_cast<double>(1000 * 1000) / duration, dTime);
+
+  // if (dTime > 3)
+  //   exit(0);
 }
 
 void KoalaTest::drawEvent() {

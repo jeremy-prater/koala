@@ -25,7 +25,8 @@ public:
                           SceneRenderableGroup,
                       const Magnum::Vector3 &translation,
                       const Magnum::Quaternion &rotation,
-                      const Magnum::Vector3 &scaling, Magnum::GL::Mesh &mesh);
+                      const Magnum::Vector3 &scaling, Magnum::GL::Mesh &mesh,
+                      const Magnum::Matrix4 &parentTransformation);
   ~Renderable();
 
 private:
@@ -37,6 +38,7 @@ private:
   Magnum::Vector3 _translation;
   Magnum::Quaternion _rotation;
   Magnum::Vector3 _scaling;
+  const Magnum::Matrix4 _parentTransform;
 
   std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                      std::shared_ptr<Koala::Assets::BaseAsset>>

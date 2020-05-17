@@ -21,7 +21,8 @@ public:
 
   void CreateRenderableFromGroup(
       const std::shared_ptr<Koala::Assets::Project> project,
-      const std::shared_ptr<Koala::Assets::BaseGroup> group);
+      const std::shared_ptr<Koala::Assets::BaseGroup> group,
+      const Magnum::Matrix4 &identityTransform);
 
 private:
   DebugLogger logger;

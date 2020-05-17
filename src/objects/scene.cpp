@@ -19,7 +19,8 @@ Scene::~Scene() { logger.Info("Destroyed Scene"); }
 static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
                     BaseObject *parent,
                     std::shared_ptr<Koala::Assets::GLTFAsset> gltfAsset,
-                    uint32_t nodeID, const std::string &pathPrefix) {
+                    uint32_t nodeID, const std::string &pathPrefix,
+                    const Magnum::Matrix4 &parentTransform) {
   auto nodeName = gltfAsset->gltfImporter.meshName(nodeID);
   auto node = gltfAsset->gltfImporter.object3D(nodeID);
   auto &mesh = gltfAsset->compiledMeshes[nodeID];
@@ -38,19 +39,22 @@ static void AddNode(const std::shared_ptr<Koala::Assets::BaseGroup> group,
     translation = node->translation();
   }
 
+  const auto &nodeTransformation = node->transformation();
+
   auto newRenderable = new Koala::Objects::Renderable(
       nodePath, parent, group->GetNodeRenderGroup(pathPrefix + nodeName),
-      translation, rotation, scaling, mesh);
+      translation, rotation, scaling, mesh, parentTransform);
   auto children = node->children();
   for (auto &child : children) {
-    AddNode(group, newRenderable, gltfAsset, child,
-            nodeName + "/" + pathPrefix);
+    AddNode(group, newRenderable, gltfAsset, child, nodeName + "/" + pathPrefix,
+            parentTransform * nodeTransformation);
   }
 }
 
 void Scene::CreateRenderableFromGroup(
     const std::shared_ptr<Assets::Project> project,
-    const std::shared_ptr<Koala::Assets::BaseGroup> group) {
+    const std::shared_ptr<Koala::Assets::BaseGroup> group,
+    const Magnum::Matrix4 &identityTransform) {
   auto start = std::chrono::system_clock::now();
 
   logger.Info("Creating Renderable from group [%s]", group->GetPath().c_str());
@@ -91,7 +95,7 @@ void Scene::CreateRenderableFromGroup(
     auto topLevelNodes = sceneData.children3D();
     for (auto nodeID : topLevelNodes) {
       // Renderable
-      AddNode(group, newObject, gltfAsset, nodeID, "");
+      AddNode(group, newObject, gltfAsset, nodeID, "", identityTransform);
     }
   }
 
