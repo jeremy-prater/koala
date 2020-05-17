@@ -59,7 +59,7 @@ KoalaTest::KoalaTest(const Arguments &arguments)
       Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
 
   scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/default/grid/grid"),
+      project, project->GetGroupByPath("/default/grid/the-grid"),
       Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
 
   Magnum::GL::Renderer::enable(GL::Renderer::Feature::DepthTest);
@@ -67,9 +67,9 @@ KoalaTest::KoalaTest(const Arguments &arguments)
 }
 
 void KoalaTest::UpdateCameraPosition() noexcept {
-  static const float dX = 15.0;
-  static const float dY = 5.0;
-  static const float dZ = 15.0;
+  static const float dX = 30.0;
+  static const float dY = 10.0;
+  static const float dZ = 30.0;
   camera->camera.setTransformation(
       Matrix4::lookAt({dX * cos(dTime), dY * cos(dTime), dZ * sin(dTime)},
                       {0.0f, 0.0f, 0.0f}, Vector3::yAxis()));
