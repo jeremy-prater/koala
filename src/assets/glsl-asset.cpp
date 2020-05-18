@@ -55,7 +55,7 @@ GLSLAsset::GLSLAsset(
     : BaseAsset(props, rootDir),
       shader(GetShaderVersionFromString(GetMetaObject("Version")),
              GetShaderTypeFromString(GetMetaObject("Type"))),
-      logger("GLSL-Object-" + path + "/" + name,
+      logger("GLSL-Asset-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {
   logger.Info("Created GLSL Shader [%s] ==> [%s][%s]",
               boost::uuids::to_string(uuid).c_str(),

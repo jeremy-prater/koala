@@ -4,6 +4,7 @@
 #include "engine/typedefs.hpp"
 #include "objects/scene.hpp"
 #include "rapidjson/document.h"
+#include <Corrade/PluginManager/Manager.h>
 #include <Magnum/GL/DefaultFramebuffer.h>
 #include <Magnum/Platform/Sdl2Application.h>
 #include <Magnum/SceneGraph/Camera.h>
@@ -13,8 +14,9 @@
 #include <Magnum/SceneGraph/Object.h>
 #include <Magnum/SceneGraph/Scene.h>
 #include <Magnum/SceneGraph/SceneGraph.h>
-#include <boost/uuid/string_generator.hpp>
+#include <Magnum/Trade/AbstractImporter.h>
 #include <boost/uuid/random_generator.hpp>
+#include <boost/uuid/string_generator.hpp>
 #include <memory>
 
 namespace Koala {
@@ -23,7 +25,10 @@ namespace Engine {
 class Engine : public Magnum::Platform::Application {
 public:
   static boost::uuids::string_generator StringUUIDGenerator;
-  static boost::uuids::basic_random_generator<boost::mt19937> RandomUUIDGenerator;
+  static boost::uuids::basic_random_generator<boost::mt19937>
+      RandomUUIDGenerator;
+  static Magnum::PluginManager::Manager<Magnum::Trade::AbstractImporter>
+      MagnumPluginManager;
 
   explicit Engine(const Arguments &arguments);
   virtual ~Engine();

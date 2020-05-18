@@ -2,7 +2,7 @@
 #include "engine/engine.hpp"
 #include "glsl-asset.hpp"
 #include "gltf-asset.hpp"
-#include "png-asset.hpp"
+#include "texture-asset.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -48,7 +48,7 @@ std::shared_ptr<BaseAsset> BaseAsset::CreateAsset(
         std::make_shared<GLSLAsset>(props, rootDir));
   } else if (parser == "png") {
     newAsset = std::dynamic_pointer_cast<BaseAsset>(
-        std::make_shared<PNGAsset>(props, rootDir));
+        std::make_shared<TextureAsset>(props, rootDir));
   }
 
   return newAsset;

@@ -8,6 +8,8 @@ using namespace Magnum;
 boost::uuids::string_generator Engine::StringUUIDGenerator;
 boost::uuids::basic_random_generator<boost::mt19937>
     Engine::RandomUUIDGenerator;
+Magnum::PluginManager::Manager<Magnum::Trade::AbstractImporter>
+    Engine::MagnumPluginManager;
 
 Engine::Engine(const Arguments &arguments)
     : Platform::Application{arguments},
