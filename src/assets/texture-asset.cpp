@@ -37,7 +37,7 @@ TextureAsset::~TextureAsset() {
     textureImporter =
         Koala::Engine::Engine::MagnumPluginManager.loadAndInstantiate(
             "AnyImageImporter");
-    if (!textureImporter) {
+    if (!textureImporter.operator bool()) {
       logger.Error("Failed to load AnyImageImporter! abort()");
       abort();
     }
@@ -45,7 +45,8 @@ TextureAsset::~TextureAsset() {
     textureImporter->openData(Corrade::Containers::ArrayView<const char>{
         reinterpret_cast<const char *>(GetData()), static_cast<size_t>(size)});
 
-    // Containers::Optional<Trade::ImageData2D> image = importer->image2D(0);
+    Corrade::Containers::Optional<Magnum::Trade::ImageData2D> image =
+        textureImporter->image2D(0);
 
     // texture.setWrapping(GL::SamplerWrapping::ClampToEdge)
     //     .setMagnificationFilter(GL::SamplerFilter::Linear)

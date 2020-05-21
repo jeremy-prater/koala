@@ -5,3 +5,6 @@ add_subdirectory(libzmq)
 
 message("Adding cppzmq")
 add_subdirectory(cppzmq)
+
+message("Adding libpng")
+add_subdirectory(libpng)
