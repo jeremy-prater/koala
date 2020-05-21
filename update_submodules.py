@@ -5,9 +5,9 @@ curdir = os.getcwd()
 
 repoList = [
     ("projects", "master"),
-    ("corrade", "v2019.10"),
-    ("magnum", "v2019.10"),
-    ("magnum-plugins", "v2019.10"),
+    ("corrade", "master"),
+    ("magnum", "master"),
+    ("magnum-plugins", "master"),
     ("magnum-bootstrap", "master"),
     ("external/cppzmq", "v4.6.0"),
     ("external/libzmq", "v4.3.2"),
