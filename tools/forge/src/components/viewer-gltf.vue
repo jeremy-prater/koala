@@ -7,7 +7,7 @@
 </template>
 
 <script>
-console.log("Creating Viewer glTF");
+console.log("Creating Viewer GLTF");
 
 import * as THREE from "three";
 // ES modules
@@ -18,7 +18,7 @@ const remote = require("electron").remote;
 const fs = remote.require("fs");
 
 export default {
-  name: "ViewerglTF",
+  name: "ViewerGLTF",
   data() {
     return {
       localObject: this.object,

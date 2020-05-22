@@ -67,8 +67,13 @@
               <p class="card-text">MD5 : {{ object.hash }}</p>
             </div>
             <div class="col-3">
-              <ViewerglTF
+              <ViewerGlTF
                 v-if="object.parser == 'gltf'"
+                style="width: 100%; height:100%; background-color:#333"
+                v-bind:object="object"
+              />
+              <ViewerPNG
+                v-if="object.parser == 'png'"
                 style="width: 100%; height:100%; background-color:#333"
                 v-bind:object="object"
               />
@@ -114,7 +119,8 @@ console.log("Creating Object Viewer");
 // in full builds helpers are exposed as Vuex.mapState
 import { mapState } from "vuex";
 import Modal from "./Modal";
-import ViewerglTF from "./viewer-gltf";
+import ViewerGlTF from "./viewer-gltf";
+import ViewerPNG from "./viewer-png";
 
 export default {
   name: "Assets",
@@ -132,7 +138,7 @@ export default {
       }
     };
   },
-  components: { Modal, ViewerglTF },
+  components: { Modal, ViewerGlTF, ViewerPNG },
   computed: mapState({
     project: state => state.project,
     currentWorkspace: state => state.currentWorkspace,

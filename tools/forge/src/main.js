@@ -14,11 +14,11 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import VueObserveVisibility from 'vue-observe-visibility';
 
-import Home from './components/Home.vue';
-import Assets from './components/Assets.vue';
-import Groups from './components/Groups.vue';
-import Dashboard from './components/Dashboard.vue';
-import KoalaSettings from './components/settings.js';
+import Home from './components/Home';
+import Assets from './components/Assets';
+import Groups from './components/Groups';
+import Dashboard from './components/Dashboard';
+import KoalaSettings from './components/settings';
 
 const remote = require('electron').remote;
 const fs = remote.require('fs');
