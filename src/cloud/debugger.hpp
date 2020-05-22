@@ -1,7 +1,7 @@
 #pragma once
 
 #include "debuglogger/debuglogger.hpp"
-#include "zmq.hpp"
+#include <zmq.hpp>
 
 namespace Koala {
 

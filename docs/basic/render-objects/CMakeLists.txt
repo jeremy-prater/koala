@@ -32,7 +32,10 @@ target_link_libraries(${PROJ_NAME} PRIVATE
     Magnum::MeshTools
     Magnum::Shaders
     Magnum::Trade
-    MagnumPlugins::TinyGltfImporter)
+    Magnum::AnyImageImporter
+    MagnumPlugins::TinyGltfImporter
+    MagnumPlugins::DdsImporter
+    MagnumPlugins::PngImporter)
 
 # Make the executable a default target to build & run in Visual Studio
 set_property(DIRECTORY ${PROJECT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJ_NAME})

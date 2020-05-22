@@ -26,15 +26,15 @@ find_package(ZeroMQ)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(Corrade REQUIRED Main)
 find_package(Magnum REQUIRED Sdl2Application GL SceneGraph MeshTools Shaders Trade)
+find_package(Magnum REQUIRED AnyImageImporter)
 find_package(MagnumPlugins REQUIRED TinyGltfImporter)
+find_package(MagnumPlugins REQUIRED DdsImporter)
+find_package(MagnumPlugins REQUIRED PngImporter)
 
 set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 # Setup include directories
 include_directories("${PROJECT_SOURCE_DIR}"
-                    "${PROJECT_BINARY_DIR}/../magnum-plugins/src"
-                    "${PROJECT_SOURCE_DIR}/../external/libzmq/include"
-                    "${PROJECT_SOURCE_DIR}/../external/cppzmq"
                     ${Boost_INCLUDE_DIRS}
                     ${RAPIDJSON_INCLUDE_DIRS}
                     ${PROJECT_BINARY_DIR}
@@ -78,6 +78,7 @@ set(SOURCE_FILES ${DEBUGLOGGER_SRCS}
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 add_library(${PROJ_NAME} STATIC ${SOURCE_FILES})
+
 target_link_libraries(${PROJ_NAME} PRIVATE
     libzmq
     Corrade::Main
@@ -88,4 +89,7 @@ target_link_libraries(${PROJ_NAME} PRIVATE
     Magnum::MeshTools
     Magnum::Shaders
     Magnum::Trade
-    MagnumPlugins::TinyGltfImporter)
+    Magnum::AnyImageImporter
+    MagnumPlugins::TinyGltfImporter
+    MagnumPlugins::DdsImporter
+    MagnumPlugins::PngImporter)

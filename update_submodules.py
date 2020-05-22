@@ -7,10 +7,11 @@ repoList = [
     ("projects", "master"),
     ("corrade", "master"),
     ("magnum", "master"),
-    ("magnum-bootstrap", "master"),
     ("magnum-plugins", "master"),
-    ("external/cppzmq", "master"),
-    ("external/libzmq", "v4.3.0")
+    ("magnum-bootstrap", "master"),
+    ("external/cppzmq", "v4.6.0"),
+    ("external/libzmq", "v4.3.2"),
+    ("external/libpng", "master")
 ]
 
 
@@ -27,6 +28,6 @@ for repo in repoList:
     print ("Updating Repo ==> [{}] to [{}]".format(repo[0], repo[1]))
     repoDir = curdir + "/" + repo[0]
     git(repoDir, ["reset", "--hard", "origin/HEAD"])
-    git(repoDir, ["fetch", "--all"])
+    git(repoDir, ["checkout", "master"])
     git(repoDir, ["checkout", repo[1]])
-    git(repoDir, ["pull"])
+    #git(repoDir, ["pull"])
