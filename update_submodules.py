@@ -5,13 +5,13 @@ curdir = os.getcwd()
 
 repoList = [
     ("projects", "master"),
-    ("corrade", "master"),
-    ("magnum", "master"),
-    ("magnum-plugins", "master"),
+    ("corrade", " v2020.06"),
+    ("magnum", "v2020.06"),
+    ("magnum-plugins", "v2020.06"),
     ("magnum-bootstrap", "master"),
     ("external/cppzmq", "v4.6.0"),
     ("external/libzmq", "v4.3.2"),
-    ("external/libpng", "master")
+    ("external/libpng", "v1.6.9")
 ]
 
 
@@ -30,4 +30,4 @@ for repo in repoList:
     git(repoDir, ["reset", "--hard", "origin/HEAD"])
     git(repoDir, ["checkout", "master"])
     git(repoDir, ["checkout", repo[1]])
-    #git(repoDir, ["pull"])
+    git(repoDir, ["pull"])

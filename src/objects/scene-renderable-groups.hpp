@@ -77,9 +77,11 @@ public:
                            std::shared_ptr<Koala::Assets::BaseAsset>>
       assetMap;
 
+  void BindTexturesToShaderProgram() noexcept;
+
 private:
   DebugLogger logger;
 };
 
 } // namespace Objects
-} // namespace Koala
+} // namespace Koalaw

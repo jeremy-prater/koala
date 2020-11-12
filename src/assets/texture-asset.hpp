@@ -14,7 +14,7 @@ public:
   virtual ~TextureAsset();
   [[nodiscard]] virtual bool ParseInternal() noexcept override;
 
-  // GL::Texture2D texture;
+  Magnum::GL::Texture2D texture;
 
 private:
   DebugLogger logger;

@@ -30,6 +30,23 @@ BaseGroup::ConvertStringToNodeType(const std::string &nodeTypeName) noexcept {
     return NodeType::VertexShader;
   } else if (nodeName == "fragment") {
     return NodeType::FragmentShader;
+  } else if (nodeName.find("texture.") != std::string::npos) {
+    std::vector<std::string> nodeTextureParts;
+    boost::split(nodeTextureParts, nodeName, [](char c) { return c == '.'; });
+    if (nodeTextureParts.size() != 2) {
+      logger.Warning(
+          "ConvertStringToNodeType ==> Incorrect number of texture parts [%s]",
+          nodeTypeName.c_str());
+      return NodeType::Unknown;
+    }
+    uint32_t textureID = std::stoi(nodeTextureParts[1]);
+    if (textureID > 31) {
+      logger.Error("Texture index [%d] is greater than allowed (%d)", textureID,
+                   31);
+      return NodeType::Unknown;
+    }
+    return static_cast<NodeType>(static_cast<uint32_t>(NodeType::Texture0) +
+                                 textureID);
   } else {
     logger.Warning("ConvertStringToNodeType ==> Unknown type! [%s]",
                    nodeTypeName.c_str());
@@ -96,8 +113,8 @@ BaseGroup::BaseGroup(
   return parentPath;
 }
 
-[[nodiscard]] const boost::uuids::uuid BaseGroup::GetParentUUID() const
-    noexcept {
+[[nodiscard]] const boost::uuids::uuid
+BaseGroup::GetParentUUID() const noexcept {
   return parentUUID;
 }
 

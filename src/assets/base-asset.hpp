@@ -15,6 +15,13 @@
 namespace Koala {
 namespace Assets {
 
+struct BaseAssetException : public std::exception {
+  std::string s;
+  BaseAssetException(const std::string &ss) : s(ss) {}
+  ~BaseAssetException() throw() {}
+  const char *what() const throw() { return s.c_str(); }
+};
+
 class BaseAsset {
 public:
   enum class AssetType : uint32_t {
@@ -50,8 +57,8 @@ public:
 
   [[nodiscard]] const uint8_t *GetData() const noexcept;
 
-  [[nodiscard]] const std::string &GetMetaObject(const std::string &key) const
-      noexcept;
+  [[nodiscard]] const std::string &
+  GetMetaObject(const std::string &key) const noexcept;
   void SetMetaObject(const std::string &key, const std::string &value) noexcept;
 
   BaseAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,

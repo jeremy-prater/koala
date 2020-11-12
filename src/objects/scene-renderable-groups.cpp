@@ -1,4 +1,5 @@
 #include "objects/scene-renderable-groups.hpp"
+#include "assets/texture-asset.hpp"
 #include "engine/engine.hpp"
 #include <boost/uuid/uuid_io.hpp>
 
@@ -77,10 +78,7 @@ SceneRenderableGroup::GetRenderGroups() noexcept {
   return groupMappings;
 }
 
-void SceneRenderableGroup::Shutdown()
-{
-  groupMappings.clear();
-}
+void SceneRenderableGroup::Shutdown() { groupMappings.clear(); }
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -101,4 +99,19 @@ SceneRenderableGroup::SceneRenderableGroup(
 SceneRenderableGroup::getInstance() noexcept {
   // return reinterpret_cast<Magnum::SceneGraph::DrawableGroup3D *>(this);
   return this;
+}
+
+void SceneRenderableGroup::BindTexturesToShaderProgram() noexcept {
+  using namespace Koala::Assets;
+  for (uint32_t type = static_cast<uint32_t>(BaseGroup::NodeType::Texture0);
+       type <= static_cast<uint32_t>(BaseGroup::NodeType::Texture31); type++) {
+    BaseGroup::NodeType nodeType = static_cast<BaseGroup::NodeType>(type);
+    auto it = assetMap.find(nodeType);
+    if (it != assetMap.end()) {
+      uint32_t textureId =
+          type - static_cast<uint32_t>(BaseGroup::NodeType::Texture0);
+      // shaderProgram.
+      std::dynamic_pointer_cast<Koala::Assets::TextureAsset>(it->second)->
+    }
+  }
 }

@@ -43,12 +43,15 @@ std::shared_ptr<BaseAsset> BaseAsset::CreateAsset(
   if (parser == "gltf") {
     newAsset = std::dynamic_pointer_cast<BaseAsset>(
         std::make_shared<GLTFAsset>(props, rootDir));
-  } else if (parser == "glsl") {
+  } else if (parser == "glsl" || parser == "vert" || parser == "frag") {
     newAsset = std::dynamic_pointer_cast<BaseAsset>(
         std::make_shared<GLSLAsset>(props, rootDir));
   } else if (parser == "png") {
     newAsset = std::dynamic_pointer_cast<BaseAsset>(
         std::make_shared<TextureAsset>(props, rootDir));
+  } else {
+    const std::string exceptionString = "Unknown parser type [" + parser + "]";
+    throw BaseAssetException(exceptionString);
   }
 
   return newAsset;
