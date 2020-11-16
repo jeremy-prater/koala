@@ -5,7 +5,7 @@ curdir = os.getcwd()
 
 repoList = [
     ("projects", "master"),
-    ("corrade", " v2020.06"),
+    ("corrade", "v2020.06"),
     ("magnum", "v2020.06"),
     ("magnum-plugins", "v2020.06"),
     ("magnum-bootstrap", "master"),
