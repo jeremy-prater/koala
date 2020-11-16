@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Magnum/GL/Texture.h>
+
 #include "base-asset.hpp"
 #include "engine/classes.hpp"
 

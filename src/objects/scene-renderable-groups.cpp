@@ -111,7 +111,7 @@ void SceneRenderableGroup::BindTexturesToShaderProgram() noexcept {
       uint32_t textureId =
           type - static_cast<uint32_t>(BaseGroup::NodeType::Texture0);
       // shaderProgram.
-      std::dynamic_pointer_cast<Koala::Assets::TextureAsset>(it->second)->
+      // std::dynamic_pointer_cast<Koala::Assets::TextureAsset>(it->second)->
     }
   }
 }

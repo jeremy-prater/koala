@@ -42,8 +42,10 @@ TextureAsset::~TextureAsset() {
       abort();
     }
 
+    const char *textureData = reinterpret_cast<const char *>(GetData());
+    
     textureImporter->openData(Corrade::Containers::ArrayView<const char>{
-        reinterpret_cast<const char *>(GetData()), static_cast<size_t>(size)});
+        textureData, static_cast<size_t>(size)});
 
     Corrade::Containers::Optional<Magnum::Trade::ImageData2D> image =
         textureImporter->image2D(0);
