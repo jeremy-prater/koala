@@ -2,7 +2,7 @@
 #include "assets/gltf-asset.hpp"
 #include "objects/scene-renderable-groups.hpp"
 #include <Magnum/GL/Renderer.h>
-#include <Magnum/Math/Angle.h>
+#include <Magnum/Math/Color.h>
 #include <Magnum/Math/Matrix4.h>
 
 using namespace Koala;
