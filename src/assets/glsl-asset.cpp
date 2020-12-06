@@ -76,7 +76,7 @@ GLSLAsset::~GLSLAsset() {
   shader.addSource(shaderString);
   parsed = shader.compile();
   if (!parsed) {
-    logger.Error("Failed to comple shader!\n\n--- Begin Shader---\n%s\n--- End "
+    logger.Error("Failed to compile shader!\n\n--- Begin Shader---\n%s\n--- End "
                  "Shader ---",
                  shaderString.c_str());
   }
