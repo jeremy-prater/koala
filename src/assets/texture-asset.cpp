@@ -3,6 +3,8 @@
 #include <Corrade/Containers/ArrayView.h>
 #include <Corrade/Containers/Optional.h>
 #include <Corrade/Utility/Resource.h>
+#include <Magnum/GL/TextureFormat.h>
+#include <Magnum/ImageView.h>
 #include <Magnum/Trade/ImageData.h>
 #include <boost/uuid/uuid_io.hpp>
 #include <chrono>
@@ -43,18 +45,26 @@ TextureAsset::~TextureAsset() {
     }
 
     const char *textureData = reinterpret_cast<const char *>(GetData());
-    
+
     textureImporter->openData(Corrade::Containers::ArrayView<const char>{
         textureData, static_cast<size_t>(size)});
 
     Corrade::Containers::Optional<Magnum::Trade::ImageData2D> image =
         textureImporter->image2D(0);
 
-    // texture.setWrapping(GL::SamplerWrapping::ClampToEdge)
-    //     .setMagnificationFilter(GL::SamplerFilter::Linear)
-    //     .setMinificationFilter(GL::SamplerFilter::Linear)
-    //     .setStorage(1, GL::textureFormat(image->format()), image->size())
-    //     .setSubImage(0, {}, *image);
+    Magnum::ImageView2D imageView{image->format(), image->size(),
+                                  image->data()};
+
+    texture.setMagnificationFilter(Magnum::GL::SamplerFilter::Linear)
+        .setMinificationFilter(Magnum::GL::SamplerFilter::Linear,
+                               Magnum::GL::SamplerMipmap::Linear)
+        .setWrapping(Magnum::GL::SamplerWrapping::ClampToEdge)
+        .setMaxAnisotropy(Magnum::GL::Sampler::maxMaxAnisotropy())
+        .setStorage(Magnum::Math::log2(4096) + 1,
+                    Magnum::GL::textureFormat(imageView.format()),
+                    imageView.size())
+        .setSubImage(0, {}, imageView)
+        .generateMipmap();
   }
 
   // Koala::Engine manager.loadAndInstantiate("AnyImageImporter");

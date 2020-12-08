@@ -76,9 +76,10 @@ GLSLAsset::~GLSLAsset() {
   shader.addSource(shaderString);
   parsed = shader.compile();
   if (!parsed) {
-    logger.Error("Failed to compile shader!\n\n--- Begin Shader---\n%s\n--- End "
-                 "Shader ---",
-                 shaderString.c_str());
+    logger.Error(
+        "Failed to compile shader!\n\n--- Begin Shader---\n%s\n--- End "
+        "Shader ---",
+        shaderString.c_str());
   }
 
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
