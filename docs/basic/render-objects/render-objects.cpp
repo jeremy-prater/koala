@@ -27,10 +27,10 @@ KoalaTest::KoalaTest(const Arguments &arguments)
     exit(-errno);
   }
 
-  if (!S_ISDIR(projectInfo.st_mode)) {
-    logger.Error("[%s] is not a directory!", projectRoot.c_str());
-    exit(-1);
-  }
+  // if (!S_ISDIR(projectInfo.st_mode)) {
+  //   logger.Error("[%s] is not a directory!", projectRoot.c_str());
+  //   exit(-1);
+  // }
 
   logger.Info("Opening %s", projectRoot.c_str());
   auto start = std::chrono::system_clock::now();
