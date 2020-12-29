@@ -10,9 +10,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #ifdef WIN32
-  #include <io.h>
+#include <io.h>
 #else
-  #include <unistd.h>
+#include <unistd.h>
 #endif
 
 using namespace Koala::Assets;
@@ -151,7 +151,11 @@ void BaseAsset::Load() {
 
   const std::string fullPath = rootDir + "/" + boost::uuids::to_string(uuid);
 
-  auto fd = open(fullPath.c_str(), O_RDONLY | O_BINARY);
+  auto fd = open(fullPath.c_str(), O_RDONLY
+#ifdef _WIN64
+                                       | O_BINARY
+#endif
+  );
 
   if (fd == -1) {
     logger.Error("Failed to load : Unable to open [%s] ==> [%s]",
@@ -161,18 +165,18 @@ void BaseAsset::Load() {
     return;
   }
 
-
   size_t readSize = 0;
   size_t totalRead = 0;
-  while (totalRead != size)
-  {
+  while (totalRead != size) {
     auto sizeToRead = size - totalRead;
     readSize = read(fd, &data[totalRead], sizeToRead);
     if (readSize == -1) {
-      logger.Warning("Failed to load : Failed to read [%s] ==> [%s]", fullPath.c_str(), strerror(errno));
+      logger.Warning("Failed to load : Failed to read [%s] ==> [%s]",
+                     fullPath.c_str(), strerror(errno));
       break;
     }
-    logger.Info("Reading file! +%d [%d / %d] (+%d)", sizeToRead, totalRead, size, readSize);
+    logger.Info("Reading file! +%d [%d / %d] (+%d)", sizeToRead, totalRead,
+                size, readSize);
     totalRead += readSize;
   }
 
