@@ -12,6 +12,10 @@ namespace Objects {
 
 class ShaderProgram : public Magnum::GL::AbstractShaderProgram {
 public:
+  // typedef Magnum::GL::Attribute<0, Magnum::Vector3> Position;
+  // typedef Magnum::GL::Attribute<1, Magnum::Vector3> Normal;
+  // typedef Magnum::GL::Attribute<2, Magnum::Vector2> TextureCoordinates;
+
   explicit ShaderProgram(
       const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                                std::shared_ptr<Koala::Assets::BaseAsset>>

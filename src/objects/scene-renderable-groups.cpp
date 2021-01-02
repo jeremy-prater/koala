@@ -103,15 +103,28 @@ SceneRenderableGroup::getInstance() noexcept {
 
 void SceneRenderableGroup::BindTexturesToShaderProgram() noexcept {
   using namespace Koala::Assets;
+  // auto it = assetMap.find(BaseGroup::NodeType::VertexShader);
+  // if (it == assetMap.end())
+  // {
+  //   logger.Warning("Unable to find vertex shader!");
+  // }
+  // auto& vertexShader = std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(it->second)->shader;
+
+  // it = assetMap.find(BaseGroup::NodeType::FragmentShader);
+  // if (it == assetMap.end())
+  // {
+  //   logger.Warning("Unable to find fragment shader!");
+  // }
+  // auto& fragShader = std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(it->second)->shader;
+
   for (uint32_t type = static_cast<uint32_t>(BaseGroup::NodeType::Texture0);
        type <= static_cast<uint32_t>(BaseGroup::NodeType::Texture31); type++) {
     BaseGroup::NodeType nodeType = static_cast<BaseGroup::NodeType>(type);
     auto it = assetMap.find(nodeType);
     if (it != assetMap.end()) {
       uint32_t textureId =
-          type - static_cast<uint32_t>(BaseGroup::NodeType::Texture0);
-      // shaderProgram.
-      // std::dynamic_pointer_cast<Koala::Assets::TextureAsset>(it->second)->
+          type - static_cast<uint32_t>(BaseGroup::NodeType::Texture0);   
+      std::dynamic_pointer_cast<Koala::Assets::TextureAsset>(it->second)->bindToSlot(textureId);
     }
   }
 }

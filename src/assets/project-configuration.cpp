@@ -34,11 +34,11 @@ Project::Project(const std::string &path, const std::string &defaultConfigFile)
   logger.Info("Loaded Project Config [%s] ==> [%d bytes]", configFile.c_str(),
               configStats.st_size);
 
-  auto assets = configDocument["assets"].GetArray();
-  logger.Info("Creating [%d] assets", assets.Size());
+  auto assetsArray = configDocument["assets"].GetArray();
+  logger.Info("Creating [%d] assets", assetsArray.Size());
   {
     std::scoped_lock<std::mutex> lock(assetsMutex);
-    for (auto &asset : assets) {
+    for (auto &asset : assetsArray) {
       auto newAsset = BaseAsset::CreateAsset(path, asset.GetObject());
       this->assets[newAsset->GetUUID()] = newAsset;
       this->assetsByPath[newAsset->GetPath() + "/" + newAsset->GetName()] =
@@ -50,11 +50,11 @@ Project::Project(const std::string &path, const std::string &defaultConfigFile)
     }
   }
 
-  auto groups = configDocument["groups"].GetArray();
-  logger.Info("Creating [%d] groups", groups.Size());
+  auto groupsArray = configDocument["groups"].GetArray();
+  logger.Info("Creating [%d] groups", groupsArray.Size());
   {
     std::scoped_lock<std::mutex> lock(groupsMutex);
-    for (auto &group : groups) {
+    for (auto &group : groupsArray) {
       auto newGroup = BaseGroup::CreateGroup(this, group.GetObject());
       this->groups[newGroup->GetUUID()] = newGroup;
       this->groupsByPath[newGroup->GetPath()] = newGroup;

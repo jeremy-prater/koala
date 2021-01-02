@@ -112,6 +112,7 @@ void KoalaTest::drawEvent() {
 
   auto &renderGroups = Koala::Objects::SceneRenderableGroup::GetRenderGroups();
   for (auto &renderGroup : renderGroups) {
+    renderGroup.first->BindTexturesToShaderProgram();
     camera->cameraLens.draw(dynamic_cast<Magnum::SceneGraph::DrawableGroup3D &>(
         *renderGroup.first));
   }

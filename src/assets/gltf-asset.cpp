@@ -25,12 +25,12 @@ GLTFAsset::~GLTFAsset() {
               boost::uuids::to_string(uuid).c_str(), parser.c_str());
 }
 
-void GLTFAsset::BuildChildTree(const std::string &path,
+void GLTFAsset::BuildChildTree(const std::string &localPath,
                                Magnum::UnsignedInt parentNode) noexcept {
 
   auto objectNode = gltfImporter.object3D(parentNode);
   const std::string objectName =
-      path + (path.empty() ? "" : "/") +
+      localPath + (localPath.empty() ? "" : "/") +
       gltfImporter.object3DName(objectNode->instance());
   logger.Info("Parsing scene : [%d] = [%s]", parentNode, objectName.c_str());
 
@@ -74,6 +74,8 @@ void GLTFAsset::BuildChildTree(const std::string &path,
 
       logger.Info("Compiling mesh : %s w/ TRS [%d] Type [%d]", meshName.c_str(),
                   subobject->flags(), subobject->instanceType());
+
+
 
       compiledMeshes[meshID] = Magnum::MeshTools::compile(*submesh);
     }

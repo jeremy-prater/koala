@@ -16,7 +16,7 @@ then
 elif [ $HOST_OS = 'Darwin' ]
 then
     NUM_CORES=`sysctl -n hw.logicalcpu`
-elif [[ $HOST_OS == MINGW* ]]
+elif [[ $HOST_OS == MINGW* ]] || [[ $HOST_OS == MSYS* ]]
 then
     NUM_CORES=$NUMBER_OF_PROCESSORS
     if [ ! -f "./tools/vcpkg/vcpkg.exe" ]; then
