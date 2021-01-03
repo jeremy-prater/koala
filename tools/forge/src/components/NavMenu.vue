@@ -245,11 +245,10 @@ console.log("Creating NavMenu");
 import { mapState } from "vuex";
 import Modal from "./Modal";
 
-const remote = require("electron").remote;
-const fs = remote.require("fs");
+const fs = window.require("fs");
 const path = require("path");
-const uuidv1 = require("uuid/v1");
-const md5File = require("md5-file");
+import { v1 as uuidv1 } from 'uuid';
+const md5File = require("./md5-file");
 
 export default {
   name: "NavMenu",
@@ -305,7 +304,7 @@ export default {
             const sourceFile = this.currentWorkspace + "/" + object.source;
             console.log(`Copying [${sourceFile}] ==> [${outputFile}]`);
             fs.copyFileSync(sourceFile, outputFile);
-            object.hash = md5File.sync(sourceFile);
+            object.hash = md5File(sourceFile);
             object.size = fs.statSync(sourceFile)["size"];
 
             if (this.cancelSave) {
@@ -374,7 +373,7 @@ export default {
         name: name,
         path: "/default",
         parser: parser,
-        hash: md5File.sync(fullPath),
+        hash: md5File(fullPath),
         source: relativeFile,
         size: fs.statSync(fullPath)["size"],
         metadata: {}

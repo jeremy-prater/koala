@@ -1,5 +1,4 @@
-const remote = require('electron').remote;
-const fs = remote.require('fs');
+const fs = window.require('fs');
 const path = require('path');
 const os = require('os');
 
