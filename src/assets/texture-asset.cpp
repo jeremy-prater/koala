@@ -72,10 +72,12 @@ TextureAsset::~TextureAsset() {
                       .count();
   logger.Info("Loaded in [%d] us", duration);
 
+  parsed = true;
+
   return parsed;
 }
 
 void TextureAsset::bindToSlot(uint32_t slot) {
-  // logger.Info("Binding to texture slot [%d]", slot);
+  logger.Info("Binding to texture slot [%d]", slot);
   texture.bind(slot);
 }

@@ -22,7 +22,7 @@ public:
           &assetTemplate);
 
   template <class T>
-  [[nodiscard]] ShaderProgram &setShaderUniform(const std::string &uniformName,
+  ShaderProgram &setShaderUniform(const std::string &uniformName,
                                                 T value) {
     auto location = uniformLocation(uniformName);
     if (location == -1) {

@@ -149,9 +149,9 @@ void BaseAsset::Load() {
     return;
   }
 
-  const std::string fullPath = rootDir + "/" + boost::uuids::to_string(uuid);
+  const std::string filePath = rootDir + "/" + boost::uuids::to_string(uuid);
 
-  auto fd = open(fullPath.c_str(), O_RDONLY
+  auto fd = open(filePath.c_str(), O_RDONLY
 #ifdef _WIN64
                                        | O_BINARY
 #endif
@@ -172,7 +172,7 @@ void BaseAsset::Load() {
     readSize = read(fd, &data[totalRead], sizeToRead);
     if (readSize == -1) {
       logger.Warning("Failed to load : Failed to read [%s] ==> [%s]",
-                     fullPath.c_str(), strerror(errno));
+                     filePath.c_str(), strerror(errno));
       break;
     }
     logger.Info("Reading file! +%d [%d / %d] (+%d)", sizeToRead, totalRead,
@@ -220,7 +220,9 @@ void BaseAsset::LoadParse() noexcept {
   }
 
   if (!IsParsed()) {
-    Parse();
+    if (!Parse()) {
+      logger.Error("Failed to parse asset!");
+    }
   }
 }
 

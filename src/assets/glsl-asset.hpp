@@ -3,6 +3,7 @@
 #include "engine/classes.hpp"
 
 #include "base-asset.hpp"
+#include <memory>
 #include <Magnum/GL/Shader.h>
 #include <Magnum/GL/Version.h>
 
@@ -11,6 +12,7 @@ namespace Assets {
 
 class GLSLAsset : public BaseAsset {
 public:
+  static uint32_t GetMaxFragmentTextures();
   GLSLAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
             const std::string &rootDir);
   virtual ~GLSLAsset();
