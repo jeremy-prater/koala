@@ -11,7 +11,8 @@ repoList = [
     ("magnum-bootstrap", "master"),
     ("external/cppzmq", "v4.7.1"),
     ("external/libzmq", "v4.3.3"),
-    ("external/libpng", "v1.6.37")
+    ("external/libpng", "v1.6.37"),
+    ("tools/vcpkg", "2020.11")
 ]
 
 

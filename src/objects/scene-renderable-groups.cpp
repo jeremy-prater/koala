@@ -27,6 +27,9 @@ std::unordered_map<
                        std::shared_ptr<Koala::Assets::BaseAsset>>>
     SceneRenderableGroup::groupMappings;
 
+std::mutex SceneRenderableGroup::textureSlotsMutex;
+std::vector<boost::uuids::uuid> SceneRenderableGroup::textureSlots;
+
 [[nodiscard]] bool SceneRenderableGroup::CompareAssetSets(
     const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                              std::shared_ptr<Koala::Assets::BaseAsset>> &a,
@@ -78,6 +81,11 @@ SceneRenderableGroup::GetRenderGroups() noexcept {
   return groupMappings;
 }
 
+void SceneRenderableGroup::Init() {
+  std::scoped_lock<std::mutex> textureLock(textureSlotsMutex);
+  textureSlots = std::vector<boost::uuids::uuid>(Koala::Objects::ShaderProgram::MaxTextureFragment);
+}
+
 void SceneRenderableGroup::Shutdown() { groupMappings.clear(); }
 
 /////////////////////////////////////////////////////////////////////
@@ -103,15 +111,33 @@ SceneRenderableGroup::getInstance() noexcept {
 
 void SceneRenderableGroup::BindTexturesToShaderProgram() noexcept {
   using namespace Koala::Assets;
-  for (uint32_t type = static_cast<uint32_t>(BaseGroup::NodeType::Texture0);
-       type <= static_cast<uint32_t>(BaseGroup::NodeType::Texture31); type++) {
-    BaseGroup::NodeType nodeType = static_cast<BaseGroup::NodeType>(type);
+  // auto it = assetMap.find(BaseGroup::NodeType::VertexShader);
+  // if (it == assetMap.end())
+  // {
+  //   logger.Warning("Unable to find vertex shader!");
+  // }
+  // auto& vertexShader =
+  // std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(it->second)->shader;
+
+  // it = assetMap.find(BaseGroup::NodeType::FragmentShader);
+  // if (it == assetMap.end())
+  // {
+  //   logger.Warning("Unable to find fragment shader!");
+  // }
+  // auto& fragShader =
+  // std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(it->second)->shader;
+
+  for (uint32_t slot = 0;
+       slot < Koala::Objects::ShaderProgram::MaxUniformFragment; slot++) {
+    BaseGroup::NodeType nodeType = static_cast<BaseGroup::NodeType>(
+        static_cast<uint32_t>(BaseGroup::NodeType::Texture0) + slot);
     auto it = assetMap.find(nodeType);
-    if (it != assetMap.end()) {
-      uint32_t textureId =
-          type - static_cast<uint32_t>(BaseGroup::NodeType::Texture0);
-      // shaderProgram.
-      // std::dynamic_pointer_cast<Koala::Assets::TextureAsset>(it->second)->
+    if ((it != assetMap.end()) &&
+        (textureSlots[slot] != it->second->GetUUID())) {
+      std::scoped_lock<std::mutex> textureLock(textureSlotsMutex);
+      std::dynamic_pointer_cast<Koala::Assets::TextureAsset>(it->second)
+          ->bindToSlot(slot);
+      textureSlots[slot] = it->second->GetUUID();
     }
   }
 }

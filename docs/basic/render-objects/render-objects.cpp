@@ -27,10 +27,10 @@ KoalaTest::KoalaTest(const Arguments &arguments)
     exit(-errno);
   }
 
-  if (!S_ISDIR(projectInfo.st_mode)) {
-    logger.Error("[%s] is not a directory!", projectRoot.c_str());
-    exit(-1);
-  }
+  // if (!S_ISDIR(projectInfo.st_mode)) {
+  //   logger.Error("[%s] is not a directory!", projectRoot.c_str());
+  //   exit(-1);
+  // }
 
   logger.Info("Opening %s", projectRoot.c_str());
   auto start = std::chrono::system_clock::now();
@@ -41,7 +41,11 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   for (auto uuid : uuids) {
     auto asset = project->GetAsset(uuid);
     asset->Load();
-    asset->Parse();
+    if (!asset->Parse())
+    {
+      logger.Error("Failed to parse an asset! [%s]", asset->GetFullPath().c_str());
+      abort();
+    }
   }
 
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -56,31 +60,18 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   cloud = std::make_unique<Cloud::Cloud>();
 
   scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/models/grid/the-grid"),
-      Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
-
-  scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/models/x/the-x"),
-      Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
-
-  scene->CreateRenderableFromGroup(
       project, project->GetGroupByPath("/models/o/the-o"),
       Magnum::Matrix4::rotationX(Rad{90.0_degf}) *
-          Magnum::Matrix4::translation({10.0f, 0.0f, 0.0f}));
-
-  scene->CreateRenderableFromGroup(
-      project, project->GetGroupByPath("/models/o/the-o"),
-      Magnum::Matrix4::rotationX(Rad{90.0_degf}) *
-          Magnum::Matrix4::translation({0.0f, 10.0f, 0.0f}));
+          Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
 
   Magnum::GL::Renderer::enable(GL::Renderer::Feature::DepthTest);
   Magnum::GL::Renderer::setClearColor(0x4040FF_rgbf);
 }
 
 void KoalaTest::UpdateCameraPosition() noexcept {
-  static const float dX = 30.0;
+  static const float dX = 10.0;
   static const float dY = 10.0;
-  static const float dZ = 30.0;
+  static const float dZ = 10.0;
   camera->camera.setTransformation(
       Matrix4::lookAt({dX * cos(dTime), dY * cos(dTime), dZ * sin(dTime)},
                       {0.0f, 0.0f, 0.0f}, Vector3::yAxis()));
@@ -112,6 +103,7 @@ void KoalaTest::drawEvent() {
 
   auto &renderGroups = Koala::Objects::SceneRenderableGroup::GetRenderGroups();
   for (auto &renderGroup : renderGroups) {
+    renderGroup.first->BindTexturesToShaderProgram();
     camera->cameraLens.draw(dynamic_cast<Magnum::SceneGraph::DrawableGroup3D &>(
         *renderGroup.first));
   }

@@ -89,7 +89,7 @@ protected:
   const std::string fullPath;
   const std::string parser;
   const AssetType type;
-  const ssize_t size;
+  const size_t size;
   const std::string md5Sum;
   const std::string rootDir;
   bool parsed;

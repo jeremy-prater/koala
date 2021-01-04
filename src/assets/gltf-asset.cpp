@@ -10,6 +10,28 @@
 
 using namespace Koala::Assets;
 
+const std::string
+GLTFAsset::ConvertMeshAttributeToString(Magnum::Trade::MeshAttribute attr) {
+  switch (attr) {
+  case Magnum::Trade::MeshAttribute::Position:
+    return "Position";
+  case Magnum::Trade::MeshAttribute::Tangent:
+    return "Tangent";
+  case Magnum::Trade::MeshAttribute::Bitangent:
+    return "Bitangent";
+  case Magnum::Trade::MeshAttribute::Normal:
+    return "Normal";
+  case Magnum::Trade::MeshAttribute::TextureCoordinates:
+    return "TextureCoordinates";
+  case Magnum::Trade::MeshAttribute::Color:
+    return "Color";
+  case Magnum::Trade::MeshAttribute::ObjectId:
+    return "ObjectId";
+  default:
+    return "unknown : " + std::to_string(static_cast<uint32_t>(attr));
+  }
+}
+
 GLTFAsset::GLTFAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
     const std::string &rootDir)
@@ -25,12 +47,12 @@ GLTFAsset::~GLTFAsset() {
               boost::uuids::to_string(uuid).c_str(), parser.c_str());
 }
 
-void GLTFAsset::BuildChildTree(const std::string &path,
+void GLTFAsset::BuildChildTree(const std::string &localPath,
                                Magnum::UnsignedInt parentNode) noexcept {
 
   auto objectNode = gltfImporter.object3D(parentNode);
   const std::string objectName =
-      path + (path.empty() ? "" : "/") +
+      localPath + (localPath.empty() ? "" : "/") +
       gltfImporter.object3DName(objectNode->instance());
   logger.Info("Parsing scene : [%d] = [%s]", parentNode, objectName.c_str());
 
@@ -74,6 +96,17 @@ void GLTFAsset::BuildChildTree(const std::string &path,
 
       logger.Info("Compiling mesh : %s w/ TRS [%d] Type [%d]", meshName.c_str(),
                   subobject->flags(), subobject->instanceType());
+
+      uint32_t meshAttrCount = submesh->attributeCount();
+      for (uint32_t currentMeshAttr = 0; currentMeshAttr < meshAttrCount;
+           currentMeshAttr++) {
+        Magnum::Trade::MeshAttribute attr =
+            submesh->attributeName(currentMeshAttr);
+        // submesh->attributeFormat(currentMeshAttr);
+        auto attrName = ConvertMeshAttributeToString(attr);
+        logger.Info("Mesh Attribute index [%d] of type [%s]", currentMeshAttr,
+                    attrName.c_str());
+      }
 
       compiledMeshes[meshID] = Magnum::MeshTools::compile(*submesh);
     }

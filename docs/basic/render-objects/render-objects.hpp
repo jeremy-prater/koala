@@ -8,7 +8,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <thread>
-#include <unistd.h>
 
 class KoalaTest : public Koala::Engine::Engine {
 public:

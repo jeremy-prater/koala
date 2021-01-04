@@ -9,7 +9,11 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#ifdef WIN32
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 
 using namespace Koala::Assets;
 
@@ -145,9 +149,13 @@ void BaseAsset::Load() {
     return;
   }
 
-  const std::string fullPath = rootDir + "/" + boost::uuids::to_string(uuid);
+  const std::string filePath = rootDir + "/" + boost::uuids::to_string(uuid);
 
-  auto fd = open(fullPath.c_str(), O_RDONLY);
+  auto fd = open(filePath.c_str(), O_RDONLY
+#ifdef _WIN64
+                                       | O_BINARY
+#endif
+  );
 
   if (fd == -1) {
     logger.Error("Failed to load : Unable to open [%s] ==> [%s]",
@@ -157,12 +165,22 @@ void BaseAsset::Load() {
     return;
   }
 
-  auto readSize = read(fd, data, size);
+  size_t readSize = 0;
+  size_t totalRead = 0;
+  while (totalRead != size) {
+    auto sizeToRead = size - totalRead;
+    readSize = read(fd, &data[totalRead], sizeToRead);
+    if (readSize == -1) {
+      logger.Warning("Failed to load : Failed to read [%s] ==> [%s]",
+                     filePath.c_str(), strerror(errno));
+      break;
+    }
+    logger.Info("Reading file! +%d [%d / %d] (+%d)", sizeToRead, totalRead,
+                size, readSize);
+    totalRead += readSize;
+  }
 
-  if (readSize == -1) {
-    logger.Warning("Failed to load : Failed to read [%s] ==> [%s]",
-                   fullPath.c_str(), strerror(errno));
-  } else if (readSize != size) {
+  if (totalRead != size) {
     logger.Warning("Failed to load : Read size mis-match [%d] != [%d]",
                    readSize, size);
   }
@@ -202,7 +220,9 @@ void BaseAsset::LoadParse() noexcept {
   }
 
   if (!IsParsed()) {
-    Parse();
+    if (!Parse()) {
+      logger.Error("Failed to parse asset!");
+    }
   }
 }
 

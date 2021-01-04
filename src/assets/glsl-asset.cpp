@@ -29,19 +29,18 @@ const std::unordered_map<std::string, const Magnum::GL::Shader::Type>
 
 Magnum::GL::Version GLSLAsset::GetShaderVersionFromString(
     const std::string &version) const noexcept {
-  // auto it = shaderVersions.find(version);
-  // if (it == shaderVersions.end()) {
-  //   logger.Warning("Unable to get Shader version [%s] Defaulting to GL330!",
-  //                  version.c_str());
-  //   return Magnum::GL::Version::GL330;
-  // }
-  // return it->second;
-  return Magnum::GL::Version::None;
+  auto it = shaderVersions.find(version);
+  if (it == shaderVersions.end()) {
+    logger.Warning("Unable to get Shader version [%s] Defaulting to GL330!",
+                   version.c_str());
+    return Magnum::GL::Version::GL330;
+  }
+  return it->second;
 }
 
 Magnum::GL::Shader::Type
-GLSLAsset::GetShaderTypeFromString(const std::string &type) const noexcept {
-  auto it = shaderTypes.find(type);
+GLSLAsset::GetShaderTypeFromString(const std::string &shaderType) const noexcept {
+  auto it = shaderTypes.find(shaderType);
   if (it == shaderTypes.end()) {
     logger.Warning("Unable to get Shader type [%s] Defaulting to Vertex");
     return Magnum::GL::Shader::Type::Vertex;
@@ -80,6 +79,7 @@ GLSLAsset::~GLSLAsset() {
         "Failed to compile shader!\n\n--- Begin Shader---\n%s\n--- End "
         "Shader ---",
         shaderString.c_str());
+    abort();
   }
 
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(

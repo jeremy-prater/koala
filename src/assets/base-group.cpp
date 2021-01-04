@@ -1,5 +1,6 @@
 #include "base-group.hpp"
 #include "debuglogger/debuglogger.hpp"
+#include "glsl-asset.hpp"
 #include "objects/scene-renderable-groups.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -40,9 +41,11 @@ BaseGroup::ConvertStringToNodeType(const std::string &nodeTypeName) noexcept {
       return NodeType::Unknown;
     }
     uint32_t textureID = std::stoi(nodeTextureParts[1]);
-    if (textureID > 31) {
+    uint32_t maxTextures = Magnum::GL::Shader::maxTextureImageUnits(
+        Magnum::GL::Shader::Type::Fragment);
+    if (textureID > maxTextures) {
       logger.Error("Texture index [%d] is greater than allowed (%d)", textureID,
-                   31);
+                   maxTextures);
       return NodeType::Unknown;
     }
     return static_cast<NodeType>(static_cast<uint32_t>(NodeType::Texture0) +

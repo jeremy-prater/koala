@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.4)
 project("Koala")
 
 #Wonky work around for boost until it's fixed
-set(Boost_NO_BOOST_CMAKE ON)
+#set(Boost_NO_BOOST_CMAKE ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -48,7 +48,15 @@ SET(ZMQ_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 SET(WITH_TLS OFF CACHE BOOL "" FORCE)
 SET(ZeroMQ_DIR "${CMAKE_CURRENT_BINARY_DIR}/external/libzmq" CACHE STRING "" FORCE)
 SET(cppzmq_DIR "${CMAKE_CURRENT_BINARY_DIR}/external/cppzmq" CACHE STRING "" FORCE)
-SET(PNG_LIBRARY "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib/libpng.a" CACHE STRING "" FORCE)
+
+IF (WIN32)
+  # set stuff for windows
+  SET(PNG_LIBRARY "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib/libpng16d.lib" CACHE STRING "" FORCE)
+ELSE()
+  # set stuff for other systems
+  SET(PNG_LIBRARY "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib/libpng16d.a" CACHE STRING "" FORCE)
+ENDIF()
+
 SET(PNG_PNG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/external/libpng" CACHE STRING "" FORCE)
 
 include_directories("${PROJECT_SOURCE_DIR}"

@@ -22,3 +22,6 @@
 [submodule "external/libpng"]
 	path = external/libpng
 	url = git@github.com:glennrp/libpng.git
+[submodule "tools/vcpkg"]
+	path = tools/vcpkg
+	url = https://github.com/microsoft/vcpkg

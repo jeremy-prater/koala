@@ -3,6 +3,7 @@
 #include "engine/classes.hpp"
 
 #include "base-asset.hpp"
+#include <memory>
 #include <Magnum/GL/Shader.h>
 #include <Magnum/GL/Version.h>
 

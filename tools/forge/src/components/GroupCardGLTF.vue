@@ -95,9 +95,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import Modal from "./Modal";
 import Autocomplete from "./Autocomplete";
 
-const remote = require("electron").remote;
-const fs = remote.require("fs");
-const uuidv1 = require("uuid/v1");
+const fs = window.require("fs");
+import { v1 as uuidv1 } from 'uuid';
 
 export default {
   name: "GroupCardGLTF",

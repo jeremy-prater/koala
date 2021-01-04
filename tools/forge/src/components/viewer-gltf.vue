@@ -14,8 +14,7 @@ import * as THREE from "three";
 import { mapState } from "vuex";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-const remote = require("electron").remote;
-const fs = remote.require("fs");
+const fs = window.require("fs");
 
 export default {
   name: "ViewerGLTF",
@@ -40,7 +39,7 @@ export default {
       }
     },
     remapMaterials(parent) {
-      if (parent.hasOwnProperty("material")) {
+      if (Object.prototype.hasOwnProperty.call(parent, "material")) {
         parent.material = new THREE.MeshBasicMaterial({
           color: 0x00ff00,
           wireframe: true

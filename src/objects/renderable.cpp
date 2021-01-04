@@ -35,6 +35,6 @@ void Renderable::draw(const Magnum::Matrix4 &transformationMatrix,
       .setShaderUniform<const Magnum::Matrix4 &>("transformationMatrix",
                                                  transformationMatrix)
       .setShaderUniform<const Magnum::Matrix4 &>("projectionMatrix",
-                                                 camera.projectionMatrix())
-      .draw(_mesh);
+                                                 camera.projectionMatrix()),
+      sceneRenderableGroup->shaderProgram.draw(_mesh);
 }

@@ -13,8 +13,7 @@ console.log("Creating Viewer PNG");
 import { mapState } from "vuex";
 import { Base64 } from "js-base64";
 
-const remote = require("electron").remote;
-const fs = remote.require("fs");
+const fs = window.require("fs");
 
 export default {
   name: "ViewerPNG",

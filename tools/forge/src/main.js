@@ -20,10 +20,9 @@ import Groups from './components/Groups';
 import Dashboard from './components/Dashboard';
 import KoalaSettings from './components/settings';
 
-const remote = require('electron').remote;
-const fs = remote.require('fs');
+const fs = window.require('fs');
 const path = require('path');
-const uuidv1 = require('uuid/v1');
+import { v1 as uuidv1 } from 'uuid';
 
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
@@ -108,7 +107,7 @@ const store = new Vuex.Store({
             state.project.assets.forEach(object => {
                 if (
                     object.uuid == metadata.uuid &&
-                    object.metadata.hasOwnProperty(metadata.key)
+                    Object.prototype.hasOwnProperty.call(object.metadata,metadata.key)
                 ) {
                     console.log(
                         `Deleting metadata ${metadata.uuid} [${metadata.key}]`

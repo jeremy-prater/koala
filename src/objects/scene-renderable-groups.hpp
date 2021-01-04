@@ -39,6 +39,7 @@ public:
       std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                          std::shared_ptr<Koala::Assets::BaseAsset>>>
   GetRenderGroups() noexcept;
+  static void Init();
   static void Shutdown();
 
 private:
@@ -56,6 +57,9 @@ private:
       std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                          std::shared_ptr<Koala::Assets::BaseAsset>>>
       groupMappings;
+
+  static std::mutex textureSlotsMutex;
+  static std::vector<boost::uuids::uuid> textureSlots;
 
   /////////////////////////////////////////////////////////////////////
   //
@@ -84,4 +88,4 @@ private:
 };
 
 } // namespace Objects
-} // namespace Koalaw
+} // namespace Koala
