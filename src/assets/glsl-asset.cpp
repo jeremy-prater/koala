@@ -48,15 +48,6 @@ GLSLAsset::GetShaderTypeFromString(const std::string &shaderType) const noexcept
   return it->second;
 }
 
-uint32_t GLSLAsset::GetMaxFragmentTextures() {
-  static uint32_t maxFragmentTextures = 0;
-  if (maxFragmentTextures == 0) {
-    maxFragmentTextures = Magnum::GL::Shader::maxTextureImageUnits(
-        Magnum::GL::Shader::Type::Fragment);
-  }
-  return maxFragmentTextures;
-}
-
 GLSLAsset::GLSLAsset(
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
     const std::string &rootDir)

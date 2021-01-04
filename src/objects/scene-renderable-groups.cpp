@@ -27,6 +27,9 @@ std::unordered_map<
                        std::shared_ptr<Koala::Assets::BaseAsset>>>
     SceneRenderableGroup::groupMappings;
 
+std::mutex SceneRenderableGroup::textureSlotsMutex;
+std::vector<boost::uuids::uuid> SceneRenderableGroup::textureSlots;
+
 [[nodiscard]] bool SceneRenderableGroup::CompareAssetSets(
     const std::unordered_map<Koala::Assets::BaseGroup::NodeType,
                              std::shared_ptr<Koala::Assets::BaseAsset>> &a,
@@ -78,6 +81,11 @@ SceneRenderableGroup::GetRenderGroups() noexcept {
   return groupMappings;
 }
 
+void SceneRenderableGroup::Init() {
+  std::scoped_lock<std::mutex> textureLock(textureSlotsMutex);
+  textureSlots = std::vector<boost::uuids::uuid>(Koala::Objects::ShaderProgram::MaxTextureFragment);
+}
+
 void SceneRenderableGroup::Shutdown() { groupMappings.clear(); }
 
 /////////////////////////////////////////////////////////////////////
@@ -103,8 +111,6 @@ SceneRenderableGroup::getInstance() noexcept {
 
 void SceneRenderableGroup::BindTexturesToShaderProgram() noexcept {
   using namespace Koala::Assets;
-  static boost::uuids::uuid slots[32];
-
   // auto it = assetMap.find(BaseGroup::NodeType::VertexShader);
   // if (it == assetMap.end())
   // {
@@ -121,14 +127,17 @@ void SceneRenderableGroup::BindTexturesToShaderProgram() noexcept {
   // auto& fragShader =
   // std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(it->second)->shader;
 
-  for (uint32_t slot = 0; slot <= GLSLAsset::GetMaxFragmentTextures(); slot++) {
+  for (uint32_t slot = 0;
+       slot < Koala::Objects::ShaderProgram::MaxUniformFragment; slot++) {
     BaseGroup::NodeType nodeType = static_cast<BaseGroup::NodeType>(
         static_cast<uint32_t>(BaseGroup::NodeType::Texture0) + slot);
     auto it = assetMap.find(nodeType);
-    if ((it != assetMap.end()) && (slots[slot] != it->second->GetUUID())) {
+    if ((it != assetMap.end()) &&
+        (textureSlots[slot] != it->second->GetUUID())) {
+      std::scoped_lock<std::mutex> textureLock(textureSlotsMutex);
       std::dynamic_pointer_cast<Koala::Assets::TextureAsset>(it->second)
           ->bindToSlot(slot);
-      slots[slot] = it->second->GetUUID();
+      textureSlots[slot] = it->second->GetUUID();
     }
   }
 }

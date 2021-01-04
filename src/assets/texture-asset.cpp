@@ -3,9 +3,10 @@
 #include <Corrade/Containers/ArrayView.h>
 #include <Corrade/Utility/Resource.h>
 #include <Magnum/GL/TextureFormat.h>
-#include <boost/uuid/uuid_io.hpp>
 #include <Magnum/ImageView.h>
+#include <boost/uuid/uuid_io.hpp>
 #include <chrono>
+
 
 using namespace Koala::Assets;
 
@@ -61,9 +62,10 @@ TextureAsset::~TextureAsset() {
                              Magnum::GL::SamplerMipmap::Linear)
       .setWrapping(Magnum::GL::SamplerWrapping::ClampToEdge)
       .setMaxAnisotropy(Magnum::GL::Sampler::maxMaxAnisotropy())
-      .setStorage(1, Magnum::GL::textureFormat(image->format()), image->size())
-      .setSubImage(0, {}, *image);
-      // .generateMipmap();
+      .setStorage(log2(2048) + 1, Magnum::GL::textureFormat(image->format()),
+                  image->size())
+      .setSubImage(0, {}, *image)
+      .generateMipmap();
 
   // Koala::Engine manager.loadAndInstantiate("AnyImageImporter");
 
@@ -78,6 +80,6 @@ TextureAsset::~TextureAsset() {
 }
 
 void TextureAsset::bindToSlot(uint32_t slot) {
-  logger.Info("Binding to texture slot [%d]", slot);
+  // logger.Info("Binding to texture slot [%d]", slot);
   texture.bind(slot);
 }

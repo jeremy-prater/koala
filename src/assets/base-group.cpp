@@ -41,9 +41,11 @@ BaseGroup::ConvertStringToNodeType(const std::string &nodeTypeName) noexcept {
       return NodeType::Unknown;
     }
     uint32_t textureID = std::stoi(nodeTextureParts[1]);
-    if (textureID > GLSLAsset::GetMaxFragmentTextures()) {
+    uint32_t maxTextures = Magnum::GL::Shader::maxTextureImageUnits(
+        Magnum::GL::Shader::Type::Fragment);
+    if (textureID > maxTextures) {
       logger.Error("Texture index [%d] is greater than allowed (%d)", textureID,
-                   GLSLAsset::GetMaxFragmentTextures());
+                   maxTextures);
       return NodeType::Unknown;
     }
     return static_cast<NodeType>(static_cast<uint32_t>(NodeType::Texture0) +

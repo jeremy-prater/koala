@@ -12,7 +12,6 @@ namespace Assets {
 
 class GLSLAsset : public BaseAsset {
 public:
-  static uint32_t GetMaxFragmentTextures();
   GLSLAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
             const std::string &rootDir);
   virtual ~GLSLAsset();
