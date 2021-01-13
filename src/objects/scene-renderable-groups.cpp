@@ -128,7 +128,7 @@ void SceneRenderableGroup::BindTexturesToShaderProgram() noexcept {
   // std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(it->second)->shader;
 
   for (uint32_t slot = 0;
-       slot < Koala::Objects::ShaderProgram::MaxUniformFragment; slot++) {
+       slot < Koala::Objects::ShaderProgram::MaxTextureFragment; slot++) {
     BaseGroup::NodeType nodeType = static_cast<BaseGroup::NodeType>(
         static_cast<uint32_t>(BaseGroup::NodeType::Texture0) + slot);
     auto it = assetMap.find(nodeType);
