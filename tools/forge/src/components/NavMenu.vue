@@ -246,7 +246,7 @@ import { mapState } from "vuex";
 import Modal from "./Modal";
 
 const fs = window.require("fs");
-const path = require("path");
+const path = window.require("path");
 import { v1 as uuidv1 } from 'uuid';
 const md5File = require("./md5-file");
 

@@ -21,7 +21,7 @@ import Dashboard from './components/Dashboard';
 import KoalaSettings from './components/settings';
 
 const fs = window.require('fs');
-const path = require('path');
+const path = window.require('path');
 import { v1 as uuidv1 } from 'uuid';
 
 Vue.use(BootstrapVue);

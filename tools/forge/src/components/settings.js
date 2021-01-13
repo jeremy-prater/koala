@@ -1,6 +1,6 @@
 const fs = window.require('fs');
-const path = require('path');
-const os = require('os');
+const path = window.require('path');
+const os = window.require('os');
 
 const configDir = path.join(os.homedir(), '.forge');
 const configFile = path.join(configDir, 'forge-config.json');
