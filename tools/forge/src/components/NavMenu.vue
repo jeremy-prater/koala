@@ -284,6 +284,10 @@ export default {
       this.saveProgress = {
         width: `${value}%`
       };
+      if (pos == max)
+      {
+        this.saveInProgress = false;
+      }
     },
     saveProject: function() {
       this.cancelSave = false;
