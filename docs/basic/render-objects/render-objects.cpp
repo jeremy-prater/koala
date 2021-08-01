@@ -41,9 +41,9 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   for (auto uuid : uuids) {
     auto asset = project->GetAsset(uuid);
     asset->Load();
-    if (!asset->Parse())
-    {
-      logger.Error("Failed to parse an asset! [%s]", asset->GetFullPath().c_str());
+    if (!asset->Parse()) {
+      logger.Error("Failed to parse an asset! [%s]",
+                   asset->GetFullPath().c_str());
       abort();
     }
   }
@@ -60,18 +60,31 @@ KoalaTest::KoalaTest(const Arguments &arguments)
   cloud = std::make_unique<Cloud::Cloud>();
 
   scene->CreateRenderableFromGroup(
+      project, project->GetGroupByPath("/models/grid/the-grid"),
+      Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
+
+  scene->CreateRenderableFromGroup(
+      project, project->GetGroupByPath("/models/x/the-x"),
+      Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
+
+  scene->CreateRenderableFromGroup(
       project, project->GetGroupByPath("/models/o/the-o"),
       Magnum::Matrix4::rotationX(Rad{90.0_degf}) *
-          Magnum::Matrix4::translation({0.0f, 0.0f, 0.0f}));
+          Magnum::Matrix4::translation({10.0f, 0.0f, 0.0f}));
+
+  scene->CreateRenderableFromGroup(
+      project, project->GetGroupByPath("/models/o/the-o"),
+      Magnum::Matrix4::rotationX(Rad{90.0_degf}) *
+          Magnum::Matrix4::translation({0.0f, 10.0f, 0.0f}));
 
   Magnum::GL::Renderer::enable(GL::Renderer::Feature::DepthTest);
   Magnum::GL::Renderer::setClearColor(0x4040FF_rgbf);
 }
 
 void KoalaTest::UpdateCameraPosition() noexcept {
-  static const float dX = 10.0;
+  static const float dX = 30.0;
   static const float dY = 10.0;
-  static const float dZ = 10.0;
+  static const float dZ = 30.0;
   camera->camera.setTransformation(
       Matrix4::lookAt({dX * cos(dTime), dY * cos(dTime), dZ * sin(dTime)},
                       {0.0f, 0.0f, 0.0f}, Vector3::yAxis()));

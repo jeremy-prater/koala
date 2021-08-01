@@ -16,6 +16,7 @@ public:
             const std::string &rootDir);
   virtual ~GLSLAsset();
   [[nodiscard]] virtual bool ParseInternal() noexcept override;
+  void DumpShaderCode() const noexcept;
 
   Magnum::GL::Shader shader;
 

@@ -38,8 +38,8 @@ Magnum::GL::Version GLSLAsset::GetShaderVersionFromString(
   return it->second;
 }
 
-Magnum::GL::Shader::Type
-GLSLAsset::GetShaderTypeFromString(const std::string &shaderType) const noexcept {
+Magnum::GL::Shader::Type GLSLAsset::GetShaderTypeFromString(
+    const std::string &shaderType) const noexcept {
   auto it = shaderTypes.find(shaderType);
   if (it == shaderTypes.end()) {
     logger.Warning("Unable to get Shader type [%s] Defaulting to Vertex");
@@ -73,12 +73,11 @@ GLSLAsset::~GLSLAsset() {
   const std::string shaderString(reinterpret_cast<const char *>(GetData()),
                                  size);
   shader.addSource(shaderString);
+
   parsed = shader.compile();
   if (!parsed) {
-    logger.Error(
-        "Failed to compile shader!\n\n--- Begin Shader---\n%s\n--- End "
-        "Shader ---",
-        shaderString.c_str());
+    logger.Error("Failed to compile shader!");
+    DumpShaderCode();
     abort();
   }
 
@@ -88,4 +87,11 @@ GLSLAsset::~GLSLAsset() {
   logger.Info("Compiled in [%d] us", duration);
 
   return parsed;
+}
+
+void GLSLAsset::DumpShaderCode() const noexcept {
+  logger.Info("Shader code : ");
+  for (const auto &chunk : shader.sources()) {
+    logger.Info("%s", chunk.c_str());
+  }
 }
