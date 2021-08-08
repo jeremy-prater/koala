@@ -311,6 +311,11 @@ export default {
             object.hash = md5File(sourceFile);
             object.size = fs.statSync(sourceFile)["size"];
 
+            this.currentObject = {
+              source: sourceFile.split("/").pop(),
+              uuid: outputFile.split("/").pop()
+            };
+
             if (this.cancelSave) {
               this.cancelSave = false;
               this.currentObject = {

@@ -2,7 +2,7 @@
 export default {
   data() {
     return {
-      selection: "",
+      selection: this.defaultSelection,
       open: false,
       current: 0
     };
@@ -15,6 +15,10 @@ export default {
     },
     index: {
       type: Number,
+      required: false
+    },
+    defaultSelection: {
+      type: String,
       required: false
     }
   },
@@ -32,7 +36,6 @@ export default {
       );
     }
   },
-
   methods: {
     clear() {
       this.selection = "";
