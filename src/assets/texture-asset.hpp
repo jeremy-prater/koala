@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Magnum/GL/Texture.h>
 #include <Corrade/Containers/Optional.h>
+#include <Magnum/GL/Texture.h>
 #include <Magnum/Trade/ImageData.h>
 
 #include "base-asset.hpp"
@@ -13,8 +13,9 @@ namespace Assets {
 class TextureAsset : public BaseAsset {
 public:
   TextureAsset(
+      const std::string &rootDir,
       rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-      const std::string &rootDir);
+      Project *project);
   virtual ~TextureAsset();
   [[nodiscard]] virtual bool ParseInternal() noexcept override;
 

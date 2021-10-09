@@ -34,7 +34,8 @@ public:
 
   static std::shared_ptr<BaseAsset> CreateAsset(
       const std::string &rootDir,
-      rapidjson::GenericObject<false, rapidjson::Value::ValueType> props);
+      rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+      Project *project);
 
   [[nodiscard]] const boost::uuids::uuid GetUUID() const noexcept;
   [[nodiscard]] const std::string GetPath() const noexcept;
@@ -62,8 +63,9 @@ public:
   GetMetaObject(const std::string &key) const noexcept;
   void SetMetaObject(const std::string &key, const std::string &value) noexcept;
 
-  BaseAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-            const std::string &rootDir);
+  BaseAsset(const std::string &rootDir,
+            rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+            Project *project);
   virtual ~BaseAsset();
 
   // Life cycle events
@@ -84,6 +86,7 @@ public:
   boost::signals2::signal<void()> onReleased();
 
 protected:
+  const Project *project;
   const boost::uuids::uuid uuid;
   const std::string path;
   const std::string name;

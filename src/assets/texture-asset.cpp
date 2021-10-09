@@ -7,7 +7,6 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <chrono>
 
-
 using namespace Koala::Assets;
 
 static Magnum::Containers::Pointer<Magnum::Trade::AbstractImporter>
@@ -15,9 +14,10 @@ static Magnum::Containers::Pointer<Magnum::Trade::AbstractImporter>
 static std::mutex textureImporterMutex;
 
 TextureAsset::TextureAsset(
+    const std::string &rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-    const std::string &rootDir)
-    : BaseAsset(props, rootDir),
+    Project *project)
+    : BaseAsset(rootDir, props, project),
       logger("Texture-Asset-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {
   logger.Info("Created Texture [%s]", boost::uuids::to_string(uuid).c_str());

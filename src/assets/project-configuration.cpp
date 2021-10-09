@@ -39,7 +39,7 @@ Project::Project(const std::string &path, const std::string &defaultConfigFile)
   {
     std::scoped_lock<std::mutex> lock(assetsMutex);
     for (auto &asset : assetsArray) {
-      auto newAsset = BaseAsset::CreateAsset(path, asset.GetObject());
+      auto newAsset = BaseAsset::CreateAsset(path, asset.GetObject(), this);
       this->assets[newAsset->GetUUID()] = newAsset;
       this->assetsByPath[newAsset->GetPath() + "/" + newAsset->GetName()] =
           newAsset;

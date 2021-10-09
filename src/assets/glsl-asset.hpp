@@ -12,8 +12,9 @@ namespace Assets {
 
 class GLSLAsset : public BaseAsset {
 public:
-  GLSLAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-            const std::string &rootDir);
+  GLSLAsset(const std::string &rootDir,
+            rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+            Project *project);
   virtual ~GLSLAsset();
   [[nodiscard]] virtual bool ParseInternal() noexcept override;
   void DumpShaderCode() const noexcept;

@@ -12,8 +12,9 @@ namespace Assets {
 
 class GLTFAsset : public BaseAsset {
 public:
-  GLTFAsset(rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-            const std::string &rootDir);
+  GLTFAsset(const std::string &rootDir,
+            rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
+            Project *project);
   virtual ~GLTFAsset();
   [[nodiscard]] virtual bool ParseInternal() noexcept override;
 
@@ -22,7 +23,8 @@ public:
   std::vector<std::string> meshNames;
   std::vector<Magnum::GL::Mesh> compiledMeshes;
 
-  static const std::string ConvertMeshAttributeToString(Magnum::Trade::MeshAttribute attr);
+  static const std::string
+  ConvertMeshAttributeToString(Magnum::Trade::MeshAttribute attr);
 
 private:
   void BuildChildTree(const std::string &path,

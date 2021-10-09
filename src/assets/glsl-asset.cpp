@@ -50,9 +50,10 @@ Magnum::GL::Shader::Type GLSLAsset::GetShaderTypeFromString(
 }
 
 GLSLAsset::GLSLAsset(
+    const std::string &rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-    const std::string &rootDir)
-    : BaseAsset(props, rootDir),
+    Project *project)
+    : BaseAsset(rootDir, props, project),
       shader(GetShaderVersionFromString(GetMetaObject("Version")),
              GetShaderTypeFromString(GetMetaObject("Type"))),
       logger("GLSL-Asset-" + path + "/" + name,

@@ -33,9 +33,10 @@ GLTFAsset::ConvertMeshAttributeToString(Magnum::Trade::MeshAttribute attr) {
 }
 
 GLTFAsset::GLTFAsset(
+    const std::string &rootDir,
     rapidjson::GenericObject<false, rapidjson::Value::ValueType> props,
-    const std::string &rootDir)
-    : BaseAsset(props, rootDir),
+    Project *project)
+    : BaseAsset(rootDir, props, project),
       logger("GLTF-Asset-" + path + "/" + name,
              DebugLogger::DebugColor::COLOR_GREEN, false) {
   logger.Info("Created GLTF Asset [%s] ==> [%s]",
