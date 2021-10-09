@@ -3,9 +3,9 @@
 #include "engine/classes.hpp"
 
 #include "base-asset.hpp"
-#include <memory>
 #include <Magnum/GL/Shader.h>
 #include <Magnum/GL/Version.h>
+#include <memory>
 
 namespace Koala {
 namespace Assets {
@@ -29,6 +29,10 @@ private:
   GetShaderVersionFromString(const std::string &version) const noexcept;
   Magnum::GL::Shader::Type
   GetShaderTypeFromString(const std::string &type) const noexcept;
+
+  [[nodiscard]] std::string GetRequired() noexcept;
+
+  [[nodiscard]] const std::string GetShaderText() noexcept;
 
   DebugLogger logger;
 };

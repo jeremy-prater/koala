@@ -1,4 +1,5 @@
 #include "glsl-asset.hpp"
+#include <boost/algorithm/string.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <chrono>
 
@@ -67,11 +68,38 @@ GLSLAsset::~GLSLAsset() {
               GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 
+[[nodiscard]] std::string GLSLAsset::GetRequired() noexcept {
+  std::string required;
+  auto requires = GetMetaObject("Requires");
+  if (requires.empty()) {
+    return required;
+  }
+
+  std::vector<std::string> requirements;
+  boost::split(requirements, requires, [](char c) { return c == ':'; });
+
+  for (auto &req : requirements) {
+    logger.Info("Welll!!! Getting required shader [%s]", req.c_str());
+  }
+
+  return required;
+}
+
+[[nodiscard]] const std::string GLSLAsset::GetShaderText() noexcept {
+  if (!IsLoaded()) {
+    Load();
+  }
+  return std::string(reinterpret_cast<const char *>(GetData()), size);
+}
+
 [[nodiscard]] bool GLSLAsset::ParseInternal() noexcept {
   auto start = std::chrono::system_clock::now();
 
-  const std::string shaderString(reinterpret_cast<const char *>(GetData()),
-                                 size);
+  const std::string shaderString = GetShaderText();
+
+  // Add GLSL modules
+  shader.addSource(GetRequired());
+  // Add shader source
   shader.addSource(shaderString);
 
   parsed = shader.compile();

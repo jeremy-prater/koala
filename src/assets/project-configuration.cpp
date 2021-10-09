@@ -1,9 +1,9 @@
 #include "project-configuration.hpp"
 #include "rapidjson/filereadstream.h"
 #include <cstdio>
+#include <memory>
 #include <sys/stat.h>
 #include <sys/types.h>
-//#include <unistd.h>
 
 using namespace Koala::Assets;
 

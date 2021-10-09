@@ -21,15 +21,15 @@ public:
   Project(const std::string &path,
           const std::string &defaultConfigFile = "projectConfig.json");
 
-  [[nodiscard]] const std::vector<boost::uuids::uuid> GetAssetUUIDs() const
-      noexcept;
+  [[nodiscard]] const std::vector<boost::uuids::uuid>
+  GetAssetUUIDs() const noexcept;
   [[nodiscard]] std::shared_ptr<BaseAsset>
   GetAsset(const boost::uuids::uuid &uuid) const noexcept;
   [[nodiscard]] std::shared_ptr<BaseAsset>
   GetAssetByPath(const std::string &path) const noexcept;
 
-  [[nodiscard]] const std::vector<boost::uuids::uuid> GetGroupUUIDs() const
-      noexcept;
+  [[nodiscard]] const std::vector<boost::uuids::uuid>
+  GetGroupUUIDs() const noexcept;
   [[nodiscard]] std::shared_ptr<BaseGroup>
   GetGroup(const boost::uuids::uuid &uuid) const noexcept;
   [[nodiscard]] std::shared_ptr<BaseGroup>

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "assets/project-configuration.hpp"
+#include "debuglogger/debuglogger.hpp"
 #include "engine/classes.hpp"
 
-#include "debuglogger/debuglogger.hpp"
 #include <boost/signals2.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <memory>
