@@ -80,7 +80,15 @@ GLSLAsset::~GLSLAsset() {
   boost::split(requirements, requires, [](char c) { return c == ':'; });
 
   for (auto &req : requirements) {
-    logger.Info("Welll!!! Getting required shader [%s]", req.c_str());
+    logger.Info("Welll!!! Getting required shader [%s] [%x]", req.c_str(), project);
+    auto shader = std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(
+        project->GetAssetByPath(req));
+    required += "# ---> Add module : " + req + "\n";
+    required += shader->GetShaderText();
+  }
+
+  if (!required.empty()) {
+    logger.Info("%s", required.c_str());
   }
 
   return required;
