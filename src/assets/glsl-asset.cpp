@@ -118,7 +118,6 @@ GLSLAsset::LoadIncludedShaderText(const std::string shaderPath) noexcept {
 
   const std::string shaderString = ParsedGetShaderText();
 
-  logger.Info("%s", shaderString.c_str());
   shader.addSource(shaderString);
 
   parsed = shader.compile();
@@ -137,8 +136,14 @@ GLSLAsset::LoadIncludedShaderText(const std::string shaderPath) noexcept {
 }
 
 void GLSLAsset::DumpShaderCode() const noexcept {
-  logger.Info("Shader code : ");
+  logger.Error("Shader code : ");
+
+  int line = -1;
   for (const auto &chunk : shader.sources()) {
-    logger.Info("%s", chunk.c_str());
+    std::istringstream shaderText(chunk);
+    std::string shaderLine;
+    while (std::getline(shaderText, shaderLine)) {
+      logger.Error(": %05d : %s", line++, shaderLine.c_str());
+    }
   }
 }
