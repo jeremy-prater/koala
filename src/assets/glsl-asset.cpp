@@ -69,29 +69,41 @@ GLSLAsset::~GLSLAsset() {
               GetMetaObject("Type").c_str(), GetMetaObject("Version").c_str());
 }
 
-[[nodiscard]] std::string GLSLAsset::GetRequired() noexcept {
+[[nodiscard]] const std::string
+GLSLAsset::LoadIncludedShaderText(const std::string shaderPath) noexcept {
   std::string required;
-  auto requires = GetMetaObject("Requires");
-  if (requires.empty()) {
-    return required;
-  }
+  auto shader = std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(
+      project->GetAssetByPath(shaderPath));
 
-  std::vector<std::string> requirements;
-  boost::split(requirements, requires, [](char c) { return c == ':'; });
+  // TODO : We just crash if we try to find an asset by path that doesn't exist
+  // if (!shader.operator bool()) {
+  //   required += "// #include : " + shaderPath + " -- Not found!\n";
+  //   return required;
+  // }
 
-  for (auto &req : requirements) {
-    logger.Info("Welll!!! Getting required shader [%s] [%x]", req.c_str(), project);
-    auto shader = std::dynamic_pointer_cast<Koala::Assets::GLSLAsset>(
-        project->GetAssetByPath(req));
-    required += "# ---> Add module : " + req + "\n";
-    required += shader->GetShaderText();
-  }
-
-  if (!required.empty()) {
-    logger.Info("%s", required.c_str());
-  }
+  required = "// #include : " + shaderPath + " -- start\n";
+  required += shader->ParsedGetShaderText();
+  required += "// #include : " + shaderPath + " -- end\n";
 
   return required;
+}
+
+[[nodiscard]] const std::string GLSLAsset::ParsedGetShaderText() noexcept {
+  std::istringstream rawShader(GetShaderText());
+  std::ostringstream parsedShader;
+  std::string shaderLine;
+  while (std::getline(rawShader, shaderLine)) {
+    if (shaderLine.rfind("#include", 0) == 0) {
+      std::string includeShader =
+          shaderLine.substr(strlen("#include "), std::string::npos);
+
+      parsedShader << LoadIncludedShaderText(includeShader);
+    } else {
+      parsedShader << shaderLine;
+    }
+    parsedShader << "\n";
+  }
+  return parsedShader.str();
 }
 
 [[nodiscard]] const std::string GLSLAsset::GetShaderText() noexcept {
@@ -104,11 +116,9 @@ GLSLAsset::~GLSLAsset() {
 [[nodiscard]] bool GLSLAsset::ParseInternal() noexcept {
   auto start = std::chrono::system_clock::now();
 
-  const std::string shaderString = GetShaderText();
+  const std::string shaderString = ParsedGetShaderText();
 
-  // Add GLSL modules
-  shader.addSource(GetRequired());
-  // Add shader source
+  logger.Info("%s", shaderString.c_str());
   shader.addSource(shaderString);
 
   parsed = shader.compile();

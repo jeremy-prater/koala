@@ -31,8 +31,9 @@ private:
   Magnum::GL::Shader::Type
   GetShaderTypeFromString(const std::string &type) const noexcept;
 
-  [[nodiscard]] std::string GetRequired() noexcept;
+  [[nodiscard]] const std::string LoadIncludedShaderText(const std::string shaderPath) noexcept;
 
+  [[nodiscard]] const std::string ParsedGetShaderText() noexcept;
   [[nodiscard]] const std::string GetShaderText() noexcept;
 
   DebugLogger logger;
