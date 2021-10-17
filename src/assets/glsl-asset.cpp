@@ -1,4 +1,5 @@
 #include "glsl-asset.hpp"
+#include "glsl-settings.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <chrono>
@@ -99,6 +100,23 @@ GLSLAsset::LoadIncludedShaderText(const std::string shaderPath) noexcept {
 
       parsedShader << LoadIncludedShaderText(includeShader);
     } else {
+      // Do variable substition
+      size_t start = 0;
+      size_t pos = 0;
+      while ((pos = shaderLine.find("${")) != std::string::npos) {
+        auto end = shaderLine.find("}", pos);
+        if (end == std::string::npos) {
+          break;
+        }
+
+        auto token = shaderLine.substr(pos + 2, end - pos - 2);
+
+        auto result = Koala::Settings::GLSLSettings::GetGlobalSetting(token);
+
+        shaderLine = shaderLine.substr(0, pos) + result +
+                     shaderLine.substr(end + 1, std::string::npos);
+      }
+
       parsedShader << shaderLine;
     }
     parsedShader << "\n";

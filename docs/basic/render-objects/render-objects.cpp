@@ -1,4 +1,5 @@
 #include "render-objects.hpp"
+#include "assets/glsl-settings.hpp"
 #include "assets/gltf-asset.hpp"
 #include "objects/scene-renderable-groups.hpp"
 #include <Magnum/GL/Renderer.h>
@@ -26,6 +27,8 @@ KoalaTest::KoalaTest(const Arguments &arguments)
                  strerror(errno));
     exit(-errno);
   }
+
+  Koala::Settings::GLSLSettings::InitDefaultGlobalSettings();
 
   // if (!S_ISDIR(projectInfo.st_mode)) {
   //   logger.Error("[%s] is not a directory!", projectRoot.c_str());
